@@ -37,6 +37,8 @@ router.get('/', function(req, res, next) {
 		var validation_string = server_secret_id + ":" + server_session_id + ":" + server_secret;
 		var server_session_id_validation = crypto.createHash('sha256').update(validation_string).digest("hex");
 		console.log(server_session_id_validation);
+
+		req.session.serverSessionIdValidation = server_session_id_validation;
 	});
 
     res.render('index', {title: 'TrustInChat', success: req.session.success, errors: req.session.errors});
