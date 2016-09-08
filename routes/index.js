@@ -45,8 +45,8 @@ router.get('/', function(req, res, next) {
 
 		req.session.serverSecretId = server_secret_id;
 		req.session.serverSessionIdValidation = server_session_id_validation;
-		
-		res.render('index', {
+	    
+	    res.render('index', {
 	    	title: 'TrustInChat', 
 	    	success: req.session.success, 
 	    	errors: req.session.errors,
@@ -56,11 +56,14 @@ router.get('/', function(req, res, next) {
 	    	serverSessionSalt: server_session_salt,
 	    	serverSessionSecret: server_session_secret
 	    });
-	    
 	});
 
+	
+
 	req.session.errors = null;
+	
 });
+
 
 
 router.post('/chat', function(req, res, next) {
