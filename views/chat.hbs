@@ -1,4 +1,17 @@
-<a href="https://trustinchat.xyz">
+<head>
+    <title>{{title}}</title>
+</head>
+<body>
+	{{# if errors}}
+        <section class="errors">
+            <ul>
+                {{#each errors}}
+                    <li>{{this.msg}}</li>
+                {{/each}}
+            </ul>
+        </section>
+    {{/if}}
+	<a href="https://trustinchat.xyz">
         <img border="0" alt="TrustInChat" src="trustinchat.png" width="100" height="50">
     </a>
     <a href="https://trustinchat.xyz/about">About</a>
@@ -13,3 +26,4 @@
 	<br><br>
 	Share URL:
 	<input type="text" name="shareUrl" />
+</body>	

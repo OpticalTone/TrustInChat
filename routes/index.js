@@ -12,6 +12,11 @@ var ServerData = require('../models/serverdata');
 router.get('/', function(req, res, next) {
 
     var server_session_id = crypto.randomBytes(16).toString('hex');
+    var server_session_salt = crypto.randomBytes(16).toString('hex');
+	var server_session_secret = crypto.randomBytes(16).toString('hex');
+
+	req.session.serverSessionSalt = server_session_salt;
+	req.session.serverSessionSecret = server_session_secret;
 
 	var server_data = ServerData.findOne().sort({dateTime: -1});
 
@@ -40,25 +45,21 @@ router.get('/', function(req, res, next) {
 
 		req.session.serverSecretId = server_secret_id;
 		req.session.serverSessionIdValidation = server_session_id_validation;
+		
+		res.render('index', {
+	    	title: 'TrustInChat', 
+	    	success: req.session.success, 
+	    	errors: req.session.errors,
+	    	serverSessionId: server_session_id,
+	    	serverSessionIdValidation: req.session.serverSessionIdValidation,
+	    	serverSecretId: req.session.serverSecretId,
+	    	serverSessionSalt: server_session_salt,
+	    	serverSessionSecret: server_session_secret
+	    });
+	    
 	});
 
-	var server_session_salt = crypto.randomBytes(16).toString('hex');
-	var server_session_secret = crypto.randomBytes(16).toString('hex');
-
-	req.session.serverSessionSalt = server_session_salt;
-	req.session.serverSessionSecret = server_session_secret;
-
-    res.render('index', {
-    	title: 'TrustInChat', 
-    	success: req.session.success, 
-    	errors: req.session.errors,
-    	serverSessionId: server_session_id,
-    	serverSessionIdValidation: req.session.serverSessionIdValidation,
-    	serverSecretId: req.session.serverSecretId,
-    	serverSessionSalt: server_session_salt,
-    	serverSessionSecret: server_session_secret
-    });
-    req.session.errors = null;
+	req.session.errors = null;
 });
 
 
@@ -119,6 +120,7 @@ router.post('/chat', function(req, res, next) {
 
 		return res.status(200).send();
 	});
+	res.render('chat', {chat:"CHAT"});
 });
 
 
