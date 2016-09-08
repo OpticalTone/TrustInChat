@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 
 	var server_data = ServerData.findOne().sort({dateTime: -1});
 
-	function get_hash(callback){
+	function make_validation_string(callback){
 			
 			server_data.exec(function(err, serverData){
 
@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
 		});
 	};
 
-	get_hash(function(server_secret_id, server_secret){
+	make_validation_string(function(server_secret_id, server_secret){
 
 		
 	    console.log(server_session_id);
