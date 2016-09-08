@@ -1,4 +1,16 @@
+<head>
+    <title>{{title}}</title>
+</head>
+<body>
 <h1>{{title}}</h1>
+
+<script type="text/javascript">
+    console.log('server_session_id: {{serverSessionId}}');
+    console.log('server_session_id_validation: {{serverSessionIdValidation}}');
+    console.log('server_secret_id: {{serverSecretId}}');
+    console.log('server_session_salt: {{serverSessionSalt}}');
+    console.log('server_session_secret: {{serverSessionSecret}}');
+</script>
 
     {{# if errors}}
         <section class="errors">
@@ -62,5 +74,5 @@
         <button type="submit">SUBMIT</button>
     </form>
 </section>
-
+</body>
 

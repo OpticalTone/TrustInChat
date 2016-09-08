@@ -38,6 +38,7 @@ router.get('/', function(req, res, next) {
 		var server_session_id_validation = crypto.createHash('sha256').update(validation_string).digest("hex");
 		console.log(server_session_id_validation);
 
+		req.session.serverSecretId = server_secret_id;
 		req.session.serverSessionIdValidation = server_session_id_validation;
 	});
 
@@ -47,9 +48,19 @@ router.get('/', function(req, res, next) {
 	req.session.serverSessionSalt = server_session_salt;
 	req.session.serverSessionSecret = server_session_secret;
 
-    res.render('index', {title: 'TrustInChat', success: req.session.success, errors: req.session.errors});
+    res.render('index', {
+    	title: 'TrustInChat', 
+    	success: req.session.success, 
+    	errors: req.session.errors,
+    	serverSessionId: server_session_id,
+    	serverSessionIdValidation: req.session.serverSessionIdValidation,
+    	serverSecretId: req.session.serverSecretId,
+    	serverSessionSalt: server_session_salt,
+    	serverSessionSecret: server_session_secret
+    });
     req.session.errors = null;
 });
+
 
 router.post('/chat', function(req, res, next) {
 
