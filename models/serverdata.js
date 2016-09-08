@@ -9,4 +9,4 @@ var serverSchema = new Schema({
 	dateTime: { type: Date, default: Date.now } 
 });
 
-module.exports = mongoose.model('Server', serverSchema);
+module.exports = mongoose.model('ServerData', serverSchema);

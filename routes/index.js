@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var User = require('../models/user');
 var Message = require('../models/message');
-var ServerData = require('../models/server');
+var ServerData = require('../models/serverdata');
 
 
 
@@ -35,8 +35,8 @@ router.get('/', function(req, res, next) {
 		console.log(server_secret);
 
 		var validation_string = server_secret_id + ":" + server_session_id + ":" + server_secret;
-		var server_session_id_vaidation = crypto.createHash('sha256').update(validation_string).digest("hex");
-		console.log(server_session_id_vaidation);
+		var server_session_id_validation = crypto.createHash('sha256').update(validation_string).digest("hex");
+		console.log(server_session_id_validation);
 	});
 
     res.render('index', {title: 'TrustInChat', success: req.session.success, errors: req.session.errors});
@@ -67,7 +67,7 @@ router.post('/chat', function(req, res, next) {
 		res.redirect('/chat');
 	}
 
-	var item = {
+	var user_item = {
 		toEmail: req.body.toEmail,
 		userName: req.body.fromName,
 		fromEmail: req.body.fromEmail,
@@ -78,19 +78,19 @@ router.post('/chat', function(req, res, next) {
 
 
 	
-	var data = new User(item);
-	data.save(function(err, savedUser) {
+	var user_data = new User(user_item);
+	user_data.save(function(err, savedUser) {
 		if(err) {
 			console.log(err);
 			return res.status(500).send();
 		}
 		
-		var item2 = {
+		var message_item = {
 			content: req.body.content
 		};
 
-		var data2 = new Message(item2);
-		data2.save(function(err, savedMessage){
+		var message_data = new Message(message_item);
+		message_data.save(function(err, savedMessage){
 			if (err){
 				console.log(err);
 				return res.status(500).send();

@@ -9,7 +9,7 @@ var debug = require('debug')('SecureChat:server');
 var http = require('http');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var ServerData = require('../models/server');
+var ServerData = require('../models/serverdata');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/chatdb', function(err) {
@@ -54,10 +54,10 @@ var data = {
   dateTime: date_time
 };
 
-var newserver = new ServerData(data);
+var newserverdata = new ServerData(data);
 
 
-newserver.save();
+newserverdata.save();
 
 
 /**
