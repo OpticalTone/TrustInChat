@@ -35,13 +35,13 @@ router.get('/', function(req, res, next) {
 	make_validation_string(function(server_secret_id, server_secret){
 
 		
-	    console.log(server_session_id);
-		console.log(server_secret_id);
-		console.log(server_secret);
+	    console.log('server_session_id: '+server_session_id);
+		console.log('server_secret_id: '+server_secret_id);
+		console.log('server_secret: '+server_secret);
 
 		var validation_string = server_secret_id + ":" + server_session_id + ":" + server_secret;
 		var server_session_id_validation = crypto.createHash('sha256').update(validation_string).digest("hex");
-		console.log(server_session_id_validation);
+		console.log('server_session_id_validation: '+server_session_id_validation);
 
 		req.session.serverSecretId = server_secret_id;
 		req.session.serverSessionIdValidation = server_session_id_validation;
@@ -56,11 +56,12 @@ router.get('/', function(req, res, next) {
 	    	serverSessionSalt: server_session_salt,
 	    	serverSessionSecret: server_session_secret
 	    });
+	    req.session.errors = null;
 	});
 
-	
 
-	req.session.errors = null;
+
+	
 	
 });
 
@@ -73,7 +74,7 @@ router.post('/chat', function(req, res, next) {
 
 	req.session.toEmail = toEmail;
 	req.session.fromEmail = fromEmail;
-	
+
 
 	// Check validity
 	req.check('toEmail', 'Invalid To e-mail address').isEmail();
@@ -89,7 +90,7 @@ router.post('/chat', function(req, res, next) {
 		req.session.success = true;
 		res.redirect('/chat');
 	}
-
+	
 	var user_item = {
 		toEmail: req.body.toEmail,
 		userName: req.body.fromName,
@@ -123,7 +124,8 @@ router.post('/chat', function(req, res, next) {
 
 		return res.status(200).send();
 	});
-	res.render('chat', {chat:"CHAT"});
+	
+	
 });
 
 

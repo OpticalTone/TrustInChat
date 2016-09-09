@@ -36,13 +36,13 @@ var server = http.createServer(app);
 
 // generate server crypto rnd str
 var server_secret_id = crypto.randomBytes(16).toString('hex');
-console.log(server_secret_id);
+console.log('server_secret_id: '+server_secret_id);
 
 var server_secret = crypto.randomBytes(16).toString('hex');
-console.log(server_secret);
+console.log('server_secret: '+server_secret);
 
 var email_server_secret = "foo-bar-baz";
-console.log(email_server_secret);
+console.log('email_server_secret: '+email_server_secret);
 
 var date_time = new Date;
 console.log(date_time);
