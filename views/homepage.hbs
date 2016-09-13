@@ -1,0 +1,76 @@
+<head>
+    <title>{{title}}</title>
+</head>
+<body>
+<script type="text/javascript">
+    console.log('server_session_id: {{serverSessionId}}');
+    console.log('server_session_id_validation: {{serverSessionIdValidation}}');
+    console.log('server_secret_id: {{serverSecretId}}');
+    console.log('server_session_salt: {{serverSessionSalt}}');
+    console.log('server_session_secret: {{serverSessionSecret}}');
+</script>
+
+    {{# if errors}}
+        <section class="errors">
+            <ul>
+                {{#each errors}}
+                    <li>{{this.msg}}</li>
+                {{/each}}
+            </ul>
+        </section>
+    {{/if}}
+<section class="insert">
+    <a href="https://trustinchat.xyz">
+        <img border="0" alt="TrustInChat" src="trustinchat.png" width="100" height="50">
+    </a>
+    <a href="https://trustinchat.xyz/about">About</a>
+    <a href="https://trustinchat.xyz/help">Help</a>   
+    <br><br> 
+    <form action="/chat" method="post">
+        <div class="input">
+            <label for="toEmail">To e-mail:<br>
+            (optional)</label>
+            <input type="text" id="toEmail" name="toEmail">
+        </div>
+        <br>
+        <div class="input">
+            <label for="fromName">From name:</label>
+            <input type="text" id="fromName" name="fromName">
+        </div>
+        <br>
+        <div class="input">
+            <label for="fromEmail">From e-mail:<br>
+            (optional)</label>
+            <input type="text" id="fromEmail" name="fromEmail">
+        </div>
+        <br>
+        <div class="input"></div>
+            <label for="securityQuestion">Security question:</label>
+            <select id="securityQuestion" name="securityQuestion">
+                <option>Where did we first meet?</option>
+            </select>
+        </div>
+        <br><br>
+        <div class="input">
+            <label for="securityAnswer">Security answer:<br>
+            (minimum 4 characters)</label>
+            <input type="password" id="securityAnswer" name="securityAnswer">
+        </div>
+        <br>
+        <div class="input">
+            Security answer:<br>
+            (repeated)
+            <input type="password" id="securityAnswerRep" name="securityAnswerRep">
+        </div><br>
+        <div class="input">
+            Initial message:
+            <textarea id="content" name="content"></textarea>
+        </div><br>
+        <div class="input">
+            <input type="checkbox" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      
+        </div><br>
+        <button type="submit">SUBMIT</button>
+    </form>
+</section>
+</body>
+
