@@ -4,14 +4,11 @@ import {Message} from './messages/message';
 //import {User} from './homepage/user';
 
 @Component({
-	//moduleId: module.id,
 	selector: 'my-app',
-	//templateUrl: 'app.component.html'
 	template: `
-		
 		<div class="row">
 			<section class="col-md-8 col-md-offset-2">
-				<chat-message [message]="message"></chat-message>
+				<chat-message [message]="message" (editClicked)="message.content = $event"></chat-message>
 			</section>
 		</div>
 	`,
@@ -20,5 +17,5 @@ import {Message} from './messages/message';
 export class AppComponent {
 
 	message: Message = new Message('A new message', null, '1');
-	
+
 }
