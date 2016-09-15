@@ -7,6 +7,7 @@ import { AppComponent }   from './app.component';
 import { MessageComponent } from './messages/message.component';
 import { MessageListComponent } from './messages/message-list.component';
 import { MessageInputComponent } from './messages/message-input.component';
+import { MessageService } from './messages/message.service';
 
 @NgModule({
 	imports: [
@@ -14,6 +15,9 @@ import { MessageInputComponent } from './messages/message-input.component';
     	FormsModule,
     	ReactiveFormsModule
   	],
+    providers: [
+        MessageService
+    ],  
   	declarations: [
     	AppComponent,
     	MessageComponent,

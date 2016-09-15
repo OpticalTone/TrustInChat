@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {Message} from "./message";
+import {MessageService} from "./message.service";
 
 @Component({
 	selector: 'chat-message-input',
@@ -14,8 +15,11 @@ import {Message} from "./message";
 	`
 })
 export class MessageInputComponent {
+
+	constructor(private _messageService: MessageService) {}
+
 	onCreate(content: string) {
 		const message: Message = new Message(content, null, '1');
-		console.log(message);
+		this._messageService.addMessage(message);
 	}
 }
