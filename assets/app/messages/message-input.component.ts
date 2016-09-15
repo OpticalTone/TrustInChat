@@ -10,7 +10,7 @@ import {MessageService} from "./message.service";
 				<label for="context">Content</label>
 				<input type="text" class="form-control" id="content" #input>
 			</div>
-			<button type="submit" class="btn btn-primary" (click)="onCreate(input.value)">Send Message</button>
+			<button type="submit" class="btn btn-primary" (click)="onSubmit(input.value)">Send Message</button>
 		</section>
 	`
 })
@@ -18,7 +18,7 @@ export class MessageInputComponent {
 
 	constructor(private _messageService: MessageService) {}
 
-	onCreate(content: string) {
+	onSubmit(content: string) {
 		const message: Message = new Message(content, null, '1');
 		this._messageService.addMessage(message);
 	}
