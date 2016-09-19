@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'chat-header',
@@ -6,10 +7,10 @@ import {Component} from '@angular/core';
 		<header class="row">
 			<nav class="col-md-8 col-md-offset-2">
 				<ul class="nav nav-pills">
-					<li><a [routerLink]="['/']">Homepage</a></li>
-					<li><a [routerLink]="['/chat']">Chat</a></li>
-					<li><a href="/#">About</a></li>
-					<li><a href="/#">Help</a></li>
+					<li><a [routerLink]="['/']" routerLinkActive="active">Homepage</a></li>
+					<li><a [routerLink]="['/chat']" routerLinkActive="active">Chat</a></li>
+					<li><a href="#" routerLinkActive="active">About</a></li>
+					<li><a href="#" routerLinkActive="active">Help</a></li>
 				</ul>
 			</nav>
 		</header>
