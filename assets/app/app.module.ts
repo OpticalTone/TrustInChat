@@ -2,7 +2,7 @@ import { NgModule }       from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { routing, appRoutingProviders } from './app.routing';
+import { AppRoutingModule, routingComponents } from './app.routing';
 
 import { AppComponent }   from './app.component';
 import { MessageComponent } from './messages/message.component';
@@ -18,9 +18,10 @@ import { MessageService } from './messages/message.service';
     	BrowserModule,
     	FormsModule,
     	ReactiveFormsModule,
-        routing
+        AppRoutingModule
   	],
     declarations: [
+        routingComponents,
         AppComponent,
         MessageComponent,
         MessageListComponent,
@@ -30,8 +31,7 @@ import { MessageService } from './messages/message.service';
         HeaderComponent
     ],
     providers: [
-        MessageService,
-        appRoutingProviders
+        MessageService
     ],  
     bootstrap:  [
 	    [AppComponent]
