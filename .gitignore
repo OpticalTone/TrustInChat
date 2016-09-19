@@ -1,3 +1,9 @@
+# compiled output
+/public
+
+# dependencies
 /node_modules
+
+# log files
 *.log
 *.log.*
