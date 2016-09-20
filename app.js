@@ -11,6 +11,7 @@ var MongoStore = require('connect-mongo')(expressSession);
 
 
 var appRoutes = require('./routes/app');
+var messageRoutes = require('./routes/messages');
 
 var app = express();
 
@@ -42,6 +43,7 @@ app.use(function(req, res, next){
   next();
 });
 
+app.use('/message', messageRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

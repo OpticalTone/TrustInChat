@@ -3,9 +3,13 @@ import {Message} from "./message";
 export class MessageService {
 	messages: Message[] = [];
 
+	constructor(private _http: Http) {
+		
+	}
+
 	addMessage(message: Message) {
-		this.messages.push(message);
-		console.log(this.messages);
+		//this.messages.push(message);
+		//console.log(this.messages);
 	}
 
 	getMessages() {
