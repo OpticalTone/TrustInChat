@@ -1,54 +1,86 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
 	selector: 'chat-homepage',
 	template: `
 		<section class="col-md-8 col-md-offset-2">
-			<form>
+			<form [formGroup]="homepageForm" (ngSubmit)="onSubmit()">
 				<div class="form-group">
 		            <label for="toEmail">To e-mail:<br>
 		            (optional)</label>
-		            <input type="text" id="toEmail" name="toEmail" class="form-control">
+		            <input type="text" formControlName="toEmail" id="toEmail" name="toEmail" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <label for="fromName">From name:</label>
-		            <input type="text" id="fromName" name="fromName" class="form-control">
+		            <input type="text" formControlName="fromName" id="fromName" name="fromName" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <label for="fromEmail">From e-mail:<br>
 		            (optional)</label>
-		            <input type="text" id="fromEmail" name="fromEmail" class="form-control">
+		            <input type="text" formControlName="fromEmail" id="fromEmail" name="fromEmail" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <label for="securityQuestion">Security question:</label>
-		            <select id="securityQuestion" name="securityQuestion">
+		            <select formControlName="securityQuestion" id="securityQuestion" name="securityQuestion">
 		                <option>Where did we first meet?</option>
 		            </select>
 		        </div>
 		        <div class="form-group">
 		            <label for="securityAnswer">Security answer:<br>
 		            (minimum 4 characters)</label>
-		            <input type="password" id="securityAnswer" name="securityAnswer" class="form-control">
+		            <input type="password" formControlName="securityAnswer" id="securityAnswer" name="securityAnswer" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <label for="securityAnswerRep">Security answer:<br>
 		            (repeated)</label>
-		            <input type="password" id="securityAnswerRep" name="securityAnswerRep" class="form-control">
+		            <input type="password" formControlName="securityAnswerRep" id="securityAnswerRep" name="securityAnswerRep" class="form-control">
 		        </div>
 		        <div class="form-group">
 		        	<label for="content">Initial message:</label>
-		            <textarea id="content" name="content"></textarea>
+		            <textarea formControlName="content" id="content" name="content"></textarea>
 		        </div>
 		        <div class="form-group">
-		            <input type="checkbox" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      
+		            <input type="checkbox" formControlName="notifications" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      
 		        </div>
-		        <div class="form-group">
-		        	<button type="submit">SUBMIT</button>
-		        </div>	
+		        <button type="submit" class="btn btn-primary" [disabled]="!homepageForm.valid">SUBMIT</button>
 			</form>
 		</section>
 	`
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
+	homepageForm: FormGroup;
 
+	constructor(private _fb:FormBuilder) {
+
+	}
+
+	onSubmit() {
+		console.log(this.homepageForm.value);
+	}
+
+	ngOnInit() {
+		this.homepageForm = this._fb.group({
+			toEmail: ['', Validators.compose([this.isEmail])],
+			fromName: ['', Validators.required],
+			fromEmail: ['', Validators.compose([this.isEmail])],
+			securityQuestion: ['', Validators.required],
+			securityAnswer: ['', Validators.compose([Validators.required, this.answerValidator])],
+			securityAnswerRep: ['', Validators.compose([Validators.required, this.answerValidator])],
+			content: ['', Validators.required],
+			notifications: ['']
+		});
+	}
+
+	private isEmail(control): {[s: string]: boolean} {
+		if (!control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
+			return {invalidEmail: true};
+		}
+	}
+
+	private answerValidator(control): {[s: string]: boolean} {
+		if (!control.value.match(/^[a-zA-Z0-9!@#$%^&*]{4,100}$/)) {
+			return {invalidAnswer: true};
+		}
+	}
 }
