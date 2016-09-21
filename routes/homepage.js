@@ -129,8 +129,8 @@ router.post('/chat', function(req, res, next) {
 });
 
 
-router.get('/chat', function(req, res) {
-	res.render('chat', {title:"CHAT", toEmail: req.session.toEmail, fromEmail: req.session.fromEmail});
+router.get('/chat1', function(req, res) {
+	res.render('chat1', {title:"CHAT", toEmail: req.session.toEmail, fromEmail: req.session.fromEmail});
 });
 
 

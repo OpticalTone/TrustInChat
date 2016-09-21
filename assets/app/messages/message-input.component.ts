@@ -20,6 +20,13 @@ export class MessageInputComponent {
 
 	onSubmit(content: string) {
 		const message: Message = new Message(content, null, '1');
-		this._messageService.addMessage(message);
+		this._messageService.addMessage(message)
+			.subscribe(
+				data => {
+					console.log(data);
+					this._messageService.messages.push(data);
+				},
+				error => console.error(error)
+			);
 	}
 }

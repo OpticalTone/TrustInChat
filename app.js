@@ -11,7 +11,6 @@ var MongoStore = require('connect-mongo')(expressSession);
 
 
 var appRoutes = require('./routes/app');
-var messageRoutes = require('./routes/messages');
 
 var app = express();
 
@@ -39,11 +38,10 @@ app.use(expressSession({
 
 app.use(function(req, res, next){
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, PUT, DELETE');
   next();
 });
 
-app.use('/message', messageRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

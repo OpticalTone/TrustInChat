@@ -1,8 +1,10 @@
+import './rxjs-extensions';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule, routingComponents } from './app.routing';
-import { Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent }   from './app.component';
 
@@ -21,7 +23,7 @@ import { MessageService } from './messages/message.service';
     	BrowserModule,
     	FormsModule,
     	ReactiveFormsModule,
-        Http,
+        HttpModule,
         AppRoutingModule
   	],
     declarations: [
