@@ -1,12 +1,16 @@
 import {Message} from "./message";
 import {Http, Headers} from '@angular/http';
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class MessageService {
 	messages: Message[] = [];
+	messageIsEdit = new EventEmitter<Message>();
+
+	private headers = new Headers({'Content-Type': 'application/json'});
+	private chatUrl = 'http://localhost:3000/chat';
 
 	constructor(private _http: Http) {
 		
@@ -14,18 +18,17 @@ export class MessageService {
 
 	addMessage(message: Message) {
 		const body = JSON.stringify(message);
-		const headers = new Headers({'Content-Type': 'application/json'});
-		return this._http.post('http://localhost:3000/chat', body, {headers: headers})
+		return this._http.post(this.chatUrl, body, {headers: this.headers})
 			.map(response => {
 				const data = response.json().obj;
 				let message = new Message(data.content, data._id, '1');
 				return message;
 			})
-			.catch(error => Observable.throw(error.json()));
+			.catch(error => Observable.throw(error.json().error || 'error'));
 	}
 
 	getMessages() {
-		return this._http.get('http://localhost:3000/chat')
+		return this._http.get(this.chatUrl)
 			.map(response => {
 				const data = response.json().obj;
 				let objs: any[] = [];
@@ -35,11 +38,18 @@ export class MessageService {
 				};
 				return objs;
 			})
-			.catch(error => Observable.throw(error.json()));
+			.catch(error => Observable.throw(error.json().error || 'error'));
+	}
+
+	updateMessage(message: Message) {
+		const body = JSON.stringify(message);
+		return this._http.patch(this.chatUrl + '/' + message.messageId , body, {headers: this.headers})
+			.map(response => response.json())
+			.catch(error => Observable.throw(error.json(). error || 'error'));
 	}
 
 	editMessage(message: Message) {
-		this.messages[this.messages.indexOf(message)] = new Message('Edited', null, '1');
+		this.messageIsEdit.emit(message);
 	}
 
 	deleteMessage(message: Message) {
