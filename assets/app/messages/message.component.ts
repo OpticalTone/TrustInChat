@@ -11,10 +11,13 @@ import {MessageService} from "./message.service";
 				{{message.content}}
 			</div>
 			<footer class="panel-footer">
-				<div class="author">
+				<div class="author" *ngIf="belongsToUser()">
+					me:
+				</div>
+				<div class="author" *ngIf="!belongsToUser()">
 					{{message.userId}}
 				</div>
-				<div class="config">
+				<div class="config" *ngIf="belongsToUser()">
 					<a (click)="onEdit()">Edit</a>
 					<a (click)="onDelete()">Delete</a>
 				</div>
@@ -54,5 +57,9 @@ export class MessageComponent {
 				data => console.log(data),
 				error => console.error(error)
 			);
+	}
+
+	belongsToUser() {
+		return localStorage.getItem('userId') == this.message.userId;
 	}
 }

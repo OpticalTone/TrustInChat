@@ -16,13 +16,15 @@ export class MessageService {
 	}
 
 	addMessage(message: Message) {
+
+		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 		const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
-		const body = JSON.stringify(message);
+
 		return this._http.post(this.chatUrl + '/' + token, body, {headers: headers})
 			.map(response => {
 				const data = response.json().obj;
-				let message = new Message(data.content, data._id, '1');
+				let message = new Message(data.content, data._id, data.user._id);
 				return message;
 			})
 			.catch(error => Observable.throw(error.json().error || 'error'));
@@ -34,7 +36,7 @@ export class MessageService {
 				const data = response.json().obj;
 				let objs: any[] = [];
 				for (let i = 0; i < data.length; i++) {
-					let message = new Message(data[i].content, data[i]._id, '1');
+					let message = new Message(data[i].content, data[i]._id, data[i].user);
 					objs.push(message);
 				};
 				return objs;
@@ -43,9 +45,12 @@ export class MessageService {
 	}
 
 	updateMessage(message: Message) {
-		const headers = new Headers({'Content-Type': 'application/json'});
+
 		const body = JSON.stringify(message);
-		return this._http.patch(this.chatUrl + '/' + message.messageId , body, {headers: headers})
+		const headers = new Headers({'Content-Type': 'application/json'});
+		const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+		
+		return this._http.patch(this.chatUrl + '/' + message.messageId + '/' + token, body, {headers: headers})
 			.map(response => response.json())
 			.catch(error => Observable.throw(error.json(). error || 'error'));
 	}
@@ -55,8 +60,12 @@ export class MessageService {
 	}
 
 	deleteMessage(message: Message) {
+
 		this.messages.splice(this.messages.indexOf(message), 1);
-		return this._http.delete(this.chatUrl + '/' + message.messageId)
+
+		const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+
+		return this._http.delete(this.chatUrl + '/' + message.messageId  + '/' + token)
 			.map(response => response.json())
 			.catch(error => Observable.throw(error.json(). error || 'error'));
 	}
