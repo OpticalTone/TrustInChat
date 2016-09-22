@@ -60,7 +60,6 @@ export class HomepageComponent implements OnInit {
 	}
 
 	onSubmit() {
-		//console.log(this.homepageForm.value);
 		const user = new User(
 			this.homepageForm.value.fromName,
 			this.homepageForm.value.securityAnswer,
@@ -72,7 +71,6 @@ export class HomepageComponent implements OnInit {
 
 		this._homepageService.addUser(user)
 			.subscribe(
-				//data => console.log(data),
 				data => {
 					console.log(user);
 					console.log(data);
@@ -83,6 +81,15 @@ export class HomepageComponent implements OnInit {
 				error => console.error(error)
 			);
 	}
+
+	isLoggedIn() {
+		return this._homepageService.isLoggedIn();
+	}
+
+	//onQuitChat() {
+	//	this._homepageService.quitChat()
+	//	this._router.navigate(['/']);
+	//}
 
 	ngOnInit() {
 		this.homepageForm = this._fb.group({

@@ -23,4 +23,12 @@ export class HomepageService {
 			.catch(error => Observable.throw(error.json().error || 'error'));
 
 	}
+
+	isLoggedIn() {
+		return localStorage.getItem('token') !== null;
+	}
+
+	//quitChat() {
+	//	localStorage.clear();
+	//}
 }

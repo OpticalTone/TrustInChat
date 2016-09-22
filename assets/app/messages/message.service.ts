@@ -17,8 +17,9 @@ export class MessageService {
 
 	addMessage(message: Message) {
 		const headers = new Headers({'Content-Type': 'application/json'});
+		const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
 		const body = JSON.stringify(message);
-		return this._http.post(this.chatUrl, body, {headers: headers})
+		return this._http.post(this.chatUrl + '/' + token, body, {headers: headers})
 			.map(response => {
 				const data = response.json().obj;
 				let message = new Message(data.content, data._id, '1');
