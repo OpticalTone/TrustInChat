@@ -1,6 +1,5 @@
 export class Message {
 	content: string;
-	userName: string;
 	messageId: string;
 	userId: string;
 

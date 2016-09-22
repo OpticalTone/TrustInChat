@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {User} from './user';
+import {HomepageService} from './homepage.service';
+import {Router} from '@angular/router';
 
 @Component({
 	selector: 'chat-homepage',
@@ -49,14 +52,36 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 	`
 })
 export class HomepageComponent implements OnInit {
+	
 	homepageForm: FormGroup;
 
-	constructor(private _fb:FormBuilder) {
+	constructor(private _fb: FormBuilder, private _homepageService: HomepageService, private _router: Router) {
 
 	}
 
 	onSubmit() {
-		console.log(this.homepageForm.value);
+		//console.log(this.homepageForm.value);
+		const user = new User(
+			this.homepageForm.value.fromName,
+			this.homepageForm.value.securityAnswer,
+			this.homepageForm.value.toEmail,
+			this.homepageForm.value.fromEmail,
+			this.homepageForm.value.securityQuestion,
+			this.homepageForm.value.notifications
+			);
+
+		this._homepageService.addUser(user)
+			.subscribe(
+				//data => console.log(data),
+				data => {
+					console.log(user);
+					console.log(data);
+					localStorage.setItem('token', data.token);
+					localStorage.setItem('userId', data.userId);
+					this._router.navigateByUrl('/chat');
+				},
+				error => console.error(error)
+			);
 	}
 
 	ngOnInit() {

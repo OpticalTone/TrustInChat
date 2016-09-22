@@ -9,7 +9,6 @@ export class MessageService {
 	messages: Message[] = [];
 	messageIsEdit = new EventEmitter<Message>();
 
-	private headers = new Headers({'Content-Type': 'application/json'});
 	private chatUrl = 'http://localhost:3000/chat';
 
 	constructor(private _http: Http) {
@@ -17,8 +16,9 @@ export class MessageService {
 	}
 
 	addMessage(message: Message) {
+		const headers = new Headers({'Content-Type': 'application/json'});
 		const body = JSON.stringify(message);
-		return this._http.post(this.chatUrl, body, {headers: this.headers})
+		return this._http.post(this.chatUrl, body, {headers: headers})
 			.map(response => {
 				const data = response.json().obj;
 				let message = new Message(data.content, data._id, '1');
@@ -42,8 +42,9 @@ export class MessageService {
 	}
 
 	updateMessage(message: Message) {
+		const headers = new Headers({'Content-Type': 'application/json'});
 		const body = JSON.stringify(message);
-		return this._http.patch(this.chatUrl + '/' + message.messageId , body, {headers: this.headers})
+		return this._http.patch(this.chatUrl + '/' + message.messageId , body, {headers: headers})
 			.map(response => response.json())
 			.catch(error => Observable.throw(error.json(). error || 'error'));
 	}

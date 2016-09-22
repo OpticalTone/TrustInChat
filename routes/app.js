@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var User = require('../models/user');
 var Message = require('../models/message');
 var ServerData = require('../models/serverdata');
+var jwt = require('jsonwebtoken');
 
 router.get('/', function(req, res, next){
 	 res.render('index');
@@ -12,6 +13,31 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
 
+	var user = new User({
+		toEmail: req.body.toEmail,   
+		userName: req.body.userName,   
+		fromEmail: req.body.fromEmail,
+		securityQuestion: req.body.securityQuestion,    
+		securityAnswer: req.body.securityAnswer,   
+		notifications: req.body.notifications
+	});
+
+	var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+
+	user.save(function(err, result) {
+		if (err) {
+			return res.status(404).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		res.status(200).json({
+			message: 'Success',
+			token: token,
+			userId: user._id,
+			obj: result
+		});
+	});
 });
 
 router.get('/chat', function(req, res, next){
