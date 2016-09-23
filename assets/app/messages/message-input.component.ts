@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Message} from "./message";
 import {MessageService} from "./message.service";
+import {ErrorService} from '../errors/error.service';
 
 @Component({
 	selector: 'chat-message-input',
@@ -18,7 +19,7 @@ import {MessageService} from "./message.service";
 export class MessageInputComponent implements OnInit{
 	message: Message = null;
 
-	constructor(private _messageService: MessageService) {}
+	constructor(private _messageService: MessageService, private _errorService: ErrorService) {}
 
 	onSubmit(content: string) {
 		if (this.message) {
@@ -27,7 +28,7 @@ export class MessageInputComponent implements OnInit{
 			this._messageService.updateMessage(this.message)
 				.subscribe(
 					data => console.log(data),
-					error => console.error(error)
+					error => this._errorService.handleError(error)
 				);
 			this.message = null;
 		} else {
@@ -38,7 +39,7 @@ export class MessageInputComponent implements OnInit{
 						console.log(data);
 						this._messageService.messages.push(data);
 					},
-					error => console.error(error)
+					error => this._errorService.handleError(error)
 				);
 		}
 		

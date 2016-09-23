@@ -20,6 +20,10 @@ import { MessagesComponent } from './messages/messages.component';
 
 import { MessageService } from './messages/message.service';
 
+import { ErrorComponent } from './errors/error.component';
+
+import { ErrorService } from './errors/error.service';
+
 @NgModule({
 	imports: [
     	BrowserModule,
@@ -37,10 +41,12 @@ import { MessageService } from './messages/message.service';
         MessageListComponent,
         MessageInputComponent,
         MessagesComponent,
+        ErrorComponent
     ],
     providers: [
         MessageService,
-        HomepageService
+        HomepageService,
+        ErrorService
     ],  
     bootstrap:  [
 	    [AppComponent]

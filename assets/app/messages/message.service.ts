@@ -27,7 +27,7 @@ export class MessageService {
 				let message = new Message(data.content, data._id, data.user._id);
 				return message;
 			})
-			.catch(error => Observable.throw(error.json().error || 'error'));
+			.catch(error => Observable.throw(error.json()));
 	}
 
 	getMessages() {
@@ -41,7 +41,7 @@ export class MessageService {
 				};
 				return objs;
 			})
-			.catch(error => Observable.throw(error.json().error || 'error'));
+			.catch(error => Observable.throw(error.json()));
 	}
 
 	updateMessage(message: Message) {
@@ -52,7 +52,7 @@ export class MessageService {
 		
 		return this._http.patch(this.chatUrl + '/' + message.messageId + '/' + token, body, {headers: headers})
 			.map(response => response.json())
-			.catch(error => Observable.throw(error.json(). error || 'error'));
+			.catch(error => Observable.throw(error.json()));
 	}
 
 	editMessage(message: Message) {
@@ -67,6 +67,6 @@ export class MessageService {
 
 		return this._http.delete(this.chatUrl + '/' + message.messageId  + '/' + token)
 			.map(response => response.json())
-			.catch(error => Observable.throw(error.json(). error || 'error'));
+			.catch(error => Observable.throw(error.json());
 	}
 }

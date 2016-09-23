@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from './user';
 import {HomepageService} from './homepage.service';
 import {Router} from '@angular/router';
+import {ErrorService} from '../errors/error.service';
 
 @Component({
 	selector: 'chat-homepage',
@@ -55,7 +56,7 @@ export class HomepageComponent implements OnInit {
 	
 	homepageForm: FormGroup;
 
-	constructor(private _fb: FormBuilder, private _homepageService: HomepageService, private _router: Router) {
+	constructor(private _fb: FormBuilder, private _homepageService: HomepageService, private _router: Router, private _errorService: ErrorService) {
 
 	}
 
@@ -78,7 +79,7 @@ export class HomepageComponent implements OnInit {
 					localStorage.setItem('userId', data.userId);
 					this._router.navigateByUrl('/chat');
 				},
-				error => console.error(error)
+				error => this._errorService.handleError(error)
 			);
 	}
 
