@@ -8,13 +8,21 @@ import {ErrorService} from '../errors/error.service';
 	template: `
 		<section class="col-md-8 col-md-offset-2">
 			<div class="form-group">
-				<label for="context">Content</label>
-				<input type="text" class="form-control" id="content" #input [ngModel]="message?.content">
+				<div class="input-group">
+					<input type="text" class="form-control" id="content" #input [ngModel]="message?.content" placeholder="Enter text here...">
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-primary" (click)="onSubmit(input.value)">{{ !message ? 'SEND' : 'SAVE' }}</button>
+					</span>
+				</div>
 			</div>
-			<button type="submit" class="btn btn-primary" (click)="onSubmit(input.value)">{{ !message ? 'Send Message' : 'Save Message' }}</button>
 			<button type="button" class="btn btn-danger" (click)="onCancel()" *ngIf="message">Cancel</button>
 		</section>
-	`
+	`,
+	styles: [`
+		button {
+			float: right;
+		}
+	`]
 })
 export class MessageInputComponent implements OnInit{
 	message: Message = null;

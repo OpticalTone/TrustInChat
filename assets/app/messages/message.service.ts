@@ -67,6 +67,6 @@ export class MessageService {
 
 		return this._http.delete(this.chatUrl + '/' + message.messageId  + '/' + token)
 			.map(response => response.json())
-			.catch(error => Observable.throw(error.json());
+			.catch(error => Observable.throw(error.json()));
 	}
 }

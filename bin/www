@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var ServerData = require('../models/serverdata');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/chatdb', function(err) {
+mongoose.connect('mongodb://127.0.0.1/chatdb', function(err) {
   if (err) {
     return console.log(err);
   }

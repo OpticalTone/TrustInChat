@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Message} from './message';
+import {User} from '../homepage/user';
 import {MessageService} from './message.service';
 import {ErrorService} from '../errors/error.service';
 
@@ -7,29 +8,36 @@ import {ErrorService} from '../errors/error.service';
 @Component({
 	selector: 'chat-message',
 	template: `
-		<article class="panel panel-default">
-			<div class="panel-body">
-				{{message.content}}
+		<div class="panel-body">
+			<div class="author" *ngIf="belongsToUser()">
+				Me:
 			</div>
-			<footer class="panel-footer">
-				<div class="author" *ngIf="belongsToUser()">
-					me:
-				</div>
-				<div class="author" *ngIf="!belongsToUser()">
-					{{message.userId}}
+			<div class="author" *ngIf="!belongsToUser()" style="float: right;">
+				{{message.userId}}
+			</div>
+			
+		</div>
+		<article class="panel panel-default">
+			
+			<div class="panel-body">
+				<div class="msg">
+					{{message.content}}
 				</div>
 				<div class="config" *ngIf="belongsToUser()">
 					<a (click)="onEdit()">Edit</a>
 					<a (click)="onDelete()">Delete</a>
 				</div>
-			</footer>		
+			</div>
 		</article>
 	`,
 	styles: [`
 		.author {
-			display: inline-block;
 			font-style: italic;
 			font-size: 12px;
+			
+		}
+		.msg {
+			display: inline-block;
 			width: 80%;
 		}
 		.config {
@@ -63,4 +71,5 @@ export class MessageComponent {
 	belongsToUser() {
 		return localStorage.getItem('userId') == this.message.userId;
 	}
+
 }
