@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import {User} from './user';
 import {HomepageService} from './homepage.service';
 import {Router} from '@angular/router';
@@ -57,7 +57,7 @@ export class HomepageComponent implements OnInit {
 	homepageForm: FormGroup;
 
 	constructor(private _fb: FormBuilder, private _homepageService: HomepageService, private _router: Router, private _errorService: ErrorService) {
-
+		
 	}
 
 	onSubmit() {
@@ -92,7 +92,12 @@ export class HomepageComponent implements OnInit {
 	//	this._router.navigate(['/']);
 	//}
 
+	
+
 	ngOnInit() {
+
+
+
 		this.homepageForm = this._fb.group({
 			toEmail: ['', Validators.compose([this.isEmail])],
 			fromName: ['', Validators.required],
@@ -102,7 +107,7 @@ export class HomepageComponent implements OnInit {
 			securityAnswerRep: ['', Validators.compose([Validators.required, this.answerValidator])],
 			content: ['', Validators.required],
 			notifications: ['']
-		});
+		}, {validator: this.matchAnswers('securityAnswer', 'securityAnswerRep')});
 	}
 
 	private isEmail(control): {[s: string]: boolean} {
@@ -114,6 +119,16 @@ export class HomepageComponent implements OnInit {
 	private answerValidator(control): {[s: string]: boolean} {
 		if (!control.value.match(/^[a-zA-Z0-9!@#$%^&*]{4,100}$/)) {
 			return {invalidAnswer: true};
+		}
+	}
+
+	private matchAnswers(answerKey: string, answerRepKey: string) {
+		return (group: FormGroup) => {
+			let answerInput = group.controls[answerKey];
+			let answerRepInput = group.controls[answerRepKey];
+			if (answerInput.value !== answerRepInput.value) {
+				return answerRepInput.setErrors({notEquivalent: true})
+			}
 		}
 	}
 }
