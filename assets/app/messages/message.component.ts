@@ -13,7 +13,7 @@ import {ErrorService} from '../errors/error.service';
 				Me:
 			</div>
 			<div class="author" *ngIf="!belongsToUser()" style="float: right;">
-				{{message.userId}}
+				id: {{message.userId}} / toEmail: {{getToEmail()}}
 			</div>
 			
 		</div>
@@ -70,6 +70,10 @@ export class MessageComponent {
 
 	belongsToUser() {
 		return localStorage.getItem('userId') == this.message.userId;
+	}
+
+	getToEmail() {
+		return localStorage.getItem('toEmail');
 	}
 
 }

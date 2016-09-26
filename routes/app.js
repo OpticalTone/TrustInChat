@@ -24,7 +24,8 @@ router.post('/', function(req, res, next){
 		notifications: req.body.notifications
 	});
 
-	var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+	//var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+	var token = jwt.sign({user: user}, 'secret');
 
 	user.save(function(err, result) {
 		if (err) {
@@ -37,6 +38,8 @@ router.post('/', function(req, res, next){
 			message: 'Success',
 			token: token,
 			userId: user._id,
+			toEmail: req.body.toEmail,
+			fromEmail: req.body.fromEmail,
 			obj: result
 		});
 	});

@@ -11,10 +11,10 @@ import {MessageInputComponent} from './message-input.component';
 				<section class="col-md-8 col-md-offset-2">
 					<div class="form-group">
 						<label>To:</label>
-						<input type="text" name="to" value="{{toEmail}}"/>
+						<input type="text" name="to" value="{{getToEmail()}}"/>
 						<br><br>
 						<label>From:</label>
-						<input type="text" name="from" value="{{fromEmail}}"/>
+						<input type="text" name="from" value="{{getFromEmail()}}"/>
 						<br><br>
 						<label>Share URL:</label>
 						<input type="text" name="shareUrl" />
@@ -46,5 +46,13 @@ import {MessageInputComponent} from './message-input.component';
 	directives: [MessageListComponent, MessageInputComponent]
 })
 export class MessagesComponent {
+
+	getToEmail() {
+		return localStorage.getItem('toEmail');
+	}
+
+	getFromEmail() {
+		return localStorage.getItem('fromEmail');
+	}
 
 }

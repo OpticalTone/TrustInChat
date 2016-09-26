@@ -77,6 +77,8 @@ export class HomepageComponent implements OnInit {
 					console.log(data);
 					localStorage.setItem('token', data.token);
 					localStorage.setItem('userId', data.userId);
+					localStorage.setItem('toEmail', data.toEmail);
+					localStorage.setItem('fromEmail', data.fromEmail);
 					this._router.navigateByUrl('/chat');
 				},
 				error => this._errorService.handleError(error)
@@ -95,9 +97,6 @@ export class HomepageComponent implements OnInit {
 	
 
 	ngOnInit() {
-
-
-
 		this.homepageForm = this._fb.group({
 			toEmail: ['', Validators.compose([this.isEmail])],
 			fromName: ['', Validators.required],
