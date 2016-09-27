@@ -42,7 +42,7 @@ import {ErrorService} from '../errors/error.service';
 		        </div>
 		        <div class="form-group">
 		        	<label for="content">Initial message:</label>
-		            <textarea formControlName="content" id="content" name="content"></textarea>
+		            <input type="text" formControlName="content" id="content" name="content" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <input type="checkbox" formControlName="notifications" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      

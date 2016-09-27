@@ -10,7 +10,61 @@ var ServerData = require('../models/serverdata');
 
 
 router.get('/', function(req, res, next){
-	 res.render('index');
+	
+	var server_session_id = crypto.randomBytes(16).toString('hex');
+    var server_session_salt = crypto.randomBytes(16).toString('hex');
+	var server_session_secret = crypto.randomBytes(16).toString('hex');
+
+	req.session.serverSessionSalt = server_session_salt;
+	req.session.serverSessionSecret = server_session_secret;
+
+	var server_data = '';
+	server_data = ServerData.findOne(function(err, doc) {
+		if (err) {
+			return res.send('Error');
+		}
+		if (doc) {
+			server_data = doc.server_data;
+		}
+	}).sort({dateTime: -1});
+
+	function make_validation_string(callback){
+			
+			server_data.exec(function(err, serverData){
+
+			if(err) console.log(err);
+			server_secret_id = serverData.serverSecretId;
+			server_secret = serverData.serverSecret;
+
+			callback(server_secret_id, server_secret);
+		});
+	};
+
+	make_validation_string(function(server_secret_id, server_secret){
+		
+	    console.log('server_session_id: '+server_session_id);
+		console.log('server_secret_id: '+server_secret_id);
+		console.log('server_secret: '+server_secret);
+
+		var validation_string = server_secret_id + ":" + server_session_id + ":" + server_secret;
+		var server_session_id_validation = crypto.createHash('sha256').update(validation_string).digest("hex");
+		console.log('server_session_id_validation: '+server_session_id_validation);
+
+		req.session.serverSecretId = server_secret_id;
+		req.session.serverSessionIdValidation = server_session_id_validation;
+	    
+	    res.render('index', {
+	    	title: 'TrustInChat', 
+	    	success: req.session.success, 
+	    	errors: req.session.errors,
+	    	serverSessionId: server_session_id,
+	    	serverSessionIdValidation: req.session.serverSessionIdValidation,
+	    	serverSecretId: req.session.serverSecretId,
+	    	serverSessionSalt: server_session_salt,
+	    	serverSessionSecret: server_session_secret
+	    });
+	    req.session.errors = null;
+    });
 });
 
 router.post('/', function(req, res, next){
@@ -33,7 +87,8 @@ router.post('/', function(req, res, next){
 				title: 'An error occurred',
 				error: err
 			});
-		}
+		} 
+
 		res.status(200).json({
 			message: 'Success',
 			token: token,
