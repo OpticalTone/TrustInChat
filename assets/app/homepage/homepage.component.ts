@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
-import {User} from './user';
 import {HomepageService} from './homepage.service';
 import {Router} from '@angular/router';
 import {ErrorService} from '../errors/error.service';
+
+import {User} from './user';
+import {Message} from '../messages/message';
 
 @Component({
 	selector: 'chat-homepage',
@@ -70,6 +72,13 @@ export class HomepageComponent implements OnInit {
 			this.homepageForm.value.notifications
 			);
 
+		
+
+		//var initialMessage = this.homepageForm.value.content;
+		//console.log(initialMessage);
+
+		//localStorage.setItem('content', initialMessage);
+
 		this._homepageService.addUser(user)
 			.subscribe(
 				data => {
@@ -83,6 +92,17 @@ export class HomepageComponent implements OnInit {
 				},
 				error => this._errorService.handleError(error)
 			);
+
+		const message = new Message(this.homepageForm.value.content, null, null);
+
+		this._homepageService.addInitialMessage(message)
+			.subscribe(
+					msgData => {
+						console.log(msgData);
+						this._homepageService.messages.push(msgData);
+					},
+					error => this._errorService.handleError(error)
+				);
 	}
 
 	isLoggedIn() {

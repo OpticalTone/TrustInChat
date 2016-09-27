@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {User} from './user';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
+
+import {User} from './user';
+import {Message} from '../messages/message';
 
 @Injectable()
 export class HomepageService {
@@ -20,7 +22,7 @@ export class HomepageService {
 
 		return this._http.post(this.homepageUrl, body, {headers: headers})
 			.map(response => response.json())
-			.catch(error => Observable.throw(error.json().error || 'error'));
+			.catch(error => Observable.throw(error.json()));
 
 	}
 
@@ -31,4 +33,15 @@ export class HomepageService {
 	//quitChat() {
 	//	localStorage.clear();
 	//}
+	messages: Message[] = [];
+	addInitialMessage(initialMessage: Message) {
+
+		const headers = new Headers({'Content-Type': 'application/json'});
+		const body = JSON.stringify(initialMessage);
+
+		return this._http.post(this.homepageUrl, body, {headers: headers})
+			.map(response => response.json())
+			.catch(error => Observable.throw(error.json()));
+			
+	}
 }
