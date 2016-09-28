@@ -104,7 +104,7 @@ router.post('/', function(req, res, next){
 
 router.get('/chat', function(req, res, next){
 		Message.find()
-		//.populate('user', 'userId')
+		.populate('user')
 		.exec(function(err, docs) {
 			if (err) {
 				return res.status(404).json({

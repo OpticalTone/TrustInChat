@@ -10,10 +10,10 @@ import {ErrorService} from '../errors/error.service';
 	template: `
 		<div class="panel-body">
 			<div class="author" *ngIf="belongsToUser()">
-				Me:
+				{{message.chatFromEmail}}(Me):
 			</div>
 			<div class="author" *ngIf="!belongsToUser()" style="float: right;">
-				id: {{message.userId}} / toEmail: {{getToEmail()}}
+				{{message.chatToEmail}}
 			</div>
 			
 		</div>
@@ -71,9 +71,5 @@ export class MessageComponent {
 	belongsToUser() {
 		return localStorage.getItem('userId') == this.message.userId;
 	}
-
-	getToEmail() {
-		return localStorage.getItem('toEmail');
-	}
-
+	
 }

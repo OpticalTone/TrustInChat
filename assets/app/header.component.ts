@@ -6,7 +6,7 @@ import {Router} from "@angular/router";
 	template: `
 		<header class="row">
 			<nav class="col-md-8 col-md-offset-2">
-				<img border="0" alt="TrustInChat" src="TrustInChat_logo.png" width="100" height="100">
+				<img border="0" alt="TrustInChat" src="img/logo.png" width="100" height="60">
 				<ul class="nav nav-pills">
 					<li><a [routerLink]="['./']" routerLinkActive="active">Homepage</a></li>
 					<li><a [routerLink]="['./chat']" routerLinkActive="active">Chat</a></li>
