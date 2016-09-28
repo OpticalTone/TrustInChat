@@ -10,6 +10,7 @@ var userSchema = new Schema({
 	securityQuestion: { type: String, default: '' },    
 	securityAnswer: { type: String, required: true },    
 	notifications: { type: String, default: '' },
+	initialMessage: { type: String, required: true },
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });
 

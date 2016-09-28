@@ -75,7 +75,8 @@ router.post('/', function(req, res, next){
 		fromEmail: req.body.fromEmail,
 		securityQuestion: req.body.securityQuestion,    
 		securityAnswer: req.body.securityAnswer,   
-		notifications: req.body.notifications
+		notifications: req.body.notifications,
+		initialMessage: req.body.initialMessage
 	});
 
 	//var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
@@ -95,6 +96,7 @@ router.post('/', function(req, res, next){
 			userId: user._id,
 			toEmail: req.body.toEmail,
 			fromEmail: req.body.fromEmail,
+			initialMessage: req.body.initialMessage,
 			obj: result
 		});
 	});

@@ -43,8 +43,8 @@ import {Message} from '../messages/message';
 		            <input type="password" formControlName="securityAnswerRep" id="securityAnswerRep" name="securityAnswerRep" class="form-control">
 		        </div>
 		        <div class="form-group">
-		        	<label for="content">Initial message:</label>
-		            <input type="text" formControlName="content" id="content" name="content" class="form-control">
+		            <label for="initialMessage">Initial Message:</label>
+		            <input type="text" formControlName="initialMessage" id="initialMessage" name="initialMessage" class="form-control">
 		        </div>
 		        <div class="form-group">
 		            <input type="checkbox" formControlName="notifications" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      
@@ -66,6 +66,7 @@ export class HomepageComponent implements OnInit {
 		const user = new User(
 			this.homepageForm.value.fromName,
 			this.homepageForm.value.securityAnswer,
+			this.homepageForm.value.initialMessage,
 			this.homepageForm.value.toEmail,
 			this.homepageForm.value.fromEmail,
 			this.homepageForm.value.securityQuestion,
@@ -85,6 +86,7 @@ export class HomepageComponent implements OnInit {
 					console.log(user);
 					console.log(data);
 					localStorage.setItem('token', data.token);
+					localStorage.setItem('initialMessage', data.initialMessage);
 					localStorage.setItem('userId', data.userId);
 					localStorage.setItem('toEmail', data.toEmail);
 					localStorage.setItem('fromEmail', data.fromEmail);
@@ -93,7 +95,7 @@ export class HomepageComponent implements OnInit {
 				error => this._errorService.handleError(error)
 			);
 
-		const message = new Message(this.homepageForm.value.content, null, null);
+		/*const message = new Message(this.homepageForm.value.content, null, null);
 
 		this._homepageService.addInitialMessage(message)
 			.subscribe(
@@ -102,7 +104,7 @@ export class HomepageComponent implements OnInit {
 						this._homepageService.messages.push(msgData);
 					},
 					error => this._errorService.handleError(error)
-				);
+				);*/
 	}
 
 	isLoggedIn() {
@@ -124,8 +126,8 @@ export class HomepageComponent implements OnInit {
 			securityQuestion: ['', Validators.required],
 			securityAnswer: ['', Validators.compose([Validators.required, this.answerValidator])],
 			securityAnswerRep: ['', Validators.compose([Validators.required, this.answerValidator])],
-			content: ['', Validators.required],
-			notifications: ['']
+			initialMessage: ['', Validators.required],
+			notifications: [''],
 		}, {validator: this.matchAnswers('securityAnswer', 'securityAnswerRep')});
 	}
 

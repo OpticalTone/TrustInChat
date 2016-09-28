@@ -33,7 +33,8 @@ export class HomepageService {
 	//quitChat() {
 	//	localStorage.clear();
 	//}
-	messages: Message[] = [];
+	
+	/*messages: Message[] = [];
 	addInitialMessage(initialMessage: Message) {
 
 		const headers = new Headers({'Content-Type': 'application/json'});
@@ -43,5 +44,5 @@ export class HomepageService {
 			.map(response => response.json())
 			.catch(error => Observable.throw(error.json()));
 			
-	}
+	}*/
 }
