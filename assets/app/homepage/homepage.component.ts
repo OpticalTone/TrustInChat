@@ -73,13 +73,6 @@ export class HomepageComponent implements OnInit {
 			this.homepageForm.value.notifications
 			);
 
-		
-
-		//var initialMessage = this.homepageForm.value.content;
-		//console.log(initialMessage);
-
-		//localStorage.setItem('content', initialMessage);
-
 		this._homepageService.addUser(user)
 			.subscribe(
 				data => {
@@ -94,17 +87,6 @@ export class HomepageComponent implements OnInit {
 				},
 				error => this._errorService.handleError(error)
 			);
-
-		/*const message = new Message(this.homepageForm.value.content, null, null);
-
-		this._homepageService.addInitialMessage(message)
-			.subscribe(
-					msgData => {
-						console.log(msgData);
-						this._homepageService.messages.push(msgData);
-					},
-					error => this._errorService.handleError(error)
-				);*/
 	}
 
 	isLoggedIn() {

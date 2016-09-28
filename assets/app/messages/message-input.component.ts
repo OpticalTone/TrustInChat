@@ -40,7 +40,12 @@ export class MessageInputComponent implements OnInit{
 				);
 			this.message = null;
 		} else {
-			const message: Message = new Message(content, null, '1');
+
+			if (!content){
+				content = '(empty message)';
+			}
+
+			const message: Message = new Message(content, null, null);
 			this._messageService.addMessage(message)
 				.subscribe(
 					data => {
