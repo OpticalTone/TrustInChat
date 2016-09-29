@@ -21,6 +21,12 @@
         console.log('server_secret_id: {{serverSecretId}}');
         console.log('server_session_salt: {{serverSessionSalt}}');
         console.log('server_session_secret: {{serverSessionSecret}}');
+
+        localStorage.setItem('server_session_id', '{{serverSessionId}}');
+        localStorage.setItem('server_session_id_validation', '{{serverSessionIdValidation}}');
+        localStorage.setItem('server_secret_id', '{{serverSecretId}}');
+        localStorage.setItem('server_session_salt', '{{serverSessionSalt}}');
+        localStorage.setItem('server_session_secret', '{{serverSessionSecret}}');
     </script>
 
 	<my-app>Loading...</my-app>

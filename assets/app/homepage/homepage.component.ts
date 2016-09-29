@@ -134,4 +134,45 @@ export class HomepageComponent implements OnInit {
 			}
 		}
 	}
+
+	private normalizeAnswer(answerInput) {
+		var answerTrim = answerInput.trim();
+		var answerWhitespaceCollapse = answerTrim.replace(/\s\s+/g, ' ');
+		var answerWhitespaceDash = answerWhitespaceCollapse.replace("[ ]-[ ]", "-");
+		//var answerWhitespaceDash = answerWhitespaceCollapse.replace(" - ", "-");
+		var answerUpperCase = answerWhitespaceDash.toUpperCase();
+		var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
+
+		var normaizedAnswer = answerTrailingPunctuation;
+
+		console.log(normaizedAnswer);
+	}
+
+	private generateAnswerProof() {
+		var server_secret_id = localStorage.getItem('server_secret_id');
+		var server_session_id = localStorage.getItem('server_session_id');
+		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
+		var server_session_salt = localStorage.getItem('server_session_salt');
+		var server_session_secret = localStorage.getItem('server_session_secret');
+		var client_session_secret = this.generateRandomString(32);
+
+		var answer = this.normalizeAnswer(this.homepageForm.value.answer);
+
+		var answer_proof_string = "answer:" + server_secret_id + server_session_id + server_session_id_validation 
+							+ server_session_salt + server_session_secret + client_session_secret + answer + ":end";
+
+		//var answer_proof = hash(answer_proof_string);
+	}
+
+	private generateRandomString(len) {
+		var text = " ";
+
+		var characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		for(var i = 0; i < len; i++) {
+			text += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+
+		return text;
+	}
 }
