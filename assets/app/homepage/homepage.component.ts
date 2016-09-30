@@ -91,6 +91,8 @@ export class HomepageComponent implements OnInit {
 			);
 
 		this.generateAnswerProof(this.homepageForm.value.securityAnswer);	
+
+		this.generateSharedSecret();
 	}
 
 	isLoggedIn() {
@@ -163,13 +165,19 @@ export class HomepageComponent implements OnInit {
 
 		console.log(client_session_secret);
 
-		var answer_proof_string = "answer:" + server_secret_id + server_session_id + server_session_id_validation 
-		+ server_session_salt + server_session_secret + client_session_secret + answer + ":end";
+		localStorage.setItem('client_session_secret', client_session_secret);
+		localStorage.setItem('answer', answer);
+
+		var answer_proof_string = "answer:" + server_secret_id + ":" + server_session_id + ":" + 
+		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
+		client_session_secret + ":" + answer + ":end";
+
+		console.log(answer_proof_string);
 
 		var hash = CryptoJS.SHA256(answer_proof_string);
 		var answer_proof = CryptoJS.enc.Base64.stringify(hash);
+
         console.log(answer_proof);
-        console.log(answer_proof_string);
 	}
 
 	private generateRandomString(len) {
@@ -182,5 +190,26 @@ export class HomepageComponent implements OnInit {
 		}
 
 		return text;
+	}
+
+	private generateSharedSecret() {
+		var server_secret_id = localStorage.getItem('server_secret_id');
+		var server_session_id = localStorage.getItem('server_session_id');
+		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
+		var server_session_salt = localStorage.getItem('server_session_salt');
+		var server_session_secret = localStorage.getItem('server_session_secret');
+		var client_session_secret = localStorage.getItem('client_session_secret');
+		var answer = localStorage.getItem('answer');
+
+		var shared_secret_string = "cipher:" + server_secret_id + ":" + server_session_id + ":" + 
+		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
+		client_session_secret + ":" + answer + ":end";
+
+		console.log(shared_secret_string);
+
+		var hash = CryptoJS.SHA256(shared_secret_string);
+		var shared_secret = CryptoJS.enc.Base64.stringify(hash);
+
+		console.log(shared_secret);
 	}
 }
