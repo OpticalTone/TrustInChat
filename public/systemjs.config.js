@@ -15,12 +15,14 @@ var map = {
 
     // other libraries
     'rxjs':'js/vendor/rxjs',
+    'crypto-js': 'js/vendor/crypto-js'
 };
 
 // packages tells the System loader how to load when no filename and/or no extension
 var packages = {
     'app': { main: 'boot.js', defaultExtension: 'js' },
-    'rxjs': { main: './Rx.js', defaultExtension: 'js' }
+    'rxjs': { main: './Rx.js', defaultExtension: 'js' },
+    'crypto-js': { format: 'cjs', defaultExtension: 'js', main: 'crypto-js.js' }
 }
  var packageNames = [
     '@angular/core',

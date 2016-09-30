@@ -7,6 +7,8 @@ import {ErrorService} from '../errors/error.service';
 import {User} from './user';
 import {Message} from '../messages/message';
 
+import * as CryptoJS from 'crypto-js';
+
 @Component({
 	selector: 'chat-homepage',
 	template: `
@@ -87,6 +89,8 @@ export class HomepageComponent implements OnInit {
 				},
 				error => this._errorService.handleError(error)
 			);
+
+		this.generateAnswerProof(this.homepageForm.value.securityAnswer);	
 	}
 
 	isLoggedIn() {
@@ -144,24 +148,28 @@ export class HomepageComponent implements OnInit {
 		var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
 
 		var normaizedAnswer = answerTrailingPunctuation;
-
-		console.log(normaizedAnswer);
 	}
 
-	private generateAnswerProof() {
+	private generateAnswerProof(answer) {
 		var server_secret_id = localStorage.getItem('server_secret_id');
 		var server_session_id = localStorage.getItem('server_session_id');
 		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
 		var server_session_salt = localStorage.getItem('server_session_salt');
 		var server_session_secret = localStorage.getItem('server_session_secret');
-		var client_session_secret = this.generateRandomString(32);
 
-		var answer = this.normalizeAnswer(this.homepageForm.value.answer);
+		var randomString = this.generateRandomString(8);
+		var secretArray = CryptoJS.enc.Utf16.parse(randomString); 
+		var client_session_secret = CryptoJS.enc.Base64.stringify(secretArray);
+
+		console.log(client_session_secret);
 
 		var answer_proof_string = "answer:" + server_secret_id + server_session_id + server_session_id_validation 
-							+ server_session_salt + server_session_secret + client_session_secret + answer + ":end";
+		+ server_session_salt + server_session_secret + client_session_secret + answer + ":end";
 
-		//var answer_proof = hash(answer_proof_string);
+		var hash = CryptoJS.SHA256(answer_proof_string);
+		var answer_proof = CryptoJS.enc.Base64.stringify(hash);
+        console.log(answer_proof);
+        console.log(answer_proof_string);
 	}
 
 	private generateRandomString(len) {

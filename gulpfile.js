@@ -33,6 +33,9 @@ gulp.task('vendor', function() {
     gulp.src('node_modules/core-js/**')
         .pipe(gulp.dest(vendor + '/core-js'));
 
+    gulp.src('node_modules/crypto-js/**')
+        .pipe(gulp.dest(vendor + '/crypto-js'));    
+
     gulp.src('node_modules/reflect-metadata/**')
         .pipe(gulp.dest(vendor + '/reflect-metadata/'));
 
