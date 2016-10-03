@@ -7,10 +7,10 @@ export class User {
 	notifications: string;
 	initialMessage: string;
 
-	constructor (userName: string, securityAnswer: string, initialMessage: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string) {
+	constructor (userName: string, initialMessage: string, securityAnswer?: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string) {
 		this.userName = userName;
-		this.securityAnswer = securityAnswer;
 		this.initialMessage = initialMessage;
+		this.securityAnswer = securityAnswer;
 		this.toEmail = toEmail;
 		this.fromEmail = fromEmail;
 		this.securityQuestion = securityQuestion;  

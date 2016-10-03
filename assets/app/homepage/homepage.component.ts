@@ -67,8 +67,9 @@ export class HomepageComponent implements OnInit {
 	onSubmit() {
 		const user = new User(
 			this.homepageForm.value.fromName,
-			this.homepageForm.value.securityAnswer,
 			this.homepageForm.value.initialMessage,
+			//this.homepageForm.value.securityAnswer,
+			null,
 			this.homepageForm.value.toEmail,
 			this.homepageForm.value.fromEmail,
 			this.homepageForm.value.securityQuestion,
@@ -92,7 +93,11 @@ export class HomepageComponent implements OnInit {
 				error => this._errorService.handleError(error)
 			);
 
-		this.generateAnswerProof(this.homepageForm.value.securityAnswer);	
+		var answer = this.homepageForm.value.securityAnswer;
+
+		localStorage.setItem('answer', answer);
+
+		this.generateAnswerProof(answer);	
 
 		this.generateSharedSecret();
 	}
@@ -165,7 +170,7 @@ export class HomepageComponent implements OnInit {
 		var secretArray = CryptoJS.enc.Utf16.parse(randomString); 
 		var client_session_secret = CryptoJS.enc.Base64.stringify(secretArray);
 
-		console.log(client_session_secret);
+		console.log('client_session_secret: ' + client_session_secret);
 
 		localStorage.setItem('client_session_secret', client_session_secret);
 		localStorage.setItem('answer', answer);
@@ -174,12 +179,12 @@ export class HomepageComponent implements OnInit {
 		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
 		client_session_secret + ":" + answer + ":end";
 
-		console.log(answer_proof_string);
+		console.log('answer_proof_string: ' + answer_proof_string);
 
 		var hash = CryptoJS.SHA256(answer_proof_string);
 		var answer_proof = CryptoJS.enc.Base64.stringify(hash);
 
-        console.log(answer_proof);
+        console.log('answer_proof: ' + answer_proof);
 
 		localStorage.setItem('answer_proof', answer_proof);
 	}
@@ -197,12 +202,12 @@ export class HomepageComponent implements OnInit {
 		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
 		client_session_secret + ":" + answer + ":end";
 
-		console.log(shared_secret_string);
+		console.log('shared_secret_string: ' + shared_secret_string);
 
 		var hash = CryptoJS.SHA256(shared_secret_string);
 		var shared_secret = CryptoJS.enc.Base64.stringify(hash);
 
-		console.log(shared_secret);
+		console.log('shared_secret: ' + shared_secret);
 
 		localStorage.setItem('shared_secret', shared_secret);
 	}

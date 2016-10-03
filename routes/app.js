@@ -74,7 +74,7 @@ router.post('/', function(req, res, next){
 		userName: req.body.userName,   
 		fromEmail: req.body.fromEmail,
 		securityQuestion: req.body.securityQuestion,    
-		securityAnswer: req.body.securityAnswer,   
+		//securityAnswer: req.body.securityAnswer,   
 		notifications: req.body.notifications,
 		initialMessage: req.body.initialMessage
 	});
