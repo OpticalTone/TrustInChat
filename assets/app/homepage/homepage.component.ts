@@ -101,7 +101,7 @@ export class HomepageComponent implements OnInit {
 
 		this.generateAnswerProof(normalizedAnswer);	
 
-		this.generateSharedSecret();
+		this.generateSharedSecret(normalizedAnswer);
 	}
 
 	isLoggedIn() {
@@ -162,7 +162,7 @@ export class HomepageComponent implements OnInit {
 		return normaizedAnswer;
 	}
 
-	private generateAnswerProof(answer) {
+	private generateAnswerProof(normalizedAnswer) {
 		var server_secret_id = localStorage.getItem('server_secret_id');
 		var server_session_id = localStorage.getItem('server_session_id');
 		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
@@ -173,95 +173,45 @@ export class HomepageComponent implements OnInit {
 		var secretArray = CryptoJS.enc.Utf16.parse(randomString); 
 		var client_session_secret = CryptoJS.enc.Base64.stringify(secretArray);
 
-		console.log('client_session_secret: ' + client_session_secret);
-
 		localStorage.setItem('client_session_secret', client_session_secret);
-		localStorage.setItem('answer', answer);
 
 		var answer_proof_string = "answer:" + server_secret_id + ":" + server_session_id + ":" + 
 		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
-		client_session_secret + ":" + answer + ":end";
-
-		console.log('answer_proof_string: ' + answer_proof_string);
+		client_session_secret + ":" + normalizedAnswer + ":end";
 
 		var hash = CryptoJS.SHA256(answer_proof_string);
 		var answer_proof = CryptoJS.enc.Base64.stringify(hash);
 
-        console.log('answer_proof: ' + answer_proof);
+        localStorage.setItem('answer_proof', answer_proof);
 
-		localStorage.setItem('answer_proof', answer_proof);
+        console.log('-----------------------------------------------');
+        console.log('client_session_secret: ' + client_session_secret);
+        console.log('answer_proof_string: ' + answer_proof_string);
+        console.log('answer_proof: ' + answer_proof);
+        console.log('-----------------------------------------------');
 	}
 
-	private generateSharedSecret() {
+	private generateSharedSecret(normalizedAnswer) {
 		var server_secret_id = localStorage.getItem('server_secret_id');
 		var server_session_id = localStorage.getItem('server_session_id');
 		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
 		var server_session_salt = localStorage.getItem('server_session_salt');
 		var server_session_secret = localStorage.getItem('server_session_secret');
 		var client_session_secret = localStorage.getItem('client_session_secret');
-		var answer = localStorage.getItem('answer');
 
 		var shared_secret_string = "cipher:" + server_secret_id + ":" + server_session_id + ":" + 
 		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
-		client_session_secret + ":" + answer + ":end";
-
-		console.log('shared_secret_string: ' + shared_secret_string);
+		client_session_secret + ":" + normalizedAnswer + ":end";
 
 		var hash = CryptoJS.SHA256(shared_secret_string);
 		var shared_secret = CryptoJS.enc.Base64.stringify(hash);
 
-		console.log('shared_secret: ' + shared_secret);
-
 		localStorage.setItem('shared_secret', shared_secret);
-	}
 
-	private createNewChatSession() {
-
-		var server_session_id = localStorage.getItem('server_session_id');
-		var server_session_id_validation = localStorage.getItem('server_session_id_validation');
-		var server_session_salt = localStorage.getItem('server_session_salt');
-		var server_session_secret = localStorage.getItem('server_session_secret');
-		var answer_proof = localStorage.getItem('answer_proof');
-
-		// The question (encrypted) + question salt + validation: 
-		var randomQuestionString = this.generateRandomString(8);
-		var questionArray = CryptoJS.enc.Utf16.parse(randomQuestionString);
-		var question_salt = CryptoJS.enc.Base64.stringify(questionArray);
-
-		var plain_text_question = localStorage.getItem('question');
-		var client_session_secret = localStorage.getItem('client_session_secret');
-
-		var question_secret_string = "secret:" + question_salt + ":" + client_session_secret;
-		var hash_question_secret = CryptoJS.SHA256(question_secret_string);
-		var question_secret = CryptoJS.enc.Base64.stringify(hash_question_secret);
-
-		var encrypted_question = CryptoJS.AES.encrypt(question_secret, plain_text_question);
-
-		var question_secret_validation_string = "validate:" + question_salt + ":" + client_session_secret;
-		var hash_validation = CryptoJS.SHA256(question_secret_validation_string);
-		var question_secret_validation = CryptoJS.enc.Base64.stringify(hash_validation);
-
-		var question_integrity = CryptoJS.HmacSHA256(question_secret, plain_text_question);
-
-		//The message (encrypted) + message salt + validation:
-		var randomMessageString = this.generateRandomString(8);
-		var messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
-		var message_salt = CryptoJS.enc.Base64.stringify(messageArray);
-
-		var shared_secret = localStorage.getItem('shared_secret');
-
-		var message_secret_string = "secret:" + message_salt + ":" + shared_secret;
-		var hash_message_secret = CryptoJS.SHA256(message_secret_string);
-		var message_secret = CryptoJS.enc.Base64.stringify(hash_message_secret);
-
-		var message_secret_validation_string = "validate:" + message_salt + ":" + shared_secret;
-		var hash_message_validation = CryptoJS.SHA256(message_secret_validation_string);
-		var message_secret_validation = CryptoJS.enc.Base64.stringify(hash_message_validation);
-
-		var plain_text_message = localStorage.getItem('initialMessage');
-
-		var message_integrity = CryptoJS.HmacSHA256(message_secret, plain_text_message);
-		
+		console.log('-----------------------------------------------');
+		console.log('shared_secret_string: ' + shared_secret_string);
+		console.log('shared_secret: ' + shared_secret);
+		console.log('-----------------------------------------------');
 	}
 
 	private generateRandomString(len) {
