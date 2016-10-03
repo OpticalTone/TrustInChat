@@ -97,7 +97,9 @@ export class HomepageComponent implements OnInit {
 
 		localStorage.setItem('answer', answer);
 
-		this.generateAnswerProof(answer);	
+		var normalizedAnswer = this.normalizeAnswer(answer);
+
+		this.generateAnswerProof(normalizedAnswer);	
 
 		this.generateSharedSecret();
 	}
@@ -133,7 +135,7 @@ export class HomepageComponent implements OnInit {
 	}
 
 	private answerValidator(control): {[s: string]: boolean} {
-		if (!control.value.match(/^[a-zA-Z0-9!@#$%^&*]{4,100}$/)) {
+		if (!control.value.match(/^[a-zA-Z0-9-_@#$%^&*\s]{4,}$/)) {
 			return {invalidAnswer: true};
 		}
 	}
@@ -151,12 +153,13 @@ export class HomepageComponent implements OnInit {
 	private normalizeAnswer(answerInput) {
 		var answerTrim = answerInput.trim();
 		var answerWhitespaceCollapse = answerTrim.replace(/\s\s+/g, ' ');
-		var answerWhitespaceDash = answerWhitespaceCollapse.replace("[ ]-[ ]", "-");
-		//var answerWhitespaceDash = answerWhitespaceCollapse.replace(" - ", "-");
+		var answerWhitespaceDash = answerWhitespaceCollapse.replace(/\s-\s/g, '-');
 		var answerUpperCase = answerWhitespaceDash.toUpperCase();
-		var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
+		//var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
 
-		var normaizedAnswer = answerTrailingPunctuation;
+		var normaizedAnswer = answerUpperCase;
+
+		return normaizedAnswer;
 	}
 
 	private generateAnswerProof(answer) {
