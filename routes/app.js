@@ -74,9 +74,15 @@ router.post('/', function(req, res, next){
 		userName: req.body.userName,   
 		fromEmail: req.body.fromEmail,
 		securityQuestion: req.body.securityQuestion,    
-		//securityAnswer: req.body.securityAnswer,   
 		notifications: req.body.notifications,
-		initialMessage: req.body.initialMessage
+		initialMessage: req.body.initialMessage,
+		
+		answerProof: req.body.answer_proof,
+		questionSalt: req.body.question_salt,
+		//encrypted_question: Object;
+		questionSecret: req.body.question_secret,
+		questionSecret_validation: req.body.question_secret_validation,
+		questionIntegrity: req.body.question_integrity
 	});
 
 	//var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
@@ -144,7 +150,11 @@ router.post('/chat', function(req, res, next) {
 		}
 		var message = new Message({
 			content: req.body.content,
-			user: doc
+			user: doc,
+			message_salt: req.body.message_salt,
+			message_secret: req.body.message_secret,
+			message_secret_validation: req.body.message_secret_validation,
+			message_integrity: req.body.message_integrity
 		});
 		message.save(function(err, result) {
 			if (err) {

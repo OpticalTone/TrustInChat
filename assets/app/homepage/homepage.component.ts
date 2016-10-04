@@ -65,19 +65,71 @@ export class HomepageComponent implements OnInit {
 	}
 
 	onSubmit() {
+
+		localStorage.setItem('question', this.homepageForm.value.securityQuestion);
+
+		var answer = this.homepageForm.value.securityAnswer;
+
+		localStorage.setItem('answer', answer);
+
+		var normalizedAnswer = this.normalizeAnswer(answer);
+
+		this.generateAnswerProof(normalizedAnswer);	
+
+		this.generateSharedSecret(normalizedAnswer);
+
+
+		var answer_proof = localStorage.getItem('answer_proof');
+
+		// The question (encrypted) + question salt + validation: 
+		var randomQuestionString = this.generateRandomString(8);
+		var questionArray = CryptoJS.enc.Utf16.parse(randomQuestionString);
+		var question_salt = CryptoJS.enc.Base64.stringify(questionArray);
+
+		var plain_text_question = localStorage.getItem('question');
+		var client_session_secret = localStorage.getItem('client_session_secret');
+
+		var question_secret_string = "secret:" + question_salt + ":" + client_session_secret;
+		var hash_question_secret = CryptoJS.SHA256(question_secret_string);
+		var question_secret = CryptoJS.enc.Base64.stringify(hash_question_secret);
+
+		var encrypted_question = CryptoJS.AES.encrypt(question_secret, plain_text_question);
+
+		var question_secret_validation_string = "validate:" + question_salt + ":" + client_session_secret;
+		var hash_validation = CryptoJS.SHA256(question_secret_validation_string);
+		var question_secret_validation = CryptoJS.enc.Base64.stringify(hash_validation);
+
+		var question_integrity_arr = CryptoJS.HmacSHA256(question_secret, plain_text_question);
+		var question_integrity = CryptoJS.enc.Base64.stringify(question_integrity_arr);
+
+		console.log('-----------------------------------------------');
+		console.log('question_salt: ', question_salt);
+		console.log('plain_text_question: ', plain_text_question);
+		console.log('question_secret_string: ', question_secret_string);
+		console.log('question_secret: ', question_secret);
+		console.log('encrypted_question: ', encrypted_question);
+		console.log('question_secret_validation_string: ', question_secret_validation_string);
+		console.log('question_secret_validation: ', question_secret_validation);
+		console.log('question_integrity: ', question_integrity);
+		console.log('-----------------------------------------------');	
+
+
 		const user = new User(
 			this.homepageForm.value.fromName,
 			this.homepageForm.value.initialMessage,
-			//this.homepageForm.value.securityAnswer,
 			null,
 			this.homepageForm.value.toEmail,
 			this.homepageForm.value.fromEmail,
 			this.homepageForm.value.securityQuestion,
-			this.homepageForm.value.notifications
+			this.homepageForm.value.notifications,
+			answer_proof,
+			question_salt,
+			//encrypted_question,
+			question_secret,
+			question_secret_validation,
+			question_integrity
 			);
-
-		localStorage.setItem('question', this.homepageForm.value.securityQuestion);
-
+		
 		this._homepageService.addUser(user)
 			.subscribe(
 				data => {
@@ -92,16 +144,7 @@ export class HomepageComponent implements OnInit {
 				},
 				error => this._errorService.handleError(error)
 			);
-
-		var answer = this.homepageForm.value.securityAnswer;
-
-		localStorage.setItem('answer', answer);
-
-		var normalizedAnswer = this.normalizeAnswer(answer);
-
-		this.generateAnswerProof(normalizedAnswer);	
-
-		this.generateSharedSecret(normalizedAnswer);
+		
 	}
 
 	isLoggedIn() {

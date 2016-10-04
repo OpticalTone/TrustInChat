@@ -3,6 +3,7 @@ import {Http, Headers} from '@angular/http';
 import {Injectable, EventEmitter} from '@angular/core';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Observable';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class MessageService {
@@ -24,7 +25,8 @@ export class MessageService {
 		return this._http.post(this.chatUrl + '/' + token, body, {headers: headers})
 			.map(response => {
 				const data = response.json().obj;
-				let message = new Message(data.content, data.user.fromEmail, data.user.toEmail, data._id, data.user._id);
+				let message = new Message(data.content, data.user.fromEmail, data.user.toEmail, data._id, data.user._id, 
+					data.message_salt, data.message_secret, data.message_secret_validation, data.message_integrity);
 				return message;
 			})
 			.catch(error => Observable.throw(error.json()));
@@ -68,5 +70,15 @@ export class MessageService {
 		return this._http.delete(this.chatUrl + '/' + message.messageId  + '/' + token)
 			.map(response => response.json())
 			.catch(error => Observable.throw(error.json()));
+	}
+
+	private generateRandomString(len) {
+		var text = " ";
+		var characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		for(var i = 0; i < len; i++) {
+			text += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		return text;
 	}
 }
