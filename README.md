@@ -1,7 +1,38 @@
 # TrustInChat    
-    
+     
+----------------------------------          
+Install tools:       
+----------------------------------      
+      
+Install MongoDB:     
+      
+curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.10.tgz        
+       
+tar -zxvf mongodb-linux-x86_64-3.2.10.tgz       
+        
+mkdir -p mongodb      
+       
+cp -R -n mongodb-linux-x86_64-3.2.10/. mongodb      
+
+mkdir -p /data/db
+
+     
+----------------------------------     
 Setup project:   
+----------------------------------           
+     
+mkdir dev     
+     
+cd dev          
+      
+git clone https://github.com/OpticalTone/TrustInChat.git      
+      
+cd TrustInChat    
+     
+git status    
     
+git checkout dev    
+     
 Terminal 1:    
 > Navigate to project folder       
 > Install dependencies(package.json): sudo npm install           
@@ -27,7 +58,8 @@ Mongo commands:
 > Find all documents in the collection: db.collection.find()    
 > Delete all documents from the collection: db.collection.remove({})      
       
-Open Chromium Web Browser:      
+Open Chromium Web Browser:  
+> Install Chromium web browser from Ubuntu software    
 > Navigate to: localhost:3000      
 > Open console: F12     
     
