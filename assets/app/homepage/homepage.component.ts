@@ -144,6 +144,8 @@ export class HomepageComponent implements OnInit {
 				},
 				error => this._errorService.handleError(error)
 			);
+
+		localStorage.setItem('fromName', this.homepageForm.value.fromName);	
 		
 	}
 

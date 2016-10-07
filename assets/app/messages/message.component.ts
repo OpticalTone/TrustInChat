@@ -10,7 +10,7 @@ import {ErrorService} from '../errors/error.service';
 	template: `
 		<div class="panel-body">
 			<div class="author" *ngIf="belongsToUser()">
-				{{message.chatFromEmail}}(Me):
+				Me:
 			</div>
 			<div class="author" *ngIf="!belongsToUser()" style="float: right;">
 				{{message.chatToEmail}}
@@ -20,12 +20,15 @@ import {ErrorService} from '../errors/error.service';
 		<article class="panel panel-default">
 			
 			<div class="panel-body">
-				<div class="msg">
+				<div class="msg" *ngIf="belongsToUser()">
 					{{message.content}}
 				</div>
 				<div class="config" *ngIf="belongsToUser()">
 					<a (click)="onEdit()">Edit</a>
 					<a (click)="onDelete()">Delete</a>
+				</div>
+				<div class="msgRight" *ngIf="!belongsToUser()">
+					{{message.content}}
 				</div>
 			</div>
 		</article>
@@ -39,6 +42,11 @@ import {ErrorService} from '../errors/error.service';
 		.msg {
 			display: inline-block;
 			width: 80%;
+		}
+		.msgRight {
+			display: inline-block;
+			text-align: right;
+			float: right;
 		}
 		.config {
 			display: inline-block;

@@ -17,7 +17,7 @@ import {MessageInputComponent} from './message-input.component';
 		    	<div class="row spacing">
 					<section class="col-md-8 col-md-offset-2">
 						<label>From:</label>
-						<span id="fromEmail">{{getFromEmail()}}</span>
+						<span id="fromEmail">{{getFromName()}} ({{getFromEmail()}})</span>
 					</section>
 				</div>
 		    	<div class="row spacing">
@@ -62,6 +62,10 @@ export class MessagesComponent {
 
 	getFromEmail() {
 		return localStorage.getItem('fromEmail');
+	}
+
+	getFromName() {
+		return localStorage.getItem('fromName');
 	}
 
 	getShareUrl() {
