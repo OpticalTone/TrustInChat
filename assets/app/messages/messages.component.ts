@@ -6,24 +6,29 @@ import {MessageInputComponent} from './message-input.component';
 	selector: 'chat-messages',
 	template: `
 	<div class="container">
-		<div class="panel data">
-			<div class="row spacing">
-				<section class="col-md-8 col-md-offset-2">
-					<div class="form-group">
-						<label>To:</label>
-						<input type="text" name="to" value="{{getToEmail()}}"/>
-						<br><br>
-						<label>From:</label>
-						<input type="text" name="from" value="{{getFromEmail()}}"/>
-						<br><br>
-						<label>Share URL:</label>
-						<input type="text" name="shareUrl" />
-						<br><br>
-					</div>
-				</section>
-			</div>
-		</div>
 	    <div class="panel">
+		    <div class="data">
+		    	<div class="row spacing">
+					<section class="col-md-8 col-md-offset-2">
+						<label>To:</label>
+						<span id="toEmail">{{getToEmail()}}</span>
+					</section>
+				</div>
+		    	<div class="row spacing">
+					<section class="col-md-8 col-md-offset-2">
+						<label>From:</label>
+						<span id="fromEmail">{{getFromEmail()}}</span>
+					</section>
+				</div>
+		    	<div class="row spacing">
+					<section class="col-md-8 col-md-offset-2">
+						<div style="white-space:nowrap">
+							<label>Share URL:</label>
+							<a href="{{getShareUrl()}}">{{getShareUrl()}}</a>
+						</div>	
+					</section>
+				</div>
+			</div>	
 			<div class="row spacing">
 				<chat-message-list></chat-message-list>
 			</div>
@@ -35,12 +40,16 @@ import {MessageInputComponent} from './message-input.component';
 	`,
 	styles: [`
 		.data {
-			width: 500px;
-			margin-left: 110px;
-			margin-top: 100px;
+			margin-top: 60px;
+			margin-bottom 60px;		
 		}
-		.data input {
-			float: right;
+
+		span#toEmail {
+			margin-left: 54px;
+		}
+
+		span#fromEmail {
+			margin-left: 36px;
 		}
 	`],
 	directives: [MessageListComponent, MessageInputComponent]
@@ -53,6 +62,16 @@ export class MessagesComponent {
 
 	getFromEmail() {
 		return localStorage.getItem('fromEmail');
+	}
+
+	getShareUrl() {
+		var serverSessionId = localStorage.getItem('server_session_id');
+
+		var clientSessionSecret = localStorage.getItem('client_session_secret');
+
+		var shareUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
+
+		return shareUrl;
 	}
 
 }

@@ -46,7 +46,7 @@ import * as CryptoJS from 'crypto-js';
 		        </div>
 		        <div class="form-group">
 		            <label for="initialMessage">Initial Message:</label>
-		            <input type="text" formControlName="initialMessage" id="initialMessage" name="initialMessage" class="form-control">
+		            <textarea formControlName="initialMessage" id="initialMessage" name="initialMessage" class="form-control"></textarea>
 		        </div>
 		        <div class="form-group">
 		            <input type="checkbox" formControlName="notifications" name="notifications" value="notifications">Please send me update notifications about the TrustInChat service.**                                      
