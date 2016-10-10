@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {MessageListComponent} from './message-list.component';
 import {MessageInputComponent} from './message-input.component';
 
+import * as sioc from 'socket.io-client';
+
 @Component({
 	selector: 'chat-messages',
 	template: `

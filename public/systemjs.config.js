@@ -15,14 +15,16 @@ var map = {
 
     // other libraries
     'rxjs':'js/vendor/rxjs',
-    'crypto-js': 'js/vendor/crypto-js'
+    'crypto-js': 'js/vendor/crypto-js',
+    "socket.io-client": "js/vendor/socket.io-client"
 };
 
 // packages tells the System loader how to load when no filename and/or no extension
 var packages = {
     'app': { main: 'boot.js', defaultExtension: 'js' },
     'rxjs': { main: './Rx.js', defaultExtension: 'js' },
-    'crypto-js': { format: 'cjs', defaultExtension: 'js', main: 'crypto-js.js' }
+    'crypto-js': { format: 'cjs', defaultExtension: 'js', main: 'crypto-js.js' },
+    "socket.io-client": {"defaultExtension": "js"}
 }
  var packageNames = [
     '@angular/core',
