@@ -9,7 +9,6 @@ import {Router} from "@angular/router";
 				<img border="0" alt="TrustInChat" src="img/logo.png" width="100" height="60">
 				<ul class="nav nav-pills">
 					<li><a [routerLink]="['']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Homepage</a></li>
-					<li><a [routerLink]="['chat']" routerLinkActive="active">Chat</a></li>
 					<li><a href="#" routerLinkActive="active">About</a></li>
 					<li><a href="#" routerLinkActive="active">Help</a></li>
 				</ul>

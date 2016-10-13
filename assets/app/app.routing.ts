@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomepageComponent} from './homepage/homepage.component';
 import {MessagesComponent} from './messages/messages.component';
+import {ChatGuard} from './messages/chat.guard';
 
 const appRoutes: Routes = [
+	{path: 'chat/:serverSessionId', component: MessagesComponent, canActivate: [ChatGuard]},
 	{path: '', component: HomepageComponent},
-	{path: 'chat', component: MessagesComponent }
+	{path: '**', redirectTo: '', pathMatch: 'full'}
 ]
 
 @NgModule({

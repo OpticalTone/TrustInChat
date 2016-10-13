@@ -24,6 +24,8 @@ import { ErrorComponent } from './errors/error.component';
 
 import { ErrorService } from './errors/error.service';
 
+import {ChatGuard} from './messages/chat.guard';
+
 @NgModule({
 	imports: [
     	BrowserModule,
@@ -46,7 +48,8 @@ import { ErrorService } from './errors/error.service';
     providers: [
         MessageService,
         HomepageService,
-        ErrorService
+        ErrorService,
+        ChatGuard
     ],  
     bootstrap:  [
 	    [AppComponent]

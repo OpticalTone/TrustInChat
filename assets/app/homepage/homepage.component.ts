@@ -129,6 +129,8 @@ export class HomepageComponent implements OnInit {
 			question_secret_validation,
 			question_integrity
 			);
+
+		var serverSessionId = localStorage.getItem('server_session_id');
 		
 		this._homepageService.addUser(user)
 			.subscribe(
@@ -140,7 +142,7 @@ export class HomepageComponent implements OnInit {
 					localStorage.setItem('userId', data.userId);
 					localStorage.setItem('toEmail', data.toEmail);
 					localStorage.setItem('fromEmail', data.fromEmail);
-					this._router.navigateByUrl('/chat');
+					this._router.navigate(['chat', serverSessionId], {fragment: client_session_secret});
 				},
 				error => this._errorService.handleError(error)
 			);
