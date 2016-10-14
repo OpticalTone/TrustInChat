@@ -26,7 +26,8 @@ export class MessageService {
 			.map(response => {
 				const data = response.json().obj;
 				let message = new Message(data.content, data.user.fromEmail, data.user.toEmail, data._id, data.user._id, 
-					data.message_salt, data.message_secret, data.message_secret_validation, data.message_integrity);
+					data.message_salt, data.message_secret, data.message_secret_validation, data.message_integrity, 
+					data.server_session_id);
 				return message;
 			})
 			.catch(error => Observable.throw(error.json()));

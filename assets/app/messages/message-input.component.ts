@@ -61,7 +61,7 @@ export class MessageInputComponent implements OnInit{
 		console.log('message_integrity: ', message_integrity);
 		console.log('-----------------------------------------------');
 		
-
+		var server_session_id = localStorage.getItem('server_session_id');
 
 		if (this.message) {
 			// edit
@@ -89,7 +89,8 @@ export class MessageInputComponent implements OnInit{
 				message_salt,
 				message_secret,
 				message_secret_validation,
-				message_integrity
+				message_integrity,
+				server_session_id
 				);
 
 

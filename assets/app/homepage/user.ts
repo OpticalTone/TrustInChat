@@ -6,7 +6,6 @@ export class User {
 	securityAnswer: string;   
 	notifications: string;
 	initialMessage: string;
-
 	answer_proof: string;
 	question_salt: string;
 	//encrypted_question: Object;
@@ -14,7 +13,7 @@ export class User {
 	question_secret_validation: string;
 	question_integrity: string;
 
-	constructor (userName: string, initialMessage: string, securityAnswer?: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string, 
+	constructor (userName: string, initialMessage: string, securityAnswer: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string, 
 		answer_proof?: string, question_salt?: string, question_secret?: string, question_secret_validation?: string, question_integrity?: string) {
 
 		this.userName = userName;
@@ -24,7 +23,6 @@ export class User {
 		this.fromEmail = fromEmail;
 		this.securityQuestion = securityQuestion;  
 		this.notifications = notifications;
-
 		this.answer_proof = answer_proof;
 		this.question_salt = question_salt;
 		this.question_secret = question_secret;

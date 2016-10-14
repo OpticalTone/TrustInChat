@@ -10,7 +10,6 @@ var userSchema = new Schema({
 	securityQuestion: { type: String, default: '' },    
 	notifications: { type: String, default: '' },
 	initialMessage: { type: String, required: true },
-
 	answer_proof: { type: String, default: '' },
 	question_salt: { type: String, default: '' },
 	//encrypted_question: Object;

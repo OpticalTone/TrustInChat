@@ -15,6 +15,7 @@ router.get('/', function(req, res, next){
     var server_session_salt = crypto.randomBytes(16).toString('hex');
 	var server_session_secret = crypto.randomBytes(16).toString('hex');
 
+	req.session.serverSessionId = server_session_id;
 	req.session.serverSessionSalt = server_session_salt;
 	req.session.serverSessionSecret = server_session_secret;
 
@@ -76,13 +77,12 @@ router.post('/', function(req, res, next){
 		securityQuestion: req.body.securityQuestion,    
 		notifications: req.body.notifications,
 		initialMessage: req.body.initialMessage,
-		
-		answerProof: req.body.answer_proof,
-		questionSalt: req.body.question_salt,
+		answer_proof: req.body.answer_proof,
+		question_salt: req.body.question_salt,
 		//encrypted_question: Object;
-		questionSecret: req.body.question_secret,
-		questionSecret_validation: req.body.question_secret_validation,
-		questionIntegrity: req.body.question_integrity
+		question_secret: req.body.question_secret,
+		question_secret_validation: req.body.question_secret_validation,
+		question_integrity: req.body.question_integrity
 	});
 
 	//var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
@@ -109,7 +109,7 @@ router.post('/', function(req, res, next){
 });
 
 router.get('/chat', function(req, res, next){
-		Message.find()
+		Message.find({server_session_id: req.body.server_session_id})
 		.populate('user', 'fromEmail toEmail')
 		.exec(function(err, docs) {
 			if (err) {
@@ -154,7 +154,8 @@ router.post('/chat', function(req, res, next) {
 			message_salt: req.body.message_salt,
 			message_secret: req.body.message_secret,
 			message_secret_validation: req.body.message_secret_validation,
-			message_integrity: req.body.message_integrity
+			message_integrity: req.body.message_integrity,
+			server_session_id: req.body.server_session_id
 		});
 		message.save(function(err, result) {
 			if (err) {

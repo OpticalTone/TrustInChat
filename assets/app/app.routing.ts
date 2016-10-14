@@ -5,7 +5,7 @@ import {MessagesComponent} from './messages/messages.component';
 import {ChatGuard} from './messages/chat.guard';
 
 const appRoutes: Routes = [
-	{path: 'chat/:serverSessionId', component: MessagesComponent, canActivate: [ChatGuard]},
+	{path: 'chat/:serverSessionId/:clientSessionSecret', component: MessagesComponent, canActivate: [ChatGuard]},
 	{path: '', component: HomepageComponent},
 	{path: '**', redirectTo: '', pathMatch: 'full'}
 ]

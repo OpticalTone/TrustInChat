@@ -32,8 +32,7 @@ app.use(expressSession({
     saveUninitialized: true, 
     resave: true,
     store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      ttl: 2 * 24 * 60 * 60
+      mongooseConnection: mongoose.connection
     })
 }));
 

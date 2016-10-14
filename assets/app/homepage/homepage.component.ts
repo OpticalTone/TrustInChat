@@ -117,7 +117,7 @@ export class HomepageComponent implements OnInit {
 		const user = new User(
 			this.homepageForm.value.fromName,
 			this.homepageForm.value.initialMessage,
-			null,
+			'',
 			this.homepageForm.value.toEmail,
 			this.homepageForm.value.fromEmail,
 			this.homepageForm.value.securityQuestion,
@@ -131,7 +131,8 @@ export class HomepageComponent implements OnInit {
 			);
 
 		var serverSessionId = localStorage.getItem('server_session_id');
-		
+		var clientSessionSecret = localStorage.getItem('client_session_secret');
+
 		this._homepageService.addUser(user)
 			.subscribe(
 				data => {
@@ -142,7 +143,8 @@ export class HomepageComponent implements OnInit {
 					localStorage.setItem('userId', data.userId);
 					localStorage.setItem('toEmail', data.toEmail);
 					localStorage.setItem('fromEmail', data.fromEmail);
-					this._router.navigate(['chat', serverSessionId], {fragment: client_session_secret});
+					//this._router.navigate(['chat', serverSessionId], {fragment: client_session_secret});
+					this._router.navigate(['chat', serverSessionId, clientSessionSecret]);
 				},
 				error => this._errorService.handleError(error)
 			);

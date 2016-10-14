@@ -9,6 +9,7 @@ var messageSchema = new Schema({
 	message_secret: { type: String, default: '' },
 	message_secret_validation: { type: String, default: '' },
 	message_integrity: { type: String, default: '' },
+	server_session_id: {type: String, default: '' },
 	
 	user: {type: Schema.Types.ObjectId, ref: 'User'}
 });

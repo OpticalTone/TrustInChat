@@ -75,7 +75,7 @@ export class MessagesComponent {
 
 		var clientSessionSecret = localStorage.getItem('client_session_secret');
 
-		var shareUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
+		var shareUrl = 'http://localhost:3000/chat/' + serverSessionId + '/' + clientSessionSecret;
 
 		return shareUrl;
 	}
