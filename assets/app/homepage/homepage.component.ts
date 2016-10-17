@@ -219,6 +219,7 @@ export class HomepageComponent implements OnInit {
 		var server_session_secret = localStorage.getItem('server_session_secret');
 
 		var randomString = this.generateRandomString(8);
+		localStorage.setItem('randomString', randomString);
 		var secretArray = CryptoJS.enc.Utf16.parse(randomString); 
 		var client_session_secret = CryptoJS.enc.Base64.stringify(secretArray);
 
@@ -234,6 +235,7 @@ export class HomepageComponent implements OnInit {
         localStorage.setItem('answer_proof', answer_proof);
 
         console.log('-----------------------------------------------');
+        console.log('randomString: ' + randomString);
         console.log('client_session_secret: ' + client_session_secret);
         console.log('answer_proof_string: ' + answer_proof_string);
         console.log('answer_proof: ' + answer_proof);
