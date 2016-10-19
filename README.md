@@ -22,16 +22,8 @@ Setup project:
 ----------------------------------           
      
 mkdir dev     
-     
 cd dev          
-      
 git clone https://github.com/OpticalTone/TrustInChat.git      
-      
-cd TrustInChat    
-     
-git status    
-    
-git checkout dev    
      
 Terminal 1:    
 > Navigate to project folder       
