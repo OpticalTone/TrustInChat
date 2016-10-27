@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
-import { MessageListComponent } from './message-list.component';
-import { MessageInputComponent } from './message-input.component';
+
+import { MessageListComponent } from './message/message-list.component';
+import { MessageInputComponent } from './message/message-input.component';
 
 @Component({
 	selector: 'chat-page',
-	template: `	`,
+	template: `
+		<div class="row">
+			<chat-message-list></chat-message-list>		
+		</div>
+		<div class="row">
+			<chat-message-input></chat-message-input>		
+		</div>
+	`,
 	styles: [``]
 })
-export class MessagesComponent {
+export class ChatComponent {
 
 }

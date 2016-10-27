@@ -8,7 +8,11 @@ var User = require('../models/user');
 var Message = require('../models/message');
 var ServerData = require('../models/serverdata');
 
+router.get('/', function(req, res, next){
+	res.render('index');
+});
 
+/*
 router.get('/', function(req, res, next){
 	
 	var server_session_id = crypto.randomBytes(16).toString('hex');
@@ -249,7 +253,7 @@ router.delete('/chat/:id', function(req, res, next) {
 			});
 		});
 	});
-});
+});*/
 
 
 module.exports = router;

@@ -10,7 +10,7 @@ import { Email } from './email.model';
 
 @Component({
 	selector: 'chat-homepage',
-	template: ``
+	template: `<h1>Homepage</h1>`
 })
 export class HomepageComponent implements OnInit {
 
