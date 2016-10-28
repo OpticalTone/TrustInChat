@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { MessageComponent } from './chat/message/message.component';
@@ -9,6 +10,8 @@ import { MessageInputComponent } from './chat/message/message-input.component';
 import { ChatComponent } from './chat/chat.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { HeaderComponent } from './header.component';
+
+import { HomepageService } from './homepage/homepage.service';
 
 import { routing } from './app.routing';
 
@@ -26,7 +29,11 @@ import { routing } from './app.routing';
 		BrowserModule,
 		FormsModule,
 		ReactiveFormsModule,
+		HttpModule,
 		routing
+	],
+	providers: [
+		HomepageService
 	],
 	bootstrap: [AppComponent]
 })

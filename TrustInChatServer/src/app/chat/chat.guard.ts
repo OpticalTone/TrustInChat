@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from "rxjs/Rx";
 
@@ -39,4 +39,4 @@ export class ChatGuard implements CanActivate {
 		//    return false;
 		}	
 	}
-}
+}*/

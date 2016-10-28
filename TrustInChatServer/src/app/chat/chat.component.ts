@@ -12,8 +12,7 @@ import { MessageInputComponent } from './message/message-input.component';
 		<div class="row">
 			<chat-message-input></chat-message-input>		
 		</div>
-	`,
-	styles: [``]
+	`
 })
 export class ChatComponent {
 

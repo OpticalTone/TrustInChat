@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { ChatService } from '../chat.service';
 import { ErrorService } from '../../errors/error.service';
@@ -28,17 +28,23 @@ import { User } from '../../homepage/user.model';
 export class MessageComponent {
 
 	@Input() message: Message;
-	@Output() editClicked = new EventEmitter<string>();
 
 	constructor(private chatService: ChatService) {
 
 	}
 
 	onEdit() {
-		this.editClicked.emit('A new value');
+
+		this.chatService.editMessage(this.message);
+
 	}
 
 	onDelete() {
-		this.chatService.deleteMessage(this.message);
+
+		this.chatService.deleteMessage(this.message)
+			.subscribe(
+				result => console.log(result)
+			);
+
 	}
 }

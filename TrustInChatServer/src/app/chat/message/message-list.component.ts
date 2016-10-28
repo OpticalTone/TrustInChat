@@ -14,7 +14,6 @@ import { Message } from './message.model';
 		<div class="col-md-8 col-md-offset-2">
 			<chat-message 
 				[message]="message" 
-				(editClicked)="message.content = $event"
 				*ngFor="let message of messages">
 			</chat-message>
 		</div>
@@ -29,6 +28,11 @@ export class MessageListComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.messages = this.chatService.getMessages();
+		this.chatService.getMessages()
+			.subscribe(
+				(messages: Message[]) => {
+					this.messages = messages;
+				}
+			);
 	}
 }

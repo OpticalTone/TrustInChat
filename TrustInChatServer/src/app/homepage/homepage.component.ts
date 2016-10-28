@@ -16,8 +16,34 @@ export class HomepageComponent implements OnInit {
 
 	homepageForm: FormGroup;
 
+	constructor(private homepageService: HomepageService) {
+
+	}
+
 	onSubmit() {
-		console.log(this.homepageForm);
+		
+		const user = new User(
+			this.homepageForm.value.fromName,
+			this.homepageForm.value.initialMessage,
+			null,
+			this.homepageForm.value.toEmail,
+			this.homepageForm.value.fromEmail,
+			this.homepageForm.value.securityQuestion,
+			this.homepageForm.value.notifications,
+			//answer_proof,
+			//question_salt,
+			//encrypted_question,
+			//question_secret,
+			//question_secret_validation,
+			//question_integrity
+		);
+
+		this.homepageService.addUser(user)
+			.subscribe(
+				data => console.log(data),
+				error => console.log(error)
+			);
+
 		this.homepageForm.reset();
 	}
 
