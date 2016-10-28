@@ -1,0 +1,44 @@
+<div class="col-md-8 col-md-offset-2">
+	<form [formGroup]="homepageForm" (ngSubmit)="onSubmit()">
+		<div class="form-group">
+            <label for="toEmail">To e-mail:<br>
+            (optional)</label>
+            <input type="text" id="toEmail" class="form-control" formControlName="toEmail">
+        </div>
+        <div class="form-group">
+            <label for="fromName">From name:</label>
+            <input type="text" id="fromName" class="form-control" formControlName="fromName">
+        </div>
+        <div class="form-group">
+            <label for="fromEmail">From e-mail:<br>
+            (optional)</label>
+            <input type="text" id="fromEmail" class="form-control" formControlName="fromEmail">
+        </div>
+        <div class="form-group">
+            <label for="securityQuestion">Security question:</label>
+            <select id="securityQuestion" formControlName="securityQuestion">
+                <option>Where did we first meet?</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="securityAnswer">Security answer:<br>
+            (minimum 4 characters)</label>
+            <input type="password" id="securityAnswer" class="form-control" formControlName="securityAnswer">
+        </div>
+        <div class="form-group">
+            <label for="securityAnswerRep">Security answer:<br>
+            (repeated)</label>
+            <input type="password" id="securityAnswerRep" class="form-control" formControlName="securityAnswerRep">
+        </div>
+        <div class="form-group">
+            <label for="initialMessage">Initial Message:</label>
+            <textarea id="initialMessage" class="form-control" formControlName="initialMessage"></textarea>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" value="notifications" formControlName="notifications">Please send me update notifications about the TrustInChat service.**                                      
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!homepageForm.valid">SUBMIT</button>
+	</form>
+</div>
+
+

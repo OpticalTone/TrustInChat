@@ -22,6 +22,10 @@ a.danger {
 	margin-bottom: 20px;
 }
 
+.space {
+	margin-bottom: 60px;
+}
+
 input.ng-invalid.ng-touched {
 	border: 1px solid red;
 }

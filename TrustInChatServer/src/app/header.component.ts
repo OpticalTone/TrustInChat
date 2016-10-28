@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 	selector: 'chat-header',
 	template: `
 		<header class="row">
-			<nav class="col-md-8 col-md-offset-2">
+			<nav class="col-md-8 col-md-offset-2 space">
 				<ul class="nav nav-pills">
 					<li><a [routerLink]="['/']" routerLinkActive="active">Homepage</a></li>
 					<li><a [routerLink]="['/chat']" routerLinkActive="active">Chat</a></li>

@@ -30,7 +30,15 @@ export class MessageComponent {
 	@Input() message: Message;
 	@Output() editClicked = new EventEmitter<string>();
 
+	constructor(private chatService: ChatService) {
+
+	}
+
 	onEdit() {
 		this.editClicked.emit('A new value');
+	}
+
+	onDelete() {
+		this.chatService.deleteMessage(this.message);
 	}
 }
