@@ -16,7 +16,7 @@ export class HomepageComponent implements OnInit {
 
 	homepageForm: FormGroup;
 
-	constructor(private homepageService: HomepageService) {
+	constructor(private homepageService: HomepageService, private router: Router) {
 
 	}
 
@@ -40,11 +40,23 @@ export class HomepageComponent implements OnInit {
 
 		this.homepageService.addUser(user)
 			.subscribe(
-				data => console.log(data),
-				error => console.log(error)
+				data => {
+					sessionStorage.setItem('token', data.token);
+					sessionStorage.setItem('initialMessage', data.initialMessage);
+					sessionStorage.setItem('userId', data.userId);
+					sessionStorage.setItem('toEmail', data.toEmail);
+					sessionStorage.setItem('fromEmail', data.fromEmail);
+					this.router.navigateByUrl('chat');
+					//this._router.navigate(['chat', serverSessionId, clientSessionSecret]);
+				},
+				error => console.error(error)
 			);
 
 		this.homepageForm.reset();
+	}
+
+	isLoggedIn() {
+		return this.homepageService.isLoggedIn();
 	}
 
 	ngOnInit() {

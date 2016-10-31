@@ -9,9 +9,8 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var MongoStore = require('connect-mongo')(expressSession);
 
-
-var appRoutes = require('./routes/app');
 var chatRoutes = require('./routes/chat');
+var appRoutes = require('./routes/app');
 
 var app = express();
 

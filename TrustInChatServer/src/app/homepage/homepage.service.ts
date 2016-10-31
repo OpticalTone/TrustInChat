@@ -25,4 +25,8 @@ export class HomepageService {
 			.catch((error: Response) => Observable.throw(error.json()));
 			
 	}
+
+	isLoggedIn() {
+		return sessionStorage.getItem('token') !== null;
+	}
 }

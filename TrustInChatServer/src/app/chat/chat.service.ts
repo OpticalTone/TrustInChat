@@ -23,7 +23,9 @@ export class ChatService {
 		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
-		return this.http.post(this.chatUrl, body, {headers: headers})
+		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
+
+		return this.http.post(this.chatUrl + '/' + token, body, {headers: headers})
 			.map((response: Response) => {
 				const result = response.json();
 				const message = new Message(
@@ -57,10 +59,10 @@ export class ChatService {
 					transformedMessages.push(
 						new Message(
 							message.content, 
-							'Dummy', 
-							'Dummy', 
+							message.user.fromEmail, 
+							message.user.toEmail, 
 							message._id, 
-							null,
+							message.user_id,
 							'Dummy',
 							'Dummy',
 							'Dummy',
@@ -87,7 +89,9 @@ export class ChatService {
 		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
-		return this.http.patch(this.chatUrl + '/' + message.messageId, body, {headers: headers})
+		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
+
+		return this.http.patch(this.chatUrl + '/' + message.messageId + token, body, {headers: headers})
 			.map((response: Response) => response.json())
 			.catch((error: Response) => Observable.throw(error.json()));
 
@@ -97,9 +101,16 @@ export class ChatService {
 
 		this.messages.splice(this.messages.indexOf(message), 1);
 
-		return this.http.delete(this.chatUrl + '/' + message.messageId)
+		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
+
+		return this.http.delete(this.chatUrl + '/' + message.messageId + token)
 			.map((response: Response) => response.json())
 			.catch((error: Response) => Observable.throw(error.json()));
 
+	}
+
+	closeSession() {
+		sessionStorage.clear();
+		//TODO: delete chat session on server, users and messages
 	}
 }
