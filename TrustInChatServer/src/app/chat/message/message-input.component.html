@@ -1,9 +1,11 @@
-<div class="col-md-8 col-md-offset-2">
+<section class="col-md-8 col-md-offset-2">
 	<form (ngSubmit)="onSubmit(f)" #f="ngForm">
-		<div class="form-group">
-			<input type="text" id="content" class="form-control" [ngModel]="message?.content" name="content" required>
+		<div class="input-group">
+			<input type="text" id="content" class="form-control" [ngModel]="message?.content" name="content" placeholder="Enter text here..." required>
+			<span class="input-group-btn">
+				<button class="btn btn-primary" type="submit">Save</button>
+			</span>
 		</div>
 		<button type="button" class="btn btn-danger" (click)="onClear(f)">Clear</button>
-		<button class="btn btn-primary" type="submit">Save</button>
 	</form>
-</div>		 
+</section>	 

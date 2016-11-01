@@ -10,8 +10,10 @@ import { MessageInputComponent } from './chat/message/message-input.component';
 import { ChatComponent } from './chat/chat.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { HeaderComponent } from './header.component';
+import { ErrorComponent } from './errors/error.component';
 
 import { HomepageService } from './homepage/homepage.service';
+import { ErrorService } from './errors/error.service';
 
 import { routing } from './app.routing';
 
@@ -23,7 +25,8 @@ import { routing } from './app.routing';
 		MessageInputComponent,
 		ChatComponent,
 		HomepageComponent,
-		HeaderComponent
+		HeaderComponent,
+		ErrorComponent
 	],
 	imports: [
 		BrowserModule,
@@ -33,7 +36,8 @@ import { routing } from './app.routing';
 		routing
 	],
 	providers: [
-		HomepageService
+		HomepageService,
+		ErrorService
 	],
 	bootstrap: [AppComponent]
 })

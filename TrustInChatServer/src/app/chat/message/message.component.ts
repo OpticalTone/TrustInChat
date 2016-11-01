@@ -12,16 +12,24 @@ import { User } from '../../homepage/user.model';
 	templateUrl: './message.component.html',
 	styles: [`
 		.author {
-			display: inline-block;
 			font-style: italic;
 			font-size: 12px;
+			
+		}
+		.msg {
+			display: inline-block;
 			width: 80%;
+		}
+		.msgRight {
+			display: inline-block;
+			text-align: right;
+			float: right;
 		}
 		.config {
 			display: inline-block;
 			text-align: right;
 			font-size: 12px;
-			width: 19%;
+			width: 19%
 		}
 	`]
 })
@@ -46,5 +54,11 @@ export class MessageComponent {
 				result => console.log(result)
 			);
 
+	}
+
+	belongsToUser() {
+
+		return sessionStorage.getItem('userId') == this.message.userId;
+	
 	}
 }

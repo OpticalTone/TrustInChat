@@ -7,27 +7,38 @@ import { Error } from './error.model';
 
 @Component({
 	selector: 'chat-error',
-	template: ``,
-	styles: [``]
+	templateUrl: './error.component.html',
+	styles: [`
+		.backdrop {
+			background-color: rgba(0,0,0,0.6);
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+		}
+	`]
 })
-export class ErrorComponent implements OnInit {
-	errorDisplay = 'none';
-	errorData: Error;
+export class ErrorComponent implements OnInit{
+	error: Error;
+	display = 'none';
 
-	constructor (private _errorService: ErrorService) {
+	constructor(private errorService: ErrorService) {
 
 	}
 
 	onErrorHandled() {
-		this.errorDisplay = 'none';
+		this.display = 'none';
 	}
 
 	ngOnInit() {
-		this._errorService.errorOcurred.subscribe(
-			errorData => {
-				this.errorData = errorData;
-				this.errorDisplay = 'block';
-			}
-		);
+		this.errorService.errorOcurred
+			.subscribe(
+				(error: Error) => {
+					this.error = error;
+					this.display = 'block';
+				}
+			);
 	}
+
 }

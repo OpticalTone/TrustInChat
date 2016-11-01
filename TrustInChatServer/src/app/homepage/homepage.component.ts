@@ -46,11 +46,13 @@ export class HomepageComponent implements OnInit {
 					sessionStorage.setItem('userId', data.userId);
 					sessionStorage.setItem('toEmail', data.toEmail);
 					sessionStorage.setItem('fromEmail', data.fromEmail);
-					this.router.navigateByUrl('chat');
+					this.router.navigate(['chat']);
 					//this._router.navigate(['chat', serverSessionId, clientSessionSecret]);
 				},
 				error => console.error(error)
 			);
+
+		sessionStorage.setItem('fromName', this.homepageForm.value.fromName);
 
 		this.homepageForm.reset();
 	}
@@ -82,7 +84,8 @@ export class HomepageComponent implements OnInit {
 		});
 
 		//TODO: matchAnswer validation
-
+		//TODO: normalize answer
 	}
-	
+
+		
 }

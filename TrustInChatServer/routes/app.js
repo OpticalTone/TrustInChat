@@ -97,8 +97,8 @@ router.post('/', function(req, res, next){
 			});
 		} 
 
-		res.status(200).json({
-			message: 'Success',
+		res.status(201).json({
+			message: 'User created and logged in',
 			token: token,
 			userId: user._id,
 			toEmail: req.body.toEmail,

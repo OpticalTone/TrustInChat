@@ -3,7 +3,9 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 
-import { Message } from "./message/message.model";
+import { ErrorService } from '../errors/error.service'
+
+import { Message } from './message/message.model';
 
 @Injectable()
 export class ChatService {
@@ -14,7 +16,7 @@ export class ChatService {
 
 	private chatUrl = 'http://localhost:3000/chatserver';
 
-	constructor(private http: Http) {
+	constructor(private http: Http, private errorService: ErrorService) {
 
 	}
 
@@ -30,10 +32,10 @@ export class ChatService {
 				const result = response.json();
 				const message = new Message(
 					result.obj.content,
-					'Dummy', 
-					'Dummy', 
+					result.obj.user.fromEmail, 
+					result.obj.user.toEmail, 
 					result.obj._id, 
-					null,
+					result.obj.user._id,
 					'Dummy',
 					'Dummy',
 					'Dummy',
@@ -43,7 +45,10 @@ export class ChatService {
 				this.messages.push(message);
 				return message;
 			})
-			.catch((error: Response) => Observable.throw(error.json()));
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
 
 	}
 
@@ -62,7 +67,7 @@ export class ChatService {
 							message.user.fromEmail, 
 							message.user.toEmail, 
 							message._id, 
-							message.user_id,
+							message.user._id,
 							'Dummy',
 							'Dummy',
 							'Dummy',
@@ -74,7 +79,10 @@ export class ChatService {
 				this.messages = transformedMessages;
 				return transformedMessages;
 			})
-			.catch((error: Response) => Observable.throw(error.json()));
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
 
 	}
 
@@ -93,7 +101,10 @@ export class ChatService {
 
 		return this.http.patch(this.chatUrl + '/' + message.messageId + token, body, {headers: headers})
 			.map((response: Response) => response.json())
-			.catch((error: Response) => Observable.throw(error.json()));
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
 
 	}
 
@@ -105,12 +116,11 @@ export class ChatService {
 
 		return this.http.delete(this.chatUrl + '/' + message.messageId + token)
 			.map((response: Response) => response.json())
-			.catch((error: Response) => Observable.throw(error.json()));
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
 
 	}
 
-	closeSession() {
-		sessionStorage.clear();
-		//TODO: delete chat session on server, users and messages
-	}
 }

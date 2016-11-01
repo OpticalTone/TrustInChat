@@ -12,10 +12,7 @@ import { Message } from './message.model';
 	selector: 'chat-message-list',
 	template: `
 		<div class="col-md-8 col-md-offset-2">
-			<chat-message 
-				[message]="message" 
-				*ngFor="let message of messages">
-			</chat-message>
+			<chat-message *ngFor="let message of messages" [message]="message"></chat-message>
 		</div>
 	`
 })

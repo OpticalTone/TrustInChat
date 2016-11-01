@@ -9,6 +9,11 @@ import { Message } from './message.model';
 @Component({
 	selector: 'chat-message-input',
 	templateUrl: './message-input.component.html',
+	styles: [`
+		button {
+			float: right;
+		}
+	`]
 })
 export class MessageInputComponent implements OnInit {
 
