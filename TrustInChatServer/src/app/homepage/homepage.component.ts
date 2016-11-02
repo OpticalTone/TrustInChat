@@ -87,9 +87,6 @@ export class HomepageComponent implements OnInit {
 			question_integrity
 		);
 
-		let serverSessionId = sessionStorage.getItem('server_session_id');
-		let clientSessionSecret = sessionStorage.getItem('client_session_secret');
-
 		this.homepageService.addUser(user)
 			.subscribe(
 				data => {
@@ -106,9 +103,13 @@ export class HomepageComponent implements OnInit {
 
 		sessionStorage.setItem('fromName', this.homepageForm.value.fromName);
 
-		
+		let serverSessionId = sessionStorage.getItem('server_session_id');
+		let clientSessionSecret = sessionStorage.getItem('client_session_secret');	
+		let toEmail = this.homepageForm.value.toEmail;
+		let fromEmail = this.homepageForm.value.fromEmail;
+		let fromName = 	this.homepageForm.value.fromName;
 
-		const email = new Email(serverSessionId, clientSessionSecret);
+		const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName);
 
 		this.homepageService.sendEmail(email)
 			.subscribe(

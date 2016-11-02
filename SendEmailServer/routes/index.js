@@ -1,7 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
+// ignored file 
 var p = require('../parameters');
+// make file: parameters.js in SendEmailServer root
+// add content:
+// var parameters = { "apiKey": "your_api_key", "timeout": 5000 };
+// exports.parameters = parameters;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,20 +26,46 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
 	var serverSessionId = req.body.serverSessionId;
 	var clientSessionSecret = req.body.clientSessionSecret;
+	var toEmail = req.body.toEmail;
+	var fromEmail = req.body.fromEmail;
+	var fromName = req.body.fromName;
 
 	console.log(serverSessionId);
 	console.log(clientSessionSecret);
+	console.log(toEmail);
+	console.log(fromEmail);
+	console.log(fromName);
+
+	var chatSessionUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
+	var chatUrl = 'https://session.trustinchat.com/chat/';
+	// TODO: check how long then calculate date
+	var date = new Date();
 
 	var sendinblue = require('sendinblue-api');
 
 	var sendinObj = new sendinblue(p.parameters);
 
-	var input =	{ 'to': { 'ivana@opticaltone.com': 'to whom!' },
-		'from': ['ivana@opticaltone.com', 'from email!'],
-		'subject': 'Test mail form sendinblue',
-		'html': 'serverSessionId: ' + serverSessionId
-				+ '<br><br>' +
-				'clientSessionSecret: ' + clientSessionSecret
+	var subject = 'Test: ' + fromName + ' has sent you a private message!';
+	var html = 'A secret message from ' + fromName + ' (' + fromEmail + ') ' + 'is waiting for you here:<br>' + 
+				'<a href="' + chatSessionUrl + '">' + chatSessionUrl + '</a><br><br>' + 
+				'Please click the link above and answer the security question provided to view the message.<br><br>' + 
+				'If the link above does not work please visit:<br>' + 
+				'<a href="' + chatUrl + '">' + chatUrl + '</a><br><br>' +
+				'And provide the following information...<br><br>' + 
+				'Chat session id:<br>' + 
+				serverSessionId + '<br><br>' +
+				'Validation code:<br>' + 
+				clientSessionSecret + '<br><br><br>' + 
+				'This encrypted message will automatically self-destruct by ' + date + '<br><br>' + 
+				'Thank you!<br>' + 
+				'The TrustInChat.com team<br><br><br>' +
+				'If you feel you are receiving this email abusively, with our apologies please forward this email to:<br>' + 
+				'abuse@trustinchat.com<br><br><br><br>' ;
+
+	var input =	{ 'to': { toEmail: '' },
+		'from': ['secure-message@trustinchat.com', 'Secure'],
+		'subject': subject,
+		'html': html
 	};
 
 	sendinObj.send_email(input, function(err, response){
@@ -44,7 +75,10 @@ router.post('/', function(req, res, next) {
 	res.status(200).json({
 		message: 'Success',
 		serverSessionId,
-		clientSessionSecret
+		clientSessionSecret,
+		toEmail,
+		fromEmail,
+		fromName
 	});
 });
 
