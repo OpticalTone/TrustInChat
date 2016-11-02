@@ -6,8 +6,7 @@ var Message = require('../models/message');
 var User = require('../models/user');
 
 router.get('/', function(req, res, next) {
-
-	Message.find()
+	Message.find({server_session_id: req.body.server_session_id})
 		.populate('user', 'fromEmail toEmail')
 		.exec(function(err, messages) {
 			if (err) {
@@ -21,11 +20,9 @@ router.get('/', function(req, res, next) {
 				obj: messages
 			});
 		});
-
 });
 
 router.use('/', function(req, res, next) {
-
 	jwt.verify(req.query.token, 'secretstring', function(err, decoded) {
 		if (err) {
 			return res.status(401).json({
@@ -35,11 +32,9 @@ router.use('/', function(req, res, next) {
 		}
 		next();
 	});
-
 });
 
 router.post('/', function(req, res, next) {
-
 	var decoded = jwt.decode(req.query.token);
 
 	User.findById(decoded.user._id, function(err, user) {
@@ -49,14 +44,15 @@ router.post('/', function(req, res, next) {
 				error: err
 			});
 		}
+
 		var message = new Message({
 			content: req.body.content,
-			user: user
-			//message_salt: req.body.message_salt,
-			//message_secret: req.body.message_secret,
-			//message_secret_validation: req.body.message_secret_validation,
-			//message_integrity: req.body.message_integrity,
-			//server_session_id: req.body.server_session_id
+			user: user,
+			message_salt: req.body.message_salt,
+			message_secret: req.body.message_secret,
+			message_secret_validation: req.body.message_secret_validation,
+			message_integrity: req.body.message_integrity,
+			server_session_id: req.body.server_session_id
 		});
 
 		message.save(function(err, result) {
@@ -75,8 +71,6 @@ router.post('/', function(req, res, next) {
 			});
 		});
 	});
-	
-
 });
 
 router.patch('/:id', function(req, res, next) {
@@ -98,8 +92,8 @@ router.patch('/:id', function(req, res, next) {
 		}
 		if (message.user != decoded.user._id) {
 			return res.status(401).json({
-				title: 'Authentication failed',
-				error: {message: 'Users do not match'}
+				title: 'Not Authorized',
+				error: err
 			});
 		}
 		message.content = req.body.content;
@@ -137,8 +131,8 @@ router.delete('/:id', function(req, res, next) {
 		}
 		if (message.user != decoded.user._id) {
 			return res.status(401).json({
-				title: 'Authentication failed',
-				error: {message: 'Users do not match'}
+				title: 'Not Authorized',
+				error: err
 			});
 		}
 		message.remove(function(err, result) {

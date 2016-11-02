@@ -15,6 +15,8 @@ import { ErrorComponent } from './errors/error.component';
 import { HomepageService } from './homepage/homepage.service';
 import { ErrorService } from './errors/error.service';
 
+import { ChatGuard } from './chat/chat.guard';
+
 import { routing } from './app.routing';
 
 @NgModule({
@@ -37,7 +39,8 @@ import { routing } from './app.routing';
 	],
 	providers: [
 		HomepageService,
-		ErrorService
+		ErrorService,
+		ChatGuard
 	],
 	bootstrap: [AppComponent]
 })

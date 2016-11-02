@@ -12,13 +12,13 @@ import { Email } from './email.model';
 export class HomepageService {
 
 	private homepageUrl = 'http://localhost:3000';
+	private sendEmailUrl = 'http://localhost:2000';
 
 	constructor(private http: Http, private errorService: ErrorService) {
 
 	}
 	
 	addUser(user: User) {
-
 		const body = JSON.stringify(user);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
@@ -28,7 +28,15 @@ export class HomepageService {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());
 			});
-			
+	}
+
+	sendEmail(email: Email) {
+		const headers = new Headers({'Content-Type': 'application/json'});
+		const body = JSON.stringify(email);
+
+		return this.http.post(this.sendEmailUrl, body, {headers: headers})
+			.map(response => response.json())
+			.catch(error => Observable.throw(error.json()));
 	}
 
 	closeSession() {
@@ -38,15 +46,5 @@ export class HomepageService {
 
 	isLoggedIn() {
 		return sessionStorage.getItem('token') !== null;
-	}
-
-	private generateRandomString(len) {
-		var text = " ";
-		var characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-		for(var i = 0; i < len; i++) {
-			text += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-		return text;
 	}
 }

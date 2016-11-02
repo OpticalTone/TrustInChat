@@ -2,7 +2,7 @@
 <html>
 <head>
 	<base href="/">
-	<title>TrustInChat</title>
+	<title>{{title}}</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
@@ -14,11 +14,11 @@
         console.log('server_session_salt: {{serverSessionSalt}}');
         console.log('server_session_secret: {{serverSessionSecret}}');
 
-        localStorage.setItem('server_session_id', '{{serverSessionId}}');
-        localStorage.setItem('server_session_id_validation', '{{serverSessionIdValidation}}');
-        localStorage.setItem('server_secret_id', '{{serverSecretId}}');
-        localStorage.setItem('server_session_salt', '{{serverSessionSalt}}');
-        localStorage.setItem('server_session_secret', '{{serverSessionSecret}}');
+        sessionStorage.setItem('server_session_id', '{{serverSessionId}}');
+        sessionStorage.setItem('server_session_id_validation', '{{serverSessionIdValidation}}');
+        sessionStorage.setItem('server_secret_id', '{{serverSecretId}}');
+        sessionStorage.setItem('server_session_salt', '{{serverSessionSalt}}');
+        sessionStorage.setItem('server_session_secret', '{{serverSessionSecret}}');
     </script>
 
 	<chat-app>Loading...</chat-app>

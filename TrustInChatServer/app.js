@@ -9,10 +9,10 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var MongoStore = require('connect-mongo')(expressSession);
 
+var app = express();
+
 var chatRoutes = require('./routes/chat');
 var appRoutes = require('./routes/app');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

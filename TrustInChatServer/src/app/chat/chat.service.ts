@@ -21,7 +21,6 @@ export class ChatService {
 	}
 
 	addMessage(message: Message) {
-
 		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
@@ -36,11 +35,11 @@ export class ChatService {
 					result.obj.user.toEmail, 
 					result.obj._id, 
 					result.obj.user._id,
-					'Dummy',
-					'Dummy',
-					'Dummy',
-					'Dummy',
-					'Dummy'
+					result.obj.message_salt,
+					result.obj.message_secret,
+					result.obj.message_secret_validation,
+					result.obj.message_integrity,
+					result.obj.server_session_id
 				);
 				this.messages.push(message);
 				return message;
@@ -49,11 +48,9 @@ export class ChatService {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());
 			});
-
 	}
 
 	getMessages() {
-
 		return this.http.get(this.chatUrl)
 			.map((response: Response) => {
 
@@ -61,20 +58,13 @@ export class ChatService {
 				let transformedMessages: Message[] = [];
 
 				for (let message of messages) {
-					transformedMessages.push(
-						new Message(
-							message.content, 
-							message.user.fromEmail, 
-							message.user.toEmail, 
-							message._id, 
-							message.user._id,
-							'Dummy',
-							'Dummy',
-							'Dummy',
-							'Dummy',
-							'Dummy'
-						)
-					);
+					transformedMessages.push(new Message(
+						message.content, 
+						message.user.fromEmail, 
+						message.user.toEmail, 
+						message._id, 
+						message.user._id
+					));
 				}
 				this.messages = transformedMessages;
 				return transformedMessages;
@@ -83,44 +73,36 @@ export class ChatService {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());
 			});
-
 	}
 
 	editMessage(message: Message) {
-
 		this.messageEdit.emit(message);
-
 	}
 
 	updateMessage(message: Message) {
-
 		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
 
-		return this.http.patch(this.chatUrl + '/' + message.messageId + token, body, {headers: headers})
+		return this.http.patch(this.chatUrl + '/' + message.messageId + '/' + token, body, {headers: headers})
 			.map((response: Response) => response.json())
 			.catch((error: Response) => {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());
 			});
-
 	}
 
 	deleteMessage(message: Message) {
-
 		this.messages.splice(this.messages.indexOf(message), 1);
 
 		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
 
-		return this.http.delete(this.chatUrl + '/' + message.messageId + token)
+		return this.http.delete(this.chatUrl + '/' + message.messageId + '/' + token)
 			.map((response: Response) => response.json())
 			.catch((error: Response) => {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());
 			});
-
 	}
-
 }

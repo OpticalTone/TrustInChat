@@ -20,7 +20,7 @@ export class MessageListComponent implements OnInit {
 
 	messages: Message[];
 
-	constructor(private chatService: ChatService) {
+	constructor(private chatService: ChatService, private errorService: ErrorService) {
 
 	}
 
@@ -29,7 +29,8 @@ export class MessageListComponent implements OnInit {
 			.subscribe(
 				(messages: Message[]) => {
 					this.messages = messages;
-				}
+				},
+				error => this.errorService.handleError(error)
 			);
 	}
 }

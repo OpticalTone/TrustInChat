@@ -6,7 +6,6 @@ import { ErrorService } from '../../errors/error.service';
 import { Message } from './message.model';
 import { User } from '../../homepage/user.model';
 
-
 @Component({
 	selector: 'chat-message',
 	templateUrl: './message.component.html',
@@ -37,28 +36,23 @@ export class MessageComponent {
 
 	@Input() message: Message;
 
-	constructor(private chatService: ChatService) {
+	constructor(private chatService: ChatService, private errorService: ErrorService) {
 
 	}
 
 	onEdit() {
-
 		this.chatService.editMessage(this.message);
-
 	}
 
 	onDelete() {
-
 		this.chatService.deleteMessage(this.message)
 			.subscribe(
-				result => console.log(result)
+				result => console.log(result),
+				error => this.errorService.handleError(error)
 			);
-
 	}
 
 	belongsToUser() {
-
 		return sessionStorage.getItem('userId') == this.message.userId;
-	
 	}
 }

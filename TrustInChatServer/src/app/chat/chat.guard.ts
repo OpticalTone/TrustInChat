@@ -1,11 +1,11 @@
-/*import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from "rxjs/Rx";
 
 @Injectable()
 export class ChatGuard implements CanActivate {
 
-	constructor(private _router: Router) {
+	constructor(private router: Router) {
 		
 	}
 
@@ -28,15 +28,15 @@ export class ChatGuard implements CanActivate {
 
 
 		// local
-		//if (localStorage.getItem('token') !== null && 
-		//localStorage.getItem('server_session_id') !== null && 
-		//localStorage.getItem('client_session_secret')  !== null) {
+		if (sessionStorage.getItem('token') !== null && 
+		sessionStorage.getItem('server_session_id') !== null && 
+		sessionStorage.getItem('client_session_secret')  !== null) {
 			return true;
-		//}
+		}
 
-		//else {
-		//	this._router.navigate(['']);
-		//    return false;
+		else {
+			this.router.navigate(['']);
+		    return false;
 		}	
 	}
-}*/
+}
