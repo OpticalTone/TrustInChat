@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="panel">
+	    <div class="data">
+	    	<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>To:</label>
+					<span id="toEmail">{{getToEmail()}}</span>
+				</section>
+			</div>
+	    	<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>From:</label>
+					<span id="fromEmail">{{getFromName()}} ({{getFromEmail()}})</span>
+				</section>
+			</div>
+	    	<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<div style="white-space:nowrap">
+						<label>Share URL:</label>
+						<a href="{{getShareUrl()}}">{{getShareUrl()}}</a>
+					</div>	
+				</section>
+			</div>
+		</div>	
+		<div class="row spacing">
+			<chat-message-list></chat-message-list>		
+		</div>
+		<div class="row spacing">
+			<chat-message-input></chat-message-input>		
+		</div>
+		<div class="col-md-8 col-md-offset-2">
+			<button class="btn btn-primary" (click)="onCloseSession()">CLOSE</button>
+		</div>
+	</div>
+</div>	
