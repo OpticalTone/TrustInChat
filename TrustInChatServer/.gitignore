@@ -1,4 +1,9 @@
-.idea
-/node_modules
-npm-debug.log
+# compiled output
 /public/js
+
+# dependencies
+/node_modules
+
+# log files
+*.log
+*.log.*

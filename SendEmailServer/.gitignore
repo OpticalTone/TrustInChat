@@ -1,1 +1,12 @@
-prameters.js
+# compiled output
+/public/js
+
+# dependencies
+/node_modules
+
+# log files
+*.log
+*.log.*
+
+# email server parameters
+/parameters.js
