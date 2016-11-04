@@ -36,7 +36,7 @@ export class ChatService {
 					result.obj._id, 
 					result.obj.user._id,
 					result.obj.message_salt,
-					result.obj.message_secret,
+					null,
 					result.obj.message_secret_validation,
 					result.obj.message_integrity,
 					result.obj.server_session_id

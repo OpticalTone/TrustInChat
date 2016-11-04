@@ -82,7 +82,7 @@ export class HomepageComponent implements OnInit {
 			answer_proof,
 			question_salt,
 			//encrypted_question,
-			question_secret,
+			null,
 			question_secret_validation,
 			question_integrity
 		);
@@ -91,6 +91,9 @@ export class HomepageComponent implements OnInit {
 			.subscribe(
 				data => {
 					sessionStorage.setItem('token', data.token);
+					sessionStorage.setItem('email_server_nonce', data.email_server_nonce);
+					sessionStorage.setItem('email_server_secret_proof', data.email_server_secret_proof);
+					sessionStorage.setItem('email_server_secret_expiry', data.email_server_secret_expiry);
 					sessionStorage.setItem('initialMessage', data.initialMessage);
 					sessionStorage.setItem('userId', data.userId);
 					sessionStorage.setItem('toEmail', data.toEmail);
@@ -142,13 +145,22 @@ export class HomepageComponent implements OnInit {
 			]),
 			securityAnswerRep: new FormControl(null, [
 				Validators.required, 
-				Validators.pattern(answerRegExp)
+				Validators.pattern(answerRegExp),
+				this.matchAnswers.bind(this)
 			]),
 			initialMessage: new FormControl(null, Validators.required),
 			notifications: new FormControl(null)
 		});
 
-		//TODO: matchAnswer validation
+	}
+
+	private matchAnswers(control: FormControl): {[s: string]: boolean} {
+		if (!this.homepageForm) {
+			return {answersNotMatch: true};
+		}
+		if (control.value != this.homepageForm.controls['securityAnswer'].value) {
+			return {answersNotMatch: true};
+		}
 	}
 
 	private normalizeAnswer(answerInput) {

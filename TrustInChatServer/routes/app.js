@@ -4,6 +4,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
+var moment = require('moment');
+var randomstring = require('randomstring');
 
 var User = require('../models/user');
 var ServerData = require('../models/serverdata');
@@ -81,10 +83,23 @@ router.post('/', function(req, res, next){
 		answer_proof: req.body.answer_proof,
 		question_salt: req.body.question_salt,
 		//encrypted_question: Object;
-		question_secret: req.body.question_secret,
 		question_secret_validation: req.body.question_secret_validation,
 		question_integrity: req.body.question_integrity
 	});
+
+	var email_server_nonce = randomstring.generate(8);
+	var email_server_secret  = 'foo-bar-baz'
+	var email_server_secret_expiry = moment().valueOf();
+	var to_email_address = req.body.toEmail;
+	var proof_string = "email-proof:" + email_server_secret + ':' + email_server_nonce + ':' + 
+						email_server_secret_expiry + ':' + to_email_address;
+	var email_server_secret_proof = crypto.createHash("sha256").update(proof_string).digest("base64");
+
+	console.log(email_server_secret);
+	console.log(email_server_secret_expiry);
+	console.log(to_email_address);
+	console.log(proof_string);
+	console.log(email_server_secret_proof);
 
 	//var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
 	var token = jwt.sign({user: user}, 'secretstring');
@@ -101,6 +116,9 @@ router.post('/', function(req, res, next){
 			message: 'User created and logged in',
 			token: token,
 			userId: user._id,
+			email_server_nonce,
+			email_server_secret_proof,
+			email_server_secret_expiry,
 			toEmail: req.body.toEmail,
 			fromEmail: req.body.fromEmail,
 			initialMessage: req.body.initialMessage,
@@ -110,3 +128,4 @@ router.post('/', function(req, res, next){
 });
 
 module.exports = router;
+

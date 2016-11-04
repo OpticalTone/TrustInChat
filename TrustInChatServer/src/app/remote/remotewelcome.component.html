@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="panel">
+	    <div class="data">
+	    	<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>To:</label>
+					<span id="toEmail">{{getToEmail()}}</span>
+				</section>
+			</div>
+	    	<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>From:</label>
+					<span id="fromEmail">{{getFromName()}} ({{getFromEmail()}})</span>
+				</section>
+			</div>
+			<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>Security question:</label>
+					<span id="securityQuestion">{{getSecurityQuestion()}}</span>
+				</section>
+			</div>
+			<div class="row spacing">
+				<section class="col-md-8 col-md-offset-2">
+					<label>Security answer:</label>
+					<input type="password" id="securityAnswer" class="form-control">
+				</section>
+			</div>
+		</div>	
+	</div>
+</div>	

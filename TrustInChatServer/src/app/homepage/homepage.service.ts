@@ -36,7 +36,10 @@ export class HomepageService {
 
 		return this.http.post(this.sendEmailUrl, body, {headers: headers})
 			.map(response => response.json())
-			.catch(error => Observable.throw(error.json()));
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
 	}
 
 	closeSession() {

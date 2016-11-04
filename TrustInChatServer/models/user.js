@@ -11,7 +11,6 @@ var userSchema = new Schema({
 	answer_proof: { type: String, default: '' },
 	question_salt: { type: String, default: '' },
 	//encrypted_question: Object;
-	question_secret: { type: String, default: '' },
 	question_secret_validation: { type: String, default: '' },
 	question_integrity: { type: String, default: '' },
 
