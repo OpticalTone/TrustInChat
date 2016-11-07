@@ -2,12 +2,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ChatComponent } from './chat/chat.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { RemoteWelcomeComponent } from './remote/remotewelcome.component';
 
 import { ChatGuard } from './chat/chat.guard';
 
 const CHAT_ROUTES: Routes = [
 	{ path: '', component: HomepageComponent },
 	{ path: 'chat/:serverSessionId/:clientSessionSecret', component: ChatComponent, canActivate: [ChatGuard] },
+	{ path: 'chat/remotewelcome/:serverSessionId/:clientSessionSecret', component: RemoteWelcomeComponent },
 	{ path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

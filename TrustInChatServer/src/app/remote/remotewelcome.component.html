@@ -4,25 +4,30 @@
 	    	<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>To:</label>
-					<span id="toEmail">{{getToEmail()}}</span>
+					<span id="toEmail">ToEmal</span>
 				</section>
 			</div>
 	    	<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>From:</label>
-					<span id="fromEmail">{{getFromName()}} ({{getFromEmail()}})</span>
+					<span id="fromEmail">FromName (FromEmail)</span>
 				</section>
 			</div>
 			<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>Security question:</label>
-					<span id="securityQuestion">{{getSecurityQuestion()}}</span>
+					<span id="securityQuestion">SecurityQuestion</span>
 				</section>
 			</div>
 			<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
-					<label>Security answer:</label>
-					<input type="password" id="securityAnswer" class="form-control">
+					<form [formGroup]="remotewelcomeForm" (ngSubmit)="onSubmit()">
+						<div class="form-group">
+							<label>Security answer:</label>
+							<input type="password" id="securityAnswer" class="form-control" formControlName="securityAnswer">
+						</div>
+						<button type="submit" class="btn btn-primary" [disabled]="!remotewelcomeForm.valid">SUBMIT</button>
+					</form>	
 				</section>
 			</div>
 		</div>	

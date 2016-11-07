@@ -149,21 +149,4 @@ router.delete('/:id', function(req, res, next) {
 	});
 });
 
-router.post('/remotewelcome', function(req, res, next){
-	User.findOne({email: req.body.answer_proof}, function(err, user) {
-		if (err) {
-			return res.status(500).json({
-				title: 'An error occurred',
-				error: err
-			});
-		}
-		if (!user) {
-			return res.status(500).json({
-				title: 'Login failed'
-				error: {message: 'Wrong answer'}
-			});
-		}
-	});
-});
-
 module.exports = router;

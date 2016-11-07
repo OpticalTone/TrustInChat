@@ -13,7 +13,7 @@ export class User {
 	public question_secret_validation: string;
 	public question_integrity: string;
 
-	constructor (userName: string, initialMessage: string, securityAnswer: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string, 
+	constructor (userName?: string, initialMessage?: string, securityAnswer?: string, toEmail?: string, fromEmail?: string, securityQuestion?: string, notifications?: string, 
 		answer_proof?: string, question_salt?: string, question_secret?: string, question_secret_validation?: string, question_integrity?: string) {
 
 		this.userName = userName;
