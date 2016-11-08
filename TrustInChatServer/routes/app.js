@@ -81,11 +81,21 @@ router.post('/', function(req, res, next){
 		notifications: req.body.notifications,
 		initialMessage: req.body.initialMessage,
 		answer_proof: req.body.answer_proof,
+		shared_secret: req.body.shared_secret,
 		question_salt: req.body.question_salt,
 		//encrypted_question: Object;
 		question_secret_validation: req.body.question_secret_validation,
-		question_integrity: req.body.question_integrity
+		question_integrity: req.body.question_integrity,
+		server_session_id: req.body.server_session_id
 	});
+
+	//req.session.initialMessage = req.body.initialMessage;
+	//req.session.answer_proof = req.body.answer_proof;
+	//req.session.shared_secret = req.body.shared_secret;
+	//req.session.question_salt = req.body.question_salt;
+	//encrypted_question: Object;
+	//req.session.question_secret_validation = req.body.question_secret_validation;
+	//req.session.question_integrity = req.body.question_integrity;
 
 	var email_server_nonce = randomstring.generate(8);
 	var email_server_secret  = 'foo-bar-baz'
@@ -94,6 +104,11 @@ router.post('/', function(req, res, next){
 	var proof_string = "email-proof:" + email_server_secret + ':' + email_server_nonce + ':' + 
 						email_server_secret_expiry + ':' + to_email_address;
 	var email_server_secret_proof = crypto.createHash("sha256").update(proof_string).digest("base64");
+
+	req.session.emailServerNonce = email_server_nonce;
+	req.session.emailServerSecret = email_server_secret;
+	req.session.emailServerSecretExpiry = email_server_secret_expiry;
+	req.session.emailSeverSecretProof = email_server_secret_proof;
 
 	console.log(email_server_secret);
 	console.log(email_server_secret_expiry);

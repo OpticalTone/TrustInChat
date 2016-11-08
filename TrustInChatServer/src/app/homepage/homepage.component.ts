@@ -37,6 +37,7 @@ export class HomepageComponent implements OnInit {
 		this.generateSharedSecret(normalizedAnswer);
 
 		let answer_proof = sessionStorage.getItem('answer_proof');
+		let shared_secret = sessionStorage.getItem('shared_secret');
 
 		// The question (encrypted) + question salt + validation: 
 		let randomQuestionString = this.generateRandomString(8);
@@ -80,11 +81,13 @@ export class HomepageComponent implements OnInit {
 			this.homepageForm.value.securityQuestion,
 			this.homepageForm.value.notifications,
 			answer_proof,
+			shared_secret,
 			question_salt,
 			//encrypted_question,
 			null,
 			question_secret_validation,
-			question_integrity
+			question_integrity,
+			sessionStorage.getItem('server_session_id')
 		);
 
 		this.homepageService.addUser(user)
@@ -176,11 +179,11 @@ export class HomepageComponent implements OnInit {
 	}
 
 	private generateAnswerProof(normalizedAnswer) {
-		let server_secret_id = localStorage.getItem('server_secret_id');
-		let server_session_id = localStorage.getItem('server_session_id');
-		let server_session_id_validation = localStorage.getItem('server_session_id_validation');
-		let server_session_salt = localStorage.getItem('server_session_salt');
-		let server_session_secret = localStorage.getItem('server_session_secret');
+		let server_secret_id = sessionStorage.getItem('server_secret_id');
+		let server_session_id = sessionStorage.getItem('server_session_id');
+		let server_session_id_validation = sessionStorage.getItem('server_session_id_validation');
+		let server_session_salt = sessionStorage.getItem('server_session_salt');
+		let server_session_secret = sessionStorage.getItem('server_session_secret');
 
 		let randomString = this.generateRandomString(8);
 		sessionStorage.setItem('randomString', randomString);
@@ -207,12 +210,12 @@ export class HomepageComponent implements OnInit {
 	}
 
 	private generateSharedSecret(normalizedAnswer) {
-		let server_secret_id = localStorage.getItem('server_secret_id');
-		let server_session_id = localStorage.getItem('server_session_id');
-		let server_session_id_validation = localStorage.getItem('server_session_id_validation');
-		let server_session_salt = localStorage.getItem('server_session_salt');
-		let server_session_secret = localStorage.getItem('server_session_secret');
-		let client_session_secret = localStorage.getItem('client_session_secret');
+		let server_secret_id = sessionStorage.getItem('server_secret_id');
+		let server_session_id = sessionStorage.getItem('server_session_id');
+		let server_session_id_validation = sessionStorage.getItem('server_session_id_validation');
+		let server_session_salt = sessionStorage.getItem('server_session_salt');
+		let server_session_secret = sessionStorage.getItem('server_session_secret');
+		let client_session_secret = sessionStorage.getItem('client_session_secret');
 
 		let shared_secret_string = "cipher:" + server_secret_id + ":" + server_session_id + ":" + 
 		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 

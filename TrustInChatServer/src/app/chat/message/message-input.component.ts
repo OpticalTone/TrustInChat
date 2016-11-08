@@ -68,7 +68,18 @@ export class MessageInputComponent implements OnInit {
 			this.message = null;
 		} else {
 			// Create
-			const message = new Message(form.value.content);
+			const message = new Message(
+				form.value.content,
+				null,
+				null,
+				null,
+				null,
+				message_salt,
+				message_secret,
+				message_secret_validation,
+				message_integrity,
+				server_session_id
+				);
 			this.chatService.addMessage(message)
 				.subscribe(
 					data => console.log(data),

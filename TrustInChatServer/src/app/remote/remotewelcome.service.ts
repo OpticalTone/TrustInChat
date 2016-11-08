@@ -28,4 +28,14 @@ export class RemoteWelcomeService {
 		
 	}
 
+	getUser() {
+		return this.http.get(this.remoteWelcomeUrl)
+			.map((response: Response) => {
+				const res = response.json().obj;
+				let user = new User(
+					res.server_session_id
+					);
+			})
+			.catch((error: Response) => Observable.throw(error.json()));
+	}
 }

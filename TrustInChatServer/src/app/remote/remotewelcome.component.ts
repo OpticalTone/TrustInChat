@@ -11,6 +11,9 @@ import { User } from '../homepage/user.model';
 	templateUrl: './remotewelcome.component.html'
 })
 export class RemoteWelcomeComponent implements OnInit {
+	
+	private user;
+
 	remotewelcomeForm: FormGroup
 
 	constructor(private remoteWelcomeService: RemoteWelcomeService, private router: Router, private route: ActivatedRoute) {
@@ -19,8 +22,8 @@ export class RemoteWelcomeComponent implements OnInit {
 
 	onSubmit() {
 
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
+		let serverSessionId = sessionStorage.getItem('server_session_id');
+		let clientSessionSecret = sessionStorage.getItem('client_session_secret');
 
 		const user = new User(
 			null,
@@ -54,8 +57,8 @@ export class RemoteWelcomeComponent implements OnInit {
 		let serverSessionId = this.route.snapshot.params['serverSessionId'];
 		let clientSessionSecret = this.route.snapshot.params['clientSessionSecret'];
 
-		sessionStorage.setItem('serverSessionId', serverSessionId);
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
+		sessionStorage.setItem('server_session_id', serverSessionId);
+		sessionStorage.setItem('client_session_secret', clientSessionSecret);
 
 		//let answerRegExp = "^[a-zA-Z0-9-_@#$%^&*\s]{4,}$";
 
@@ -65,7 +68,15 @@ export class RemoteWelcomeComponent implements OnInit {
 				//Validators.pattern(answerRegExp) 
 			])
 		});
+
+		this.remoteWelcomeService.getUser()
+			.subscribe(
+				user => console.log(user)
+			);
+
 	}
+
+
 
 	getToEmail() {
 		

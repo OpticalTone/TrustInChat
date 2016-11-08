@@ -9,10 +9,12 @@ var userSchema = new Schema({
 	notifications: { type: String, default: '' },
 	initialMessage: { type: String, required: true },
 	answer_proof: { type: String, default: '' },
+	shared_secret: { type: String, default: '' },
 	question_salt: { type: String, default: '' },
 	//encrypted_question: Object;
 	question_secret_validation: { type: String, default: '' },
 	question_integrity: { type: String, default: '' },
+	server_session_id: { type: String, default: '' },
 
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });
