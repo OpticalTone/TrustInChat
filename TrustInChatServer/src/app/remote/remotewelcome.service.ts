@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 
 import { Observable } from "rxjs";
 import 'rxjs/Rx';
@@ -24,18 +24,15 @@ export class RemoteWelcomeService {
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
 
-	checkAnswer() {
+	/*checkAnswer() {
 		
 	}
 
 	getUser() {
+		let params = new URLSearchParams();
+
 		return this.http.get(this.remoteWelcomeUrl)
-			.map((response: Response) => {
-				const res = response.json().obj;
-				let user = new User(
-					res.server_session_id
-					);
-			})
+			.map((response: Response) => response.json())
 			.catch((error: Response) => Observable.throw(error.json()));
-	}
+	}*/
 }

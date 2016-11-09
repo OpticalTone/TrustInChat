@@ -12,7 +12,7 @@ import { User } from '../homepage/user.model';
 })
 export class RemoteWelcomeComponent implements OnInit {
 	
-	private user;
+	user: User;
 
 	remotewelcomeForm: FormGroup
 
@@ -38,7 +38,9 @@ export class RemoteWelcomeComponent implements OnInit {
 			//encrypted_question,
 			null,
 			null,
-			null
+			null,
+			null,
+			sessionStorage.getItem('server_session_id')
 		);
 
 		//const user = new User(this.remotewelcomeForm.value.securityAnswer);
@@ -46,7 +48,24 @@ export class RemoteWelcomeComponent implements OnInit {
 			.subscribe(
 				data => {
 					sessionStorage.setItem('token', data.token);
-					sessionStorage.setItem('toEmail', data.toEmail);
+					sessionStorage.setItem('userName', data.user.userName);
+					sessionStorage.setItem('initialMessage', data.user.initialMessage);
+					sessionStorage.setItem('securityAnswer', data.user.securityAnswer);
+					sessionStorage.setItem('toEmail', data.user.toEmail);
+					sessionStorage.setItem('fromEmail', data.user.fromEmail);
+					sessionStorage.setItem('securityQuestion', data.user.securityQuestion);
+					sessionStorage.setItem('notifications', data.user.notifications);
+					sessionStorage.setItem('answer_proof', data.user.answer_proof);
+					sessionStorage.setItem('shared_secret', data.user.shared_secret);
+					sessionStorage.setItem('question_salt', data.user.question_salt);
+					sessionStorage.setItem('question_secret', data.user.question_secret);
+					sessionStorage.setItem('question_secret_validation', data.user.question_secret_validation);
+					sessionStorage.setItem('question_integrity', data.user.question_integrity);
+					//sessionStorage.setItem('server_secret_id', data.server_secret_id);
+					//sessionStorage.setItem('server_session_id_validation', data.server_session_id_validation);
+					//sessionStorage.setItem('server_session_salt', data.server_session_salt);
+					//sessionStorage.setItem('server_session_secret', server_session_secret);
+					console.log(data);
 					this.router.navigate(['chat', serverSessionId, clientSessionSecret]);
 				}
 			);
@@ -54,6 +73,7 @@ export class RemoteWelcomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
 		let serverSessionId = this.route.snapshot.params['serverSessionId'];
 		let clientSessionSecret = this.route.snapshot.params['clientSessionSecret'];
 
@@ -69,9 +89,20 @@ export class RemoteWelcomeComponent implements OnInit {
 			])
 		});
 
-		this.remoteWelcomeService.getUser()
+
+
+
+
+
+		/*this.remoteWelcomeService.getUser()
 			.subscribe(
-				user => console.log(user)
+				//data => console.log(data)
+				//(user: User) => {
+				//	this.user = user;
+				//	console.log(this.user);
+				//}
+				data => console.log(data.obj.server_session_id)
+
 			);
 
 	}
@@ -88,6 +119,6 @@ export class RemoteWelcomeComponent implements OnInit {
 
 	getSecurityQuestion() {
 		
-	}
+	}*/
 
 }
