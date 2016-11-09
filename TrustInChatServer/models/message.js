@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var User = require('./user');
+var Session= require('./session');
 
 var messageSchema = new Schema({
 	content: {type: String, required: true},
@@ -8,15 +8,14 @@ var messageSchema = new Schema({
 	message_salt: { type: String, default: '' },
 	message_secret_validation: { type: String, default: '' },
 	message_integrity: { type: String, default: '' },
-	server_session_id: {type: String, default: '' },
 	
-	user: {type: Schema.Types.ObjectId, ref: 'User'}
+	session: {type: Schema.Types.ObjectId, ref: 'Session'}
 });
 
 messageSchema.post('remove', function(message) {
-	User.findById(message.user, function(err, user) {
-		user.messages.pull(message);
-		user.save();
+	Session.findById(message.session, function(err, session) {
+		session.messages.pull(message);
+		session.save();
 	});
 });
 

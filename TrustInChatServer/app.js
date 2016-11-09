@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
-var expressSession = require('express-session');
-var MongoStore = require('connect-mongo')(expressSession);
 
 var app = express();
 
@@ -27,14 +25,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(expressSession({
-    secret: 'anystringoftext', 
-    saveUninitialized: true, 
-    resave: true,
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection
-    })
-}));
 
 app.use(function(req, res, next){
 	res.setHeader('Access-Control-Allow-Origin', '*');

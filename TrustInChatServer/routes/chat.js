@@ -3,11 +3,11 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 var Message = require('../models/message');
-var User = require('../models/user');
+var Session = require('../models/session');
 
 router.get('/', function(req, res, next) {
-	Message.find({server_session_id: req.body.server_session_id})
-		.populate('user', 'fromEmail toEmail')
+	Message.find()
+		.populate('session', 'fromEmail toEmail')
 		.exec(function(err, messages) {
 			if (err) {
 				return res.status(500).json({
@@ -37,7 +37,7 @@ router.use('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
 	var decoded = jwt.decode(req.query.token);
 
-	User.findById(decoded.user._id, function(err, user) {
+	Session.findById(decoded.session._id, function(err, session) {
 		if (err) {
 			return res.status(500).json({
 				title: 'An error occurred',
@@ -47,11 +47,10 @@ router.post('/', function(req, res, next) {
 
 		var message = new Message({
 			content: req.body.content,
-			user: user,
 			message_salt: req.body.message_salt,
 			message_secret_validation: req.body.message_secret_validation,
 			message_integrity: req.body.message_integrity,
-			server_session_id: req.body.server_session_id
+			session: session
 		});
 
 		message.save(function(err, result) {
@@ -61,8 +60,8 @@ router.post('/', function(req, res, next) {
 					error: err
 				});
 			}
-			user.messages.push(result);
-			user.save();
+			session.messages.push(result);
+			session.save();
 
 			res.status(201).json({
 				message: 'Saved message',
@@ -89,7 +88,7 @@ router.patch('/:id', function(req, res, next) {
 				error: {message: 'Message not found!'}
 			});
 		}
-		if (message.user != decoded.user._id) {
+		if (message.session != decoded.session._id) {
 			return res.status(401).json({
 				title: 'Not Authorized',
 				error: err
@@ -128,7 +127,7 @@ router.delete('/:id', function(req, res, next) {
 				error: {message: 'Message not found!'}
 			});
 		}
-		if (message.user != decoded.user._id) {
+		if (message.session != decoded.session._id) {
 			return res.status(401).json({
 				title: 'Not Authorized',
 				error: err
