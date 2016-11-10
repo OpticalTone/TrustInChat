@@ -29,8 +29,8 @@ export class ChatGuard implements CanActivate {
 
 		// local
 		if (sessionStorage.getItem('token') !== null && 
-		sessionStorage.getItem('server_session_id') !== null && 
-		sessionStorage.getItem('client_session_secret')  !== null) {
+		sessionStorage.getItem('serverSessionId') !== null && 
+		sessionStorage.getItem('clientSessionSecret')  !== null) {
 			return true;
 		}
 

@@ -50,6 +50,7 @@ router.post('/', function(req, res, next) {
 			message_salt: req.body.message_salt,
 			message_secret_validation: req.body.message_secret_validation,
 			message_integrity: req.body.message_integrity,
+			user: req.body.user,
 			session: session
 		});
 

@@ -8,7 +8,7 @@ var sessionSchema = new Schema({
 	securityQuestion: { type: String, default: '' }, 
 	answer: { type: String, default: '' },   
 	initialMessage: { type: String, required: true },
-	notifications: { type: String, default: '' }
+	notifications: { type: String, default: '' },
 
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });

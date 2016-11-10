@@ -4,7 +4,7 @@ import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from "rxjs";
 import 'rxjs/Rx';
 
-import { User } from '../homepage/user.model';
+import { Session } from '../homepage/session.model';
 
 @Injectable()
 export class RemoteWelcomeService {
@@ -15,24 +15,12 @@ export class RemoteWelcomeService {
 
 	}
 
-	signin(user: User) {
-		const body = JSON.stringify(user);
+	signin(session: Session) {
+		const body = JSON.stringify(session);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		return this.http.post(this.remoteWelcomeUrl, body, {headers: headers})
 			.map((response: Response) => response.json())
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
-
-	/*checkAnswer() {
-		
-	}
-
-	getUser() {
-		let params = new URLSearchParams();
-
-		return this.http.get(this.remoteWelcomeUrl)
-			.map((response: Response) => response.json())
-			.catch((error: Response) => Observable.throw(error.json()));
-	}*/
 }

@@ -3,11 +3,13 @@ var Schema = mongoose.Schema;
 var Session= require('./session');
 
 var messageSchema = new Schema({
-	content: {type: String, required: true},
+	content: { type: String, required: true },
 
 	message_salt: { type: String, default: '' },
 	message_secret_validation: { type: String, default: '' },
 	message_integrity: { type: String, default: '' },
+
+	user: { type: String, default: '' },
 	
 	session: {type: Schema.Types.ObjectId, ref: 'Session'}
 });

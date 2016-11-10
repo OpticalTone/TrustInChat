@@ -31,15 +31,15 @@ export class ChatService {
 				const result = response.json();
 				const message = new Message(
 					result.obj.content,
-					result.obj.user.fromEmail, 
-					result.obj.user.toEmail, 
+					result.obj.session.fromEmail, 
+					result.obj.session.toEmail, 
 					result.obj._id, 
-					result.obj.user._id,
+					result.obj.session._id,
 					result.obj.message_salt,
 					null,
 					result.obj.message_secret_validation,
 					result.obj.message_integrity,
-					result.obj.server_session_id
+					result.obj.user
 				);
 				this.messages.push(message);
 				return message;
@@ -62,16 +62,26 @@ export class ChatService {
 					sessionStorage.getItem('fromEmail'),
 					sessionStorage.getItem('toEmail'),
 					null,
-					sessionStorage.getItem('userId')
+					null,
+					null,
+					null,
+					null,
+					null,
+					sessionStorage.getItem('user')
 					);
 
 				for (let message of messages) {
 					transformedMessages.push(new Message(
 						message.content, 
-						message.user.fromEmail, 
-						message.user.toEmail, 
+						message.session.fromEmail, 
+						message.session.toEmail, 
 						message._id, 
-						message.user._id
+						message.session._id,
+						null,
+						null,
+						null,
+						null,
+						message.user
 					));
 				}
 				this.messages = transformedMessages;

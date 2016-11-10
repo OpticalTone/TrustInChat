@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import { ErrorService } from '../errors/error.service';
 
-import { User } from './user.model';
+import { Session } from './session.model';
 import { Email } from './email.model';
 
 @Injectable()
@@ -18,8 +18,8 @@ export class HomepageService {
 
 	}
 	
-	addUser(user: User) {
-		const body = JSON.stringify(user);
+	createSession(session: Session) {
+		const body = JSON.stringify(session);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		return this.http.post(this.homepageUrl, body, {headers: headers})
@@ -44,7 +44,7 @@ export class HomepageService {
 
 	closeSession() {
 		sessionStorage.clear();
-		//TODO: delete chat session on server, users and messages
+		//TODO: delete chat session on server, session and messages
 	}
 
 	isLoggedIn() {

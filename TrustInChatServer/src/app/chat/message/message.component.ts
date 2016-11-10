@@ -4,7 +4,6 @@ import { ChatService } from '../chat.service';
 import { ErrorService } from '../../errors/error.service';
 
 import { Message } from './message.model';
-import { User } from '../../homepage/user.model';
 
 @Component({
 	selector: 'chat-message',
@@ -53,6 +52,7 @@ export class MessageComponent {
 	}
 
 	belongsToUser() {
-		return sessionStorage.getItem('userId') == this.message.userId;
+		console.log(this.message.user);
+		return sessionStorage.getItem('user') == this.message.user;
 	}
 }

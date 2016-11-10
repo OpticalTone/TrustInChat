@@ -5,8 +5,12 @@ export class Email {
 	public fromEmail: string;
 	public fromName: string;
 
-	constructor (serverSessionId?: string, clientSessionSecret?: string, toEmail?: string, fromEmail?: string, fromName?: string) {
-
+	constructor (serverSessionId?: string, 
+				 clientSessionSecret?: string, 
+				 toEmail?: string, 
+				 fromEmail?: string, 
+				 fromName?: string) 
+	{
 		this.serverSessionId = serverSessionId;
 		this.clientSessionSecret = clientSessionSecret;
 		this.toEmail = toEmail;

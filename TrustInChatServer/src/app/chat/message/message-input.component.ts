@@ -56,8 +56,6 @@ export class MessageInputComponent implements OnInit {
 		console.log('message_integrity: ', message_integrity);
 		console.log('-----------------------------------------------');
 
-		let server_session_id = sessionStorage.getItem('server_session_id');
-
 		if (this.message) {
 			// Edit
 			this.message.content = form.value.content;
@@ -78,8 +76,9 @@ export class MessageInputComponent implements OnInit {
 				message_secret,
 				message_secret_validation,
 				message_integrity,
-				server_session_id
+				sessionStorage.getItem('user')
 				);
+
 			this.chatService.addMessage(message)
 				.subscribe(
 					data => console.log(data),

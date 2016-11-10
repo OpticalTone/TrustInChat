@@ -10,7 +10,6 @@ var expressValidator = require('express-validator');
 var app = express();
 
 var chatRoutes = require('./routes/chat');
-var remoteRoutes = require('./routes/remote');
 var appRoutes = require('./routes/app');
 
 // view engine setup
@@ -34,7 +33,6 @@ app.use(function(req, res, next){
 });
 
 app.use('/chatserver', chatRoutes);
-app.use('/remoteserver', remoteRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

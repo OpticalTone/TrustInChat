@@ -7,22 +7,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body>
-    <script type="text/javascript">
-        console.log('server_session_id: {{serverSessionId}}');
-        console.log('server_session_id_validation: {{serverSessionIdValidation}}');
-        console.log('server_secret_id: {{serverSecretId}}');
-        console.log('server_session_salt: {{serverSessionSalt}}');
-        console.log('server_session_secret: {{serverSessionSecret}}');
-
-        sessionStorage.setItem('server_session_id', '{{serverSessionId}}');
-        sessionStorage.setItem('server_session_id_validation', '{{serverSessionIdValidation}}');
-        sessionStorage.setItem('server_secret_id', '{{serverSecretId}}');
-        sessionStorage.setItem('server_session_salt', '{{serverSessionSalt}}');
-        sessionStorage.setItem('server_session_secret', '{{serverSessionSecret}}');
-    </script>
-
 	<chat-app>Loading...</chat-app>
-
     <script src="/js/app/bundle.js"></script>
 </body>
 </html>
