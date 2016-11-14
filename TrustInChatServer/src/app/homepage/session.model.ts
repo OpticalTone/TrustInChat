@@ -6,6 +6,7 @@ export class Session {
 	public securityAnswer: string;   
 	public initialMessage: string;
 	public notifications: string;
+	public user: string;
 
 	constructor (toEmail?: string, 
 				 fromName?: string,
@@ -13,7 +14,8 @@ export class Session {
 				 securityQuestion?: string,
 				 securityAnswer?: string,
 				 initialMessage?: string,
-				 notifications?: string) 
+				 notifications?: string,
+				 user?: string) 
 	{
 		this.toEmail = toEmail;
 		this.fromName = fromName;
@@ -22,6 +24,7 @@ export class Session {
 		this.securityAnswer = securityAnswer;
 		this.initialMessage = initialMessage;  
 		this.notifications = notifications;
+		this.user = user;
 	}
 }
 

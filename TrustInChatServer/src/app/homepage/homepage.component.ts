@@ -31,7 +31,8 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.securityQuestion,
 				this.homepageForm.value.securityAnswer,
 				this.homepageForm.value.initialMessage,
-				this.homepageForm.value.notifications
+				this.homepageForm.value.notifications,
+				sessionStorage.getItem('user')
 			);
 
 		// get data from server(serverSessionId)
@@ -71,8 +72,6 @@ export class HomepageComponent implements OnInit {
 				error => this.errorService.handleError(error)
 			);
 
-		sessionStorage.setItem('user', 'homepage');
-
 		// clear homepage form	
 		this.homepageForm.reset();	
 	}
@@ -82,6 +81,8 @@ export class HomepageComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
+		sessionStorage.setItem('user', 'homepage');
 
 		let emailRegExp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 		let answerRegExp = "^[a-zA-Z0-9-_@#$%^&*\s]{4,}$";

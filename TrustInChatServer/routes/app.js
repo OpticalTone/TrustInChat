@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 
 var Session = require('../models/session');
+var Message = require('../models/message');
 
 router.get('/', function(req, res, next) {
     res.render('index', {
@@ -14,25 +15,46 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
+	
 	var session = new Session({
 		toEmail: req.body.toEmail,  
 		fromName: req.body.fromName,
 		fromEmail: req.body.fromEmail,
 		securityQuestion: req.body.securityQuestion,
 		answer: req.body.securityAnswer,  
-		initialMessage: req.body.initialMessage,
 		notifications: req.body.notifications
 	});
+
+	
 
 	var token = jwt.sign({session: session}, 'secretstring');
 
 	session.save(function(err, result) {
 		if (err) {
-			return res.status(404).json({
+			return res.status(500).json({
 				title: 'An error occurred',
 				error: err
 			});
 		} 
+
+		var message = new Message({
+			content: req.body.initialMessage,
+			message_salt: req.body.message_salt,
+			message_secret_validation: req.body.message_secret_validation,
+			message_integrity: req.body.message_integrity,
+			user: req.body.user,
+			session: session
+		});
+
+
+		message.save(function(err, result) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+		});
 
 		res.status(201).json({
 			message: 'User created and logged in',

@@ -57,19 +57,6 @@ export class ChatService {
 				const messages = response.json().obj;
 				let transformedMessages: Message[] = [];
 
-				transformedMessages[0] = new Message(
-					sessionStorage.getItem('initialMessage'), 
-					sessionStorage.getItem('fromEmail'),
-					sessionStorage.getItem('toEmail'),
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					sessionStorage.getItem('user')
-					);
-
 				for (let message of messages) {
 					transformedMessages.push(new Message(
 						message.content, 

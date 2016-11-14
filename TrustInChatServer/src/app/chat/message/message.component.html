@@ -14,10 +14,10 @@
 		<div class="msg" *ngIf="belongsToUser()">
 			{{message.content}}
 		</div>
-		<!--div class="config" *ngIf="belongsToUser()">
+		<div class="config" *ngIf="belongsToUser()">
 			<a (click)="onEdit()">Edit</a>
 			<a (click)="onDelete()">Delete</a>
-		</div-->
+		</div>
 		<div class="msgRight" *ngIf="!belongsToUser()">
 			{{message.content}}
 		</div>
