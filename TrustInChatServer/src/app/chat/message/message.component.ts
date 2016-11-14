@@ -52,7 +52,10 @@ export class MessageComponent {
 	}
 
 	belongsToUser() {
-		console.log(this.message.user);
 		return sessionStorage.getItem('user') == this.message.user;
+	}
+
+	remoteUser() {
+		return sessionStorage.getItem('user') == 'remote';
 	}
 }

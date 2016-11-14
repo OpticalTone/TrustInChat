@@ -9,8 +9,7 @@ import { ErrorComponent } from './errors/error.component';
 
 @Component({
 	selector: 'chat-app',
-	templateUrl: './app.component.html',
-	providers: [ChatService]	
+	templateUrl: './app.component.html'
 })
 export class AppComponent {
 

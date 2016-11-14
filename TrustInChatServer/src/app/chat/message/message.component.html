@@ -2,7 +2,10 @@
 	<div class="author" *ngIf="belongsToUser()">
 		Me:
 	</div>
-	<div class="author" *ngIf="!belongsToUser()" style="float: right;">
+	<div class="author" *ngIf="!belongsToUser() && !remoteUser()" style="float: right;">
+		{{message.chatToEmail}}
+	</div>
+	<div class="author" *ngIf="!belongsToUser() && remoteUser()" style="float: right;">
 		{{message.chatFromEmail}}
 	</div>
 </div>

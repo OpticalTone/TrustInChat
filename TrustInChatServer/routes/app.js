@@ -6,13 +6,13 @@ var jwt = require('jsonwebtoken');
 
 var Session = require('../models/session');
 
-router.get('/', function(req, res, next){
+router.get('/', function(req, res, next) {
     res.render('index', {
     	title: 'TrustInChat'
     });
 });
 
-router.post('/', function(req, res, next){
+router.post('/', function(req, res, next) {
 
 	var session = new Session({
 		toEmail: req.body.toEmail,  
@@ -65,6 +65,7 @@ router.post('/remoteserver', function(req, res, next) {
 		}
 
 		var token = jwt.sign({session: session}, 'secretstring');
+
 		res.status(200).json({
 			message: 'Successfully logged in',
 			token: token,

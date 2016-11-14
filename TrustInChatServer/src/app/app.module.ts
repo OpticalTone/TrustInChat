@@ -14,6 +14,7 @@ import { RemoteWelcomeComponent } from './remote/remotewelcome.component';
 import { ErrorComponent } from './errors/error.component';
 
 import { HomepageService } from './homepage/homepage.service';
+import { ChatService } from './chat/chat.service';
 import { RemoteWelcomeService } from './remote/remotewelcome.service';
 import { ErrorService } from './errors/error.service';
 
@@ -42,6 +43,7 @@ import { routing } from './app.routing';
 	],
 	providers: [
 		HomepageService,
+		ChatService,
 		RemoteWelcomeService,
 		ErrorService,
 		ChatGuard
