@@ -9,6 +9,7 @@ var sessionSchema = new Schema({
 	answer: { type: String, default: '' },
 	notifications: { type: String, default: '' },
 
+	serverdata: {type: Schema.Types.ObjectId, ref: 'ServerData'},
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });
 

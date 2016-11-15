@@ -41,6 +41,7 @@ export class HomepageComponent implements OnInit {
 				data => {
 					sessionStorage.setItem('token', data.token);
 					sessionStorage.setItem('fromEmail', data.fromEmail);
+					sessionStorage.setItem('fromName', data.fromName);
 					sessionStorage.setItem('toEmail', data.toEmail);
 					sessionStorage.setItem('initialMessage', data.initialMessage);
 					sessionStorage.setItem('serverSessionId', data.session._id);

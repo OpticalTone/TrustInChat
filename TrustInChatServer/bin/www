@@ -7,7 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('TrustInChat:server');
 var http = require('http');
+var crypto = require('crypto');
 var mongoose = require('mongoose');
+var ServerData = require('../models/serverdata');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://127.0.0.1/simple', function(err) {
@@ -31,6 +33,22 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+// generate server crypto rnd str
+var serverSecretId = crypto.randomBytes(16).toString('hex');
+console.log('server-secret-id: ' + serverSecretId);
+
+var serverSecret = crypto.randomBytes(16).toString('hex');
+console.log('server-secret: ' + serverSecret);
+
+var data = {
+  serverSecretId: serverSecretId,
+  serverSecret: serverSecret
+};
+
+var newserverdata = new ServerData(data);
+
+newserverdata.save();
 
 /**
  * Listen on provided port, on all network interfaces.

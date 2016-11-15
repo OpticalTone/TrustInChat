@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 
 var Session = require('../models/session');
 var Message = require('../models/message');
+var ServerData = require('../models/serverdata');
 
 router.get('/', function(req, res, next) {
     res.render('index', {
@@ -14,16 +15,27 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+	
+	ServerData.findById("582b354aa115e655f16b1960", function(err, serverdata) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		var session = new Session({
+			toEmail: req.body.toEmail,  
+			fromName: req.body.fromName,
+			fromEmail: req.body.fromEmail,
+			securityQuestion: req.body.securityQuestion,
+			answer: req.body.securityAnswer,  
+			notifications: req.body.notifications,
+			serverdata: serverdata
+		});
+	
+	
 
 	
-	var session = new Session({
-		toEmail: req.body.toEmail,  
-		fromName: req.body.fromName,
-		fromEmail: req.body.fromEmail,
-		securityQuestion: req.body.securityQuestion,
-		answer: req.body.securityAnswer,  
-		notifications: req.body.notifications
-	});
 
 	
 
@@ -36,6 +48,8 @@ router.post('/', function(req, res, next) {
 				error: err
 			});
 		} 
+		serverdata.sessions.push(result);
+		serverdata.save();
 
 		var message = new Message({
 			content: req.body.initialMessage,
@@ -60,29 +74,13 @@ router.post('/', function(req, res, next) {
 			message: 'User created and logged in',
 			token: token,
 			fromEmail: req.body.fromEmail,
+			fromName: req.body.fromName,
 			toEmail: req.body.toEmail,
 			initialMessage: req.body.initialMessage,
 			session: session
 		});
 	});
-});
-
-router.get('/', function(req, res, next) {
-	console.log(req.query.serverSessionId);
-	Message.find({session: req.query.serverSessionId})
-		.populate('session', 'fromEmail toEmail')
-		.exec(function(err, messages) {
-			if (err) {
-				return res.status(500).json({
-					title: 'An error occurred',
-					error: err
-				});
-			}
-			res.status(200).json({
-				message: 'Success',
-				obj: messages
-			});
-		});
+	});
 });
 
 router.get('/remoteserver', function(req, res, next) {
