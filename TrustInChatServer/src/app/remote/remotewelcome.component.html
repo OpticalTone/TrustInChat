@@ -4,19 +4,19 @@
 	    	<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>To:</label>
-					<span id="toEmail">ToEmal</span>
+					<span id="toEmail">{{getToEmail()}}</span>
 				</section>
 			</div>
 	    	<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>From:</label>
-					<span id="fromEmail">FromName (FromEmail)</span>
+					<span id="fromEmail">{{getFromName()}} ({{getFromEmail()}})</span>
 				</section>
 			</div>
 			<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
 					<label>Security question:</label>
-					<span id="securityQuestion">SecurityQuestion</span>
+					<span id="securityQuestion">{{getSecurityQuestion()}}</span>
 				</section>
 			</div>
 			<div class="row spacing">

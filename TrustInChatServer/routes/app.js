@@ -67,8 +67,39 @@ router.post('/', function(req, res, next) {
 	});
 });
 
-router.get('/remoteserver', function(req, res, next) {
+router.get('/', function(req, res, next) {
+	console.log(req.query.serverSessionId);
+	Message.find({session: req.query.serverSessionId})
+		.populate('session', 'fromEmail toEmail')
+		.exec(function(err, messages) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			res.status(200).json({
+				message: 'Success',
+				obj: messages
+			});
+		});
+});
 
+router.get('/remoteserver', function(req, res, next) {
+	console.log(req.query.serverSessionId);
+	Session.findOne({_id: req.query.serverSessionId})
+		.exec(function(err, session) {
+			if(err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			res.status(200).json({
+				message: 'Success',
+				obj: session
+			});
+		});
 });
 
 router.post('/remoteserver', function(req, res, next) {

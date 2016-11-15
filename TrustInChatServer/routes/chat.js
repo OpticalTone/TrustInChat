@@ -6,7 +6,8 @@ var Message = require('../models/message');
 var Session = require('../models/session');
 
 router.get('/', function(req, res, next) {
-	Message.find()
+	console.log(req.query.serverSessionId);
+	Message.find({session: req.query.serverSessionId})
 		.populate('session', 'fromEmail toEmail')
 		.exec(function(err, messages) {
 			if (err) {

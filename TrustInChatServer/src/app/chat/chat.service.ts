@@ -1,4 +1,4 @@
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
@@ -51,7 +51,11 @@ export class ChatService {
 	}
 
 	getMessages() {
-		return this.http.get(this.chatUrl)
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let params = new URLSearchParams();
+		params.set('serverSessionId', serverSessionId);
+		
+		return this.http.get(this.chatUrl, { search: params })
 			.map((response: Response) => {
 
 				const messages = response.json().obj;

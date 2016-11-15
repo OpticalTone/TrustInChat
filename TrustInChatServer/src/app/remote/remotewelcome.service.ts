@@ -17,7 +17,20 @@ export class RemoteWelcomeService {
 
 	}
 
-	signin(session: Session) {
+	getData() {
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let params = new URLSearchParams();
+		params.set('serverSessionId', serverSessionId);
+
+		return this.http.get(this.remoteWelcomeUrl, { search: params })
+			.map((response: Response) => response.json())
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
+	}
+
+	signIn(session: Session) {
 		const body = JSON.stringify(session);
 		const headers = new Headers({'Content-Type': 'application/json'});
 

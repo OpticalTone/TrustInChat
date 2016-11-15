@@ -12,7 +12,6 @@ export class Message {
 
 	public user: string;
 
-
 	constructor (content: string, 
 				 chatFromEmail?: string,
 				 chatToEmail?: string,
