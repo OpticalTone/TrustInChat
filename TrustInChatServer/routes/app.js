@@ -15,8 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-	
-	ServerData.findById("582b354aa115e655f16b1960", function(err, serverdata) {
+	ServerData.findOne(function(err, serverdata) {
 		if (err) {
 			return res.status(500).json({
 				title: 'An error occurred',
@@ -32,25 +31,6 @@ router.post('/', function(req, res, next) {
 			notifications: req.body.notifications,
 			serverdata: serverdata
 		});
-	
-	
-
-	
-
-	
-
-	var token = jwt.sign({session: session}, 'secretstring');
-
-	session.save(function(err, result) {
-		if (err) {
-			return res.status(500).json({
-				title: 'An error occurred',
-				error: err
-			});
-		} 
-		serverdata.sessions.push(result);
-		serverdata.save();
-
 		var message = new Message({
 			content: req.body.initialMessage,
 			message_salt: req.body.message_salt,
@@ -59,28 +39,39 @@ router.post('/', function(req, res, next) {
 			user: req.body.user,
 			session: session
 		});
-
-
-		message.save(function(err, result) {
+		message.save(function(err, resultMessage) {
 			if (err) {
 				return res.status(500).json({
 					title: 'An error occurred',
 					error: err
 				});
 			}
-		});
+			session.messages.push(resultMessage);
 
-		res.status(201).json({
-			message: 'User created and logged in',
-			token: token,
-			fromEmail: req.body.fromEmail,
-			fromName: req.body.fromName,
-			toEmail: req.body.toEmail,
-			initialMessage: req.body.initialMessage,
-			session: session
+			var token = jwt.sign({session: session}, 'secretstring');
+
+			session.save(function(err, result) {
+				if (err) {
+					return res.status(500).json({
+						title: 'An error occurred',
+						error: err
+					});
+				} 
+				serverdata.sessions.push(result);
+				serverdata.save();
+
+				res.status(201).json({
+					message: 'User created and logged in',
+					token: token,
+					fromEmail: req.body.fromEmail,
+					fromName: req.body.fromName,
+					toEmail: req.body.toEmail,
+					initialMessage: req.body.initialMessage,
+					session: session
+				});
+			});
 		});
-	});
-	});
+	}).sort({_id: -1});
 });
 
 router.get('/remoteserver', function(req, res, next) {
