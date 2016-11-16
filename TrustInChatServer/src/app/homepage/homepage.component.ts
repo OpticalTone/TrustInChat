@@ -24,6 +24,8 @@ export class HomepageComponent implements OnInit {
 
 	onSubmit() {
 		
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+
 		const session = new Session(
 				this.homepageForm.value.toEmail,
 				this.homepageForm.value.fromName,
@@ -32,7 +34,8 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.securityAnswer,
 				this.homepageForm.value.initialMessage,
 				this.homepageForm.value.notifications,
-				sessionStorage.getItem('user')
+				sessionStorage.getItem('user'),
+				serverSessionId
 			);
 
 		// get data from server(serverSessionId)
@@ -44,8 +47,7 @@ export class HomepageComponent implements OnInit {
 					sessionStorage.setItem('fromName', data.fromName);
 					sessionStorage.setItem('toEmail', data.toEmail);
 					sessionStorage.setItem('initialMessage', data.initialMessage);
-					sessionStorage.setItem('serverSessionId', data.session._id);
-					this.router.navigate(['chat', 'session', clientSessionSecret]);
+					this.router.navigate(['chat', serverSessionId, clientSessionSecret]);
 				},
 				error =>this.errorService.handleError(error)
 			);
@@ -58,7 +60,6 @@ export class HomepageComponent implements OnInit {
 		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
 		// send email
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let toEmail = this.homepageForm.value.toEmail;
 		let fromEmail = this.homepageForm.value.fromEmail;
 		let fromName = 	this.homepageForm.value.fromName;

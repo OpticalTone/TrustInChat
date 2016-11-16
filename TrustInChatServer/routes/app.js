@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
+var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
 var Session = require('../models/session');
@@ -9,8 +10,12 @@ var Message = require('../models/message');
 var ServerData = require('../models/serverdata');
 
 router.get('/', function(req, res, next) {
+
+	var serverSessionId = crypto.randomBytes(8).toString('hex');
+
     res.render('index', {
-    	title: 'TrustInChat'
+    	title: 'TrustInChat',
+    	serverSessionId: serverSessionId
     });
 });
 
@@ -23,6 +28,7 @@ router.post('/', function(req, res, next) {
 			});
 		}
 		var session = new Session({
+			serverSessionId: req.body.serverSessionId,
 			toEmail: req.body.toEmail,  
 			fromName: req.body.fromName,
 			fromEmail: req.body.fromEmail,
@@ -66,8 +72,7 @@ router.post('/', function(req, res, next) {
 					fromEmail: req.body.fromEmail,
 					fromName: req.body.fromName,
 					toEmail: req.body.toEmail,
-					initialMessage: req.body.initialMessage,
-					session: session
+					initialMessage: req.body.initialMessage
 				});
 			});
 		});

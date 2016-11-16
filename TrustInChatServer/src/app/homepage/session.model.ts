@@ -7,7 +7,7 @@ export class Session {
 	public initialMessage: string;
 	public notifications: string;
 	public user: string;
-	//public sessionId: string;
+	public serverSessionId: string;
 
 	constructor (toEmail?: string, 
 				 fromName?: string,
@@ -17,7 +17,7 @@ export class Session {
 				 initialMessage?: string,
 				 notifications?: string,
 				 user?: string,
-				 //sessionId?: string
+				 serverSessionId?: string
 				 ) 
 	{
 		this.toEmail = toEmail;
@@ -28,7 +28,7 @@ export class Session {
 		this.initialMessage = initialMessage;  
 		this.notifications = notifications;
 		this.user = user;
-		//this.sessionId = sessionId;
+		this.serverSessionId = serverSessionId;
 	}
 }
 

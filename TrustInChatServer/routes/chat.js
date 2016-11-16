@@ -7,20 +7,35 @@ var Session = require('../models/session');
 
 router.get('/', function(req, res, next) {
 	console.log(req.query.serverSessionId);
-	Message.find({session: req.query.serverSessionId})
-		.populate('session', 'fromEmail toEmail')
-		.exec(function(err, messages) {
-			if (err) {
+
+	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
+		if (err) {
 				return res.status(500).json({
 					title: 'An error occurred',
 					error: err
 				});
 			}
-			res.status(200).json({
-				message: 'Success',
-				obj: messages
-			});
-		});
+
+
+
+			var sessionId = session[0]._id;
+			console.log(sessionId);
+
+			Message.find({session: sessionId})
+				.populate('session', 'fromEmail toEmail')
+				.exec(function(err, messages) {
+					if (err) {
+						return res.status(500).json({
+							title: 'An error occurred',
+							error: err
+						});
+					}
+					res.status(200).json({
+						message: 'Success',
+						obj: messages
+					});
+				});
+	});
 });
 
 router.use('/', function(req, res, next) {

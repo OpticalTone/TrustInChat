@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var sessionSchema = new Schema({
+	serverSessionId: { type: String, default: '' },
 	toEmail: { type: String, default: ''},    
 	fromName: { type: String, required: true},    
 	fromEmail: { type: String, default: '' }, 
