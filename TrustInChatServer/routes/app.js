@@ -9,15 +9,69 @@ var Session = require('../models/session');
 var Message = require('../models/message');
 var ServerData = require('../models/serverdata');
 
-router.get('/', function(req, res, next) {
+/*router.get('/', function(req, res, next) {
 
 	var serverSessionId = crypto.randomBytes(8).toString('hex');
 
-    res.render('index', {
+	var serverdata = '';
+	serverdata = ServerData.findOne(function(err, doc) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		if (doc) {
+			serverdata = doc.serverdata;
+			console.log(serverdata);
+		}
+	}).sort({_id: -1});
+	res.render('index', {
     	title: 'TrustInChat',
     	serverSessionId: serverSessionId
     });
-});
+});*/
+
+router.get('/', function(req, res, next) {
+	ServerData.findOne()
+		.sort({_id: -1})
+		.exec(function(err, serverdata) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			var serverSecretId = serverdata.serverSecretId;
+			var serverSecret = serverdata.serverSecret;
+			
+			var serverSessionId = crypto.randomBytes(8).toString('hex');
+
+			var validationString = serverSecretId + ':' + serverSessionId + ':' + serverSecret;
+			var serverSessionIdValidation = crypto.createHash('sha256').update(validationString).digest('hex');
+
+			var serverSessionSalt = crypto.randomBytes(8).toString('hex');
+			var serverSessionSecret = crypto.randomBytes(8).toString('hex');
+
+			console.log('server-secret-id: ' + serverSecretId);
+			console.log('server-secret: ' + serverSecret);
+			console.log('server-session-id: ' + serverSessionId);
+			console.log('validationString: ' + validationString);
+			console.log('server-session-id-validation: ' + serverSessionIdValidation);
+			console.log('server-session-salt: ' + serverSessionSalt);
+			console.log('server-session-secret: ' + serverSessionSecret);
+
+			res.render('index', {
+		    	title: 'TrustInChat',
+		    	serverSecretId: serverSecretId,
+		    	serverSessionId: serverSessionId,
+		    	serverSessionIdValidation: serverSessionIdValidation,
+		    	serverSessionSalt: serverSessionSalt,
+		    	serverSessionSecret: serverSessionSecret
+		    });
+		});
+		
+}); 
 
 router.post('/', function(req, res, next) {
 	ServerData.findOne(function(err, serverdata) {
@@ -81,7 +135,7 @@ router.post('/', function(req, res, next) {
 
 router.get('/remoteserver', function(req, res, next) {
 	console.log(req.query.serverSessionId);
-	Session.findOne({_id: req.query.serverSessionId})
+	Session.findOne({serverSessionId: req.query.serverSessionId})
 		.exec(function(err, session) {
 			if(err) {
 				return res.status(500).json({

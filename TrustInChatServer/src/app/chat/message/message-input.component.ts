@@ -32,13 +32,13 @@ export class MessageInputComponent implements OnInit {
 		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
 		let message_salt = CryptoJS.enc.Base64.stringify(messageArray);
 
-		let shared_secret = sessionStorage.getItem('shared_secret');
+		let sharedSecret = sessionStorage.getItem('sharedSecret');
 
-		let message_secret_string = "secret:" + message_salt + ":" + shared_secret;
+		let message_secret_string = "secret:" + message_salt + ":" + sharedSecret;
 		let hash_message_secret = CryptoJS.SHA256(message_secret_string);
 		let message_secret = CryptoJS.enc.Base64.stringify(hash_message_secret);
 
-		let message_secret_validation_string = "validate:" + message_salt + ":" + shared_secret;
+		let message_secret_validation_string = "validate:" + message_salt + ":" + sharedSecret;
 		let hash_message_validation = CryptoJS.SHA256(message_secret_validation_string);
 		let message_secret_validation = CryptoJS.enc.Base64.stringify(hash_message_validation);
 
@@ -48,12 +48,12 @@ export class MessageInputComponent implements OnInit {
 		let message_integrity = CryptoJS.enc.Base64.stringify(message_integrity_arr);
 
 		console.log('-----------------------------------------------');
-		console.log('message_salt: ', message_salt);
-		console.log('message_secret_string: ', message_secret_string);
-		console.log('message_secret: ', message_secret);
-		console.log('message_secret_validation_string: ', message_secret_validation_string);
-		console.log('message_secret_validation: ', message_secret_validation);
-		console.log('message_integrity: ', message_integrity);
+		console.log('message-salt: ', message_salt);
+		console.log('message-secret-string: ', message_secret_string);
+		console.log('message-secret: ', message_secret);
+		console.log('message-secret-validation-string: ', message_secret_validation_string);
+		console.log('message-secret-validation: ', message_secret_validation);
+		console.log('message-integrity: ', message_integrity);
 		console.log('-----------------------------------------------');
 
 		if (this.message) {

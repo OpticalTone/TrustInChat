@@ -8,8 +8,17 @@
 </head>
 <body>
 	<script type="text/javascript">
+		console.log('serverSecretId: {{serverSecretId}}');
 		console.log('serverSessionId: {{serverSessionId}}');
+		console.log('serverSessionIdValidation: {{serverSessionIdValidation}}');
+		console.log('serverSessionSalt: {{serverSessionSalt}}');
+		console.log('serverSessionSecret {{serverSessionSecret}}');
+
+		sessionStorage.setItem('serverSecretId', '{{serverSecretId}}');
 		sessionStorage.setItem('serverSessionId', '{{serverSessionId}}');
+		sessionStorage.setItem('serverSessionIdValidation', '{{serverSessionIdValidation}}');
+		sessionStorage.setItem('serverSessionSalt', '{{serverSessionSalt}}');
+		sessionStorage.setItem('serverSessionSecret', '{{serverSessionSecret}}');
 	</script>
 
 	<chat-app>Loading...</chat-app>

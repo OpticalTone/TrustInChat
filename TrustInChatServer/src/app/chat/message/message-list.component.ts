@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { ChatService } from '../chat.service';
 import { ErrorService } from '../../errors/error.service';
@@ -20,11 +21,16 @@ export class MessageListComponent implements OnInit {
 
 	messages: Message[];
 
-	constructor(private chatService: ChatService, private errorService: ErrorService) {
+	constructor(private chatService: ChatService, private errorService: ErrorService, private route: ActivatedRoute) {
 
 	}
 
 	ngOnInit() {
+
+		let serverSessionId = this.route.snapshot.params['serverSessionId'];
+		
+		sessionStorage.setItem('serverSessionId', serverSessionId);
+		
 		this.chatService.getMessages()
 			.subscribe(
 				(messages: Message[]) => {

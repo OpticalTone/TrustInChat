@@ -10,31 +10,28 @@ router.get('/', function(req, res, next) {
 
 	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
 		if (err) {
-				return res.status(500).json({
-					title: 'An error occurred',
-					error: err
-				});
-			}
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		var sessionId = session[0]._id;
+		console.log(sessionId);
 
-
-
-			var sessionId = session[0]._id;
-			console.log(sessionId);
-
-			Message.find({session: sessionId})
-				.populate('session', 'fromEmail toEmail')
-				.exec(function(err, messages) {
-					if (err) {
-						return res.status(500).json({
-							title: 'An error occurred',
-							error: err
-						});
-					}
-					res.status(200).json({
-						message: 'Success',
-						obj: messages
+		Message.find({session: sessionId})
+			.populate('session', 'fromEmail toEmail')
+			.exec(function(err, messages) {
+				if (err) {
+					return res.status(500).json({
+						title: 'An error occurred',
+						error: err
 					});
+				}
+				res.status(200).json({
+					message: 'Success',
+					obj: messages
 				});
+			});
 	});
 });
 

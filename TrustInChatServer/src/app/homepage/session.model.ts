@@ -8,6 +8,9 @@ export class Session {
 	public notifications: string;
 	public user: string;
 	public serverSessionId: string;
+	public serverSessionIdValidation: string;
+	public serverSessionSalt: string;
+	public serverSessionSecret: string;
 
 	constructor (toEmail?: string, 
 				 fromName?: string,
@@ -17,7 +20,10 @@ export class Session {
 				 initialMessage?: string,
 				 notifications?: string,
 				 user?: string,
-				 serverSessionId?: string
+				 serverSessionId?: string,
+				 serverSessionIdValidation?: string,
+				 serverSessionSalt?: string,
+				 serverSessionSecret?: string
 				 ) 
 	{
 		this.toEmail = toEmail;
@@ -29,6 +35,9 @@ export class Session {
 		this.notifications = notifications;
 		this.user = user;
 		this.serverSessionId = serverSessionId;
+		this.serverSessionIdValidation = serverSessionIdValidation;
+		this.serverSessionSalt = serverSessionSalt;
+		this.serverSessionSecret = serverSessionSecret;
 	}
 }
 

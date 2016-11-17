@@ -24,7 +24,22 @@ export class HomepageComponent implements OnInit {
 
 	onSubmit() {
 		
+		let serverSecretId = sessionStorage.getItem('serverSecretId');
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+
+		// generate cryptographic clientSessionSecret random string
+		let randomString = this.generateRandomString(8);
+		let secretArray = CryptoJS.enc.Utf16.parse(randomString); 
+		let clientSessionSecret = CryptoJS.enc.Base64.stringify(secretArray);
+		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
+
+		let securityAnswer = this.homepageForm.value.securityAnswer;
+		let answer = this.normalizeAnswer(securityAnswer);
+
+		this.generateSharedSecret(answer);
 
 		const session = new Session(
 				this.homepageForm.value.toEmail,
@@ -35,7 +50,10 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.initialMessage,
 				this.homepageForm.value.notifications,
 				sessionStorage.getItem('user'),
-				serverSessionId
+				serverSessionId,
+				serverSessionIdValidation,
+				serverSessionSalt,
+				serverSessionSecret
 			);
 
 		// get data from server(serverSessionId)
@@ -51,13 +69,6 @@ export class HomepageComponent implements OnInit {
 				},
 				error =>this.errorService.handleError(error)
 			);
-
-		// generate cryptographic clientSessionSecret random string
-		let randomString = this.generateRandomString(8);
-		let secretArray = CryptoJS.enc.Utf16.parse(randomString); 
-		let clientSessionSecret = CryptoJS.enc.Base64.stringify(secretArray);
-
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
 		// send email
 		let toEmail = this.homepageForm.value.toEmail;
@@ -161,26 +172,27 @@ export class HomepageComponent implements OnInit {
         console.log('-----------------------------------------------');
 	}
 
-	private generateSharedSecret(normalizedAnswer) {
-		let server_secret_id = sessionStorage.getItem('server_secret_id');
-		let server_session_id = sessionStorage.getItem('server_session_id');
-		let server_session_id_validation = sessionStorage.getItem('server_session_id_validation');
-		let server_session_salt = sessionStorage.getItem('server_session_salt');
-		let server_session_secret = sessionStorage.getItem('server_session_secret');
-		let client_session_secret = sessionStorage.getItem('client_session_secret');
+	private generateSharedSecret(answer) {
+		let serverSecretId = sessionStorage.getItem('serverSecretId');
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 
-		let shared_secret_string = "cipher:" + server_secret_id + ":" + server_session_id + ":" + 
-		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
-		client_session_secret + ":" + normalizedAnswer + ":end";
 
-		let hash = CryptoJS.SHA256(shared_secret_string);
-		let shared_secret = CryptoJS.enc.Base64.stringify(hash);
+		let sharedSecretString = "cipher:" + serverSecretId + ":" + serverSessionId + ":" + 
+		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
+		clientSessionSecret + ":" + answer + ":end";
 
-		sessionStorage.setItem('shared_secret', shared_secret);
+		let hash = CryptoJS.SHA256(sharedSecretString);
+		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
+
+		sessionStorage.setItem('sharedSecret', sharedSecret);
 
 		console.log('-----------------------------------------------');
-		console.log('shared_secret_string: ' + shared_secret_string);
-		console.log('shared_secret: ' + shared_secret);
+		console.log('sharedSecretString: ' + sharedSecretString);
+		console.log('shared-secret: ' + sharedSecret);
 		console.log('-----------------------------------------------');
 	}
 
