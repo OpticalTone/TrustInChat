@@ -5,9 +5,9 @@ var Session= require('./session');
 var messageSchema = new Schema({
 	content: { type: String, required: true },
 
-	message_salt: { type: String, default: '' },
-	message_secret_validation: { type: String, default: '' },
-	message_integrity: { type: String, default: '' },
+	messageSalt: { type: String, default: '' },
+	messageSecretValidation: { type: String, default: '' },
+	messageIntegrity: { type: String, default: '' },
 
 	user: { type: String, default: '' },
 	

@@ -5,10 +5,10 @@ export class Message {
 	public messageId: string;
 	public sessionId: string;
 
-	public message_salt: string;
-	public message_secret: string;
-	public message_secret_validation: string;
-	public message_integrity: string;
+	public messageSalt: string;
+	public messageSecret: string;
+	public messageSecretValidation: string;
+	public messageIntegrity: string;
 
 	public user: string;
 
@@ -17,11 +17,12 @@ export class Message {
 				 chatToEmail?: string,
 				 messageId?: string,
 				 sessionId?: string,
-				 message_salt?: string, 
-				 message_secret?: string, 
-				 message_secret_validation?: string, 
-				 message_integrity?: string,
-				 user?: string) 
+				 messageSalt?: string, 
+				 messageSecret?: string, 
+				 messageSecretValidation?: string, 
+				 messageIntegrity?: string,
+				 user?: string
+				 ) 
 	{
 		this.content = content;
 		this.chatFromEmail = chatFromEmail;
@@ -29,10 +30,10 @@ export class Message {
 		this.messageId = messageId;
 		this.sessionId = sessionId;
 
-		this.message_salt = message_salt;
-		this.message_secret = message_secret;
-		this.message_secret_validation = message_secret_validation;
-		this.message_integrity = message_integrity;
+		this.messageSalt = messageSalt;
+		this.messageSecret = messageSecret;
+		this.messageSecretValidation = messageSecretValidation;
+		this.messageIntegrity = messageIntegrity;
 
 		this.user = user;
 	}

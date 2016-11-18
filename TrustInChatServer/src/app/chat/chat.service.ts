@@ -35,10 +35,10 @@ export class ChatService {
 					result.obj.session.toEmail, 
 					result.obj._id, 
 					result.obj.session._id,
-					result.obj.message_salt,
+					result.obj.messageSalt,
 					null,
-					result.obj.message_secret_validation,
-					result.obj.message_integrity,
+					result.obj.messageSecretValidation,
+					result.obj.messageIntegrity,
 					result.obj.user
 				);
 				this.messages.push(message);

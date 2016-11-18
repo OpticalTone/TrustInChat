@@ -9,29 +9,6 @@ var Session = require('../models/session');
 var Message = require('../models/message');
 var ServerData = require('../models/serverdata');
 
-/*router.get('/', function(req, res, next) {
-
-	var serverSessionId = crypto.randomBytes(8).toString('hex');
-
-	var serverdata = '';
-	serverdata = ServerData.findOne(function(err, doc) {
-		if (err) {
-			return res.status(500).json({
-				title: 'An error occurred',
-				error: err
-			});
-		}
-		if (doc) {
-			serverdata = doc.serverdata;
-			console.log(serverdata);
-		}
-	}).sort({_id: -1});
-	res.render('index', {
-    	title: 'TrustInChat',
-    	serverSessionId: serverSessionId
-    });
-});*/
-
 router.get('/', function(req, res, next) {
 	ServerData.findOne()
 		.sort({_id: -1})
@@ -70,7 +47,6 @@ router.get('/', function(req, res, next) {
 		    	serverSessionSecret: serverSessionSecret
 		    });
 		});
-		
 }); 
 
 router.post('/', function(req, res, next) {
@@ -82,13 +58,16 @@ router.post('/', function(req, res, next) {
 			});
 		}
 		var session = new Session({
-			serverSessionId: req.body.serverSessionId,
 			toEmail: req.body.toEmail,  
 			fromName: req.body.fromName,
 			fromEmail: req.body.fromEmail,
 			securityQuestion: req.body.securityQuestion,
 			answer: req.body.securityAnswer,  
 			notifications: req.body.notifications,
+			serverSessionId: req.body.serverSessionId,
+			serverSessionIdValidation: req.body.serverSessionIdValidation,
+			serverSessionSalt: req.body.serverSessionSalt,
+			serverSessionSecret: req.body.serverSessionSecret,
 			serverdata: serverdata
 		});
 		var message = new Message({
@@ -134,20 +113,46 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/remoteserver', function(req, res, next) {
-	console.log(req.query.serverSessionId);
-	Session.findOne({serverSessionId: req.query.serverSessionId})
-		.exec(function(err, session) {
-			if(err) {
-				return res.status(500).json({
-					title: 'An error occurred',
-					error: err
-				});
-			}
-			res.status(200).json({
-				message: 'Success',
-				obj: session
+	ServerData.findOne(function(err, serverdata) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
 			});
-		});
+		}
+		var serverSecretId = serverdata.serverSecretId;
+
+		console.log(req.query.serverSessionId);
+		Session.findOne({serverSessionId: req.query.serverSessionId})
+			.exec(function(err, session) {
+				if(err) {
+					return res.status(500).json({
+						title: 'An error occurred',
+						error: err
+					});
+				}
+				var toEmail = session.toEmail;
+				var fromName = session.fromName;
+				var fromEmail = session.fromEmail;
+				var securityQuestion = session.securityQuestion;
+				var serverSessionId = session.serverSessionId;
+				var serverSessionIdValidation = session.serverSessionIdValidation;
+				var serverSessionSalt = session.serverSessionSalt;
+				var serverSessionSecret = session.serverSessionSecret;
+
+				res.status(200).json({
+					serverSecretId: serverSecretId,
+					toEmail: toEmail,
+					fromName: fromName,
+					fromEmail: fromEmail,
+					securityQuestion: securityQuestion,
+					serverSessionId: serverSessionId,
+					serverSessionIdValidation: serverSessionIdValidation,
+					serverSessionSalt: serverSessionSalt,
+					serverSessionSecret: serverSessionSecret
+				});
+			});
+	}).sort({_id: -1});		
 });
 
 router.post('/remoteserver', function(req, res, next) {
