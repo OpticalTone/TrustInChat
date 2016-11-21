@@ -72,9 +72,9 @@ router.post('/', function(req, res, next) {
 		});
 		var message = new Message({
 			content: req.body.initialMessage,
-			message_salt: req.body.message_salt,
-			message_secret_validation: req.body.message_secret_validation,
-			message_integrity: req.body.message_integrity,
+			messageSalt: req.body.messageSalt,
+			messageSecretValidation: req.body.messageSecretValidation,
+			messageIntegrity: req.body.messageIntegrity,
 			user: req.body.user,
 			session: session
 		});

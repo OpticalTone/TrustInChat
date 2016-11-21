@@ -3,14 +3,20 @@ export class Session {
 	public fromName: string;   
 	public fromEmail: string;  
 	public securityQuestion: string;    
-	public securityAnswer: string;   
+	public securityAnswer: string;
 	public initialMessage: string;
 	public notifications: string;
+
 	public user: string;
+
 	public serverSessionId: string;
 	public serverSessionIdValidation: string;
 	public serverSessionSalt: string;
 	public serverSessionSecret: string;
+
+	public messageSalt: string;
+	public messageSecretValidation: string;
+	public messageIntegrity: string;
 
 	constructor (toEmail?: string, 
 				 fromName?: string,
@@ -23,7 +29,10 @@ export class Session {
 				 serverSessionId?: string,
 				 serverSessionIdValidation?: string,
 				 serverSessionSalt?: string,
-				 serverSessionSecret?: string
+				 serverSessionSecret?: string,
+				 messageSalt?: string,
+				 messageSecretValidation?: string,
+				 messageIntegrity?: string
 				 ) 
 	{
 		this.toEmail = toEmail;
@@ -38,6 +47,9 @@ export class Session {
 		this.serverSessionIdValidation = serverSessionIdValidation;
 		this.serverSessionSalt = serverSessionSalt;
 		this.serverSessionSecret = serverSessionSecret;
+		this.messageSalt = messageSalt;
+		this.messageSecretValidation = messageSecretValidation;
+		this.messageIntegrity = messageIntegrity;
 	}
 }
 

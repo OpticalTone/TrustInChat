@@ -41,6 +41,36 @@ export class HomepageComponent implements OnInit {
 
 		this.generateSharedSecret(answer);
 
+		//The message (encrypted) + message salt + validation:
+		let randomMessageString = this.generateRandomString(8);
+		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
+		let messageSalt = CryptoJS.enc.Base64.stringify(messageArray);
+
+		let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
+		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
+		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+		sessionStorage.setItem('initialMessageSecret', messageSecret);
+
+		let messageSecretValidationString = "validate:" + messageSalt + ":" + sharedSecret;
+		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
+		let messageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
+
+		let plainTextMessage = this.homepageForm.value.initialMessage;
+
+		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
+		let messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
+
+		console.log('-----------------------------------------------');
+		console.log('initial-message-salt: ', messageSalt);
+		console.log('initial-message-secret-string: ', messageSecretString);
+		console.log('initial-message-secret: ', messageSecret);
+		console.log('initial-message-secret-validation-string: ', messageSecretValidationString);
+		console.log('initial-message-secret-validation: ', messageSecretValidation);
+		console.log('initial-message-integrity: ', messageIntegrity);
+		console.log('-----------------------------------------------');
+
 		const session = new Session(
 				this.homepageForm.value.toEmail,
 				this.homepageForm.value.fromName,
@@ -53,7 +83,10 @@ export class HomepageComponent implements OnInit {
 				serverSessionId,
 				serverSessionIdValidation,
 				serverSessionSalt,
-				serverSessionSecret
+				serverSessionSecret,
+				messageSalt,
+				messageSecretValidation,
+				messageIntegrity
 			);
 
 		// get data from server(serverSessionId)

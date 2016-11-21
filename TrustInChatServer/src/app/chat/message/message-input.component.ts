@@ -30,30 +30,31 @@ export class MessageInputComponent implements OnInit {
 		//The message (encrypted) + message salt + validation:
 		let randomMessageString = this.generateRandomString(8);
 		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
-		let messageSalt = CryptoJS.enc.Base64.stringify(messageArray);
+		let newMessageSalt = CryptoJS.enc.Base64.stringify(messageArray);
 
 		let sharedSecret = sessionStorage.getItem('sharedSecret');
 
-		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
+		let messageSecretString = "secret:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
-		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+		let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+		sessionStorage.setItem('newMessageSecret', newMessageSecret);
 
-		let messageSecretValidationString = "validate:" + messageSalt + ":" + sharedSecret;
+		let messageSecretValidationString = "validate:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
-		let messageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
+		let newMessageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
 
 		let plainTextMessage = form.value.content;
 
-		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
-		let messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
+		let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
+		let newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
 
 		console.log('-----------------------------------------------');
-		console.log('message-salt: ', messageSalt);
-		console.log('message-secret-string: ', messageSecretString);
-		console.log('message-secret: ', messageSecret);
-		console.log('message-secret-validation-string: ', messageSecretValidationString);
-		console.log('message-secret-validation: ', messageSecretValidation);
-		console.log('message-integrity: ', messageIntegrity);
+		console.log('new-message-salt: ', newMessageSalt);
+		console.log('new-message-secret-string: ', messageSecretString);
+		console.log('new-message-secret: ', newMessageSecret);
+		console.log('new-message-secret-validation-string: ', messageSecretValidationString);
+		console.log('new-message-secret-validation: ', newMessageSecretValidation);
+		console.log('new-message-integrity: ', newMessageIntegrity);
 		console.log('-----------------------------------------------');
 
 		if (this.message) {
@@ -72,10 +73,9 @@ export class MessageInputComponent implements OnInit {
 				null,
 				null,
 				null,
-				messageSalt,
-				messageSecret,
-				messageSecretValidation,
-				messageIntegrity,
+				newMessageSalt,
+				newMessageSecretValidation,
+				newMessageIntegrity,
 				sessionStorage.getItem('user')
 				);
 

@@ -35,10 +35,9 @@ export class ChatService {
 					result.obj.session.toEmail, 
 					result.obj._id, 
 					result.obj.session._id,
-					result.obj.messageSalt,
-					null,
-					result.obj.messageSecretValidation,
-					result.obj.messageIntegrity,
+					result.obj.newMessageSalt,
+					result.obj.newMessageSecretValidation,
+					result.obj.newMessageIntegrity,
 					result.obj.user
 				);
 				this.messages.push(message);
@@ -62,16 +61,17 @@ export class ChatService {
 				let transformedMessages: Message[] = [];
 
 				for (let message of messages) {
+					// if message.newMessageSecretValidation == clientValidation
+					// && message.newMessageSecretIntegrity == clientIntegrity
 					transformedMessages.push(new Message(
 						message.content, 
 						message.session.fromEmail, 
 						message.session.toEmail, 
 						message._id, 
 						message.session._id,
-						null,
-						null,
-						null,
-						null,
+						message.newMessageSalt, 
+				 		message.newMessageSecretValidation, 
+				 		message.newMessageIntegrity,
 						message.user
 					));
 				}

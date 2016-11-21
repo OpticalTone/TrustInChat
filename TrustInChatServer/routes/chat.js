@@ -60,9 +60,9 @@ router.post('/', function(req, res, next) {
 
 		var message = new Message({
 			content: req.body.content,
-			messageSalt: req.body.messageSalt,
-			messageSecretValidation: req.body.messageSecretValidation,
-			messageIntegrity: req.body.messageIntegrity,
+			messageSalt: req.body.newMessageSalt,
+			messageSecretValidation: req.body.newMessageSecretValidation,
+			messageIntegrity: req.body.newMessageIntegrity,
 			user: req.body.user,
 			session: session
 		});
