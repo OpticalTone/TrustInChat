@@ -37,7 +37,6 @@ export class MessageInputComponent implements OnInit {
 		let messageSecretString = "secret:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 		let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
-		sessionStorage.setItem('newMessageSecret', newMessageSecret);
 
 		let messageSecretValidationString = "validate:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);

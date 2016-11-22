@@ -51,7 +51,6 @@ export class HomepageComponent implements OnInit {
 		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
-		sessionStorage.setItem('initialMessageSecret', messageSecret);
 
 		let messageSecretValidationString = "validate:" + messageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
