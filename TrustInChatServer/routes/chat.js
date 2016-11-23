@@ -108,7 +108,12 @@ router.patch('/:id', function(req, res, next) {
 				error: err
 			});
 		}
+
 		message.content = req.body.content;
+		message.messageSalt = req.body.newMessageSalt;
+		message.messageSecretValidation = req.body.newMessageSecretValidation;
+		message.messageIntegrity = req.body.newMessageIntegrity;
+
 		message.save(function(err, result) {
 			if (err) {
 				return res.status(500).json({

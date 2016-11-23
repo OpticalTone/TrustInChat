@@ -59,6 +59,9 @@ export class MessageInputComponent implements OnInit {
 		if (this.message) {
 			// Edit
 			this.message.content = form.value.content;
+			this.message.newMessageSalt = newMessageSalt;
+			this.message.newMessageSecretValidation = newMessageSecretValidation;
+			this.message.newMessageIntegrity = newMessageIntegrity;
 			this.chatService.updateMessage(this.message)
 				.subscribe(
 					result => console.log(result)
