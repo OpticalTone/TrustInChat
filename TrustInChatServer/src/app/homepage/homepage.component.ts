@@ -39,6 +39,10 @@ export class HomepageComponent implements OnInit {
 		let securityAnswer = this.homepageForm.value.securityAnswer;
 		let answer = this.normalizeAnswer(securityAnswer);
 
+		this.generateAnswerProof(answer);
+
+		let answerProof = sessionStorage.getItem('answerProof');
+
 		this.generateSharedSecret(answer);
 
 		//The message (encrypted) + message salt + validation:
@@ -75,7 +79,7 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.fromName,
 				this.homepageForm.value.fromEmail,
 				this.homepageForm.value.securityQuestion,
-				this.homepageForm.value.securityAnswer,
+				answerProof,
 				this.homepageForm.value.initialMessage,
 				this.homepageForm.value.notifications,
 				sessionStorage.getItem('user'),
@@ -173,34 +177,30 @@ export class HomepageComponent implements OnInit {
 		return normaizedAnswer;
 	}
 
-	private generateAnswerProof(normalizedAnswer) {
-		let server_secret_id = sessionStorage.getItem('server_secret_id');
-		let server_session_id = sessionStorage.getItem('server_session_id');
-		let server_session_id_validation = sessionStorage.getItem('server_session_id_validation');
-		let server_session_salt = sessionStorage.getItem('server_session_salt');
-		let server_session_secret = sessionStorage.getItem('server_session_secret');
+	private generateAnswerProof(answer) {
+		let serverSecretId = sessionStorage.getItem('serverSecretId');
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+ 
+		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 
-		let randomString = this.generateRandomString(8);
-		sessionStorage.setItem('randomString', randomString);
-		let secretArray = CryptoJS.enc.Utf16.parse(randomString); 
-		let client_session_secret = CryptoJS.enc.Base64.stringify(secretArray);
+		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
-		sessionStorage.setItem('client_session_secret', client_session_secret);
+		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
+		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
+		clientSessionSecret + ":" + answer + ":end";
 
-		let answer_proof_string = "answer:" + server_secret_id + ":" + server_session_id + ":" + 
-		server_session_id_validation + ":" + server_session_salt + ":" + server_session_secret + ":" + 
-		client_session_secret + ":" + normalizedAnswer + ":end";
+		let hash = CryptoJS.SHA256(answerProofString);
+		let answerProof = CryptoJS.enc.Base64.stringify(hash);
 
-		let hash = CryptoJS.SHA256(answer_proof_string);
-		let answer_proof = CryptoJS.enc.Base64.stringify(hash);
-
-        sessionStorage.setItem('answer_proof', answer_proof);
+        sessionStorage.setItem('answerProof', answerProof);
 
         console.log('-----------------------------------------------');
-        console.log('randomString: ' + randomString);
-        console.log('client_session_secret: ' + client_session_secret);
-        console.log('answer_proof_string: ' + answer_proof_string);
-        console.log('answer_proof: ' + answer_proof);
+        console.log('clientSessionSecret: ' + clientSessionSecret);
+        console.log('answerProofString: ' + answerProofString);
+        console.log('answerProof: ' + answerProof);
         console.log('-----------------------------------------------');
 	}
 

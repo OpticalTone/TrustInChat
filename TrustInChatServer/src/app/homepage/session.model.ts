@@ -3,7 +3,7 @@ export class Session {
 	public fromName: string;   
 	public fromEmail: string;  
 	public securityQuestion: string;    
-	public securityAnswer: string;
+	public answerProof: string;
 	public initialMessage: string;
 	public notifications: string;
 
@@ -22,7 +22,7 @@ export class Session {
 				 fromName?: string,
 				 fromEmail?: string,
 				 securityQuestion?: string,
-				 securityAnswer?: string,
+				 answerProof?: string,
 				 initialMessage?: string,
 				 notifications?: string,
 				 user?: string,
@@ -39,7 +39,7 @@ export class Session {
 		this.fromName = fromName;
 		this.fromEmail = fromEmail;
 		this.securityQuestion = securityQuestion;
-		this.securityAnswer = securityAnswer;
+		this.answerProof = answerProof;
 		this.initialMessage = initialMessage;  
 		this.notifications = notifications;
 		this.user = user;

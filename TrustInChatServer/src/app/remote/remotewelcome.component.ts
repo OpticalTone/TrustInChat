@@ -36,6 +36,10 @@ export class RemoteWelcomeComponent implements OnInit {
 		let securityAnswer = this.remotewelcomeForm.value.securityAnswer;
 		let answer = this.normalizeAnswer(securityAnswer);
 
+		this.generateAnswerProof(answer);
+
+		let answerProof = sessionStorage.getItem('answerProof');
+
 		this.generateSharedSecret(answer);
 
 		const session = new Session(
@@ -43,7 +47,7 @@ export class RemoteWelcomeComponent implements OnInit {
 			null,
 			null,
 			null,
-			this.remotewelcomeForm.value.securityAnswer,
+			answerProof,
 			null,
 			null
 		);
@@ -129,6 +133,33 @@ export class RemoteWelcomeComponent implements OnInit {
 		return normaizedAnswer;
 	}
 
+	private generateAnswerProof(answer) {
+		let serverSecretId = sessionStorage.getItem('serverSecretId');
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+
+		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
+
+		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
+
+		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
+		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
+		clientSessionSecret + ":" + answer + ":end";
+
+		let hash = CryptoJS.SHA256(answerProofString);
+		let answerProof = CryptoJS.enc.Base64.stringify(hash);
+
+        sessionStorage.setItem('answerProof', answerProof);
+
+        console.log('-----------------------------------------------');
+        console.log('clientSessionSecret: ' + clientSessionSecret);
+        console.log('answerProofString: ' + answerProofString);
+        console.log('answerProof: ' + answerProof);
+        console.log('-----------------------------------------------');
+	}
+
 	private generateSharedSecret(answer) {
 		let serverSecretId = sessionStorage.getItem('serverSecretId');
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
@@ -151,5 +182,15 @@ export class RemoteWelcomeComponent implements OnInit {
 		console.log('sharedSecretString: ' + sharedSecretString);
 		console.log('shared-secret: ' + sharedSecret);
 		console.log('-----------------------------------------------');
+	}
+
+	private generateRandomString(len) {
+		let text = " ";
+		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		for(let i = 0; i < len; i++) {
+			text += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		return text;
 	}
 }

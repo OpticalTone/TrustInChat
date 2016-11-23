@@ -6,7 +6,7 @@ var sessionSchema = new Schema({
 	fromName: { type: String, required: true},    
 	fromEmail: { type: String, default: '' }, 
 	securityQuestion: { type: String, default: '' }, 
-	answer: { type: String, default: '' },
+	answerProof: { type: String, default: '' },
 	notifications: { type: String, default: '' },
 
 	serverSessionId: { type: String, default: '' },

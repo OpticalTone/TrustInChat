@@ -62,7 +62,7 @@ router.post('/', function(req, res, next) {
 			fromName: req.body.fromName,
 			fromEmail: req.body.fromEmail,
 			securityQuestion: req.body.securityQuestion,
-			answer: req.body.securityAnswer,  
+			answerProof: req.body.answerProof,  
 			notifications: req.body.notifications,
 			serverSessionId: req.body.serverSessionId,
 			serverSessionIdValidation: req.body.serverSessionIdValidation,
@@ -156,7 +156,7 @@ router.get('/remoteserver', function(req, res, next) {
 });
 
 router.post('/remoteserver', function(req, res, next) {
-	Session.findOne({answer: req.body.securityAnswer}, function(err, session) {
+	Session.findOne({answerProof: req.body.answerProof}, function(err, session) {
 		if (err) {
 			return res.status(401).json({
 				title: 'An error occurred',
