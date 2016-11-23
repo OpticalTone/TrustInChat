@@ -68,6 +68,10 @@ router.post('/', function(req, res, next) {
 			serverSessionIdValidation: req.body.serverSessionIdValidation,
 			serverSessionSalt: req.body.serverSessionSalt,
 			serverSessionSecret: req.body.serverSessionSecret,
+			questionSalt: req.body.questionSalt,
+			questionSecretValidation: req.body.questionSecretValidation,
+			questionIntegrity: req.body.questionIntegrity,
+			encryptedQuestion: req.body.encryptedQuestion,
 			serverdata: serverdata
 		});
 		var message = new Message({

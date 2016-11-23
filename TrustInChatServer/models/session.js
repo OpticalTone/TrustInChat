@@ -14,6 +14,11 @@ var sessionSchema = new Schema({
 	serverSessionSalt: { type: String, default: '' },
 	serverSessionSecret: { type: String, default: '' },
 
+	questionSalt: { type: String, default: '' },
+	encryptedQuestion: { type: String, default: '' },
+	questionSecretValidation: { type: String, default: '' },
+	questionIntegrity: { type: String, default: '' },
+
 	serverdata: {type: Schema.Types.ObjectId, ref: 'ServerData'},
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });

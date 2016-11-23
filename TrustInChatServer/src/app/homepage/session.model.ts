@@ -18,6 +18,11 @@ export class Session {
 	public messageSecretValidation: string;
 	public messageIntegrity: string;
 
+	public questionSalt: string;
+	public encryptedQuestion: string;
+	public questionSecretValidation: string;
+	public questionIntegrity: string;
+
 	constructor (toEmail?: string, 
 				 fromName?: string,
 				 fromEmail?: string,
@@ -32,7 +37,11 @@ export class Session {
 				 serverSessionSecret?: string,
 				 messageSalt?: string,
 				 messageSecretValidation?: string,
-				 messageIntegrity?: string
+				 messageIntegrity?: string,
+				 questionSalt?: string,
+				 encryptedQuestion?: string,
+				 questionSecretValidation?: string,
+				 questionIntegrity?: string
 				 ) 
 	{
 		this.toEmail = toEmail;
@@ -50,6 +59,10 @@ export class Session {
 		this.messageSalt = messageSalt;
 		this.messageSecretValidation = messageSecretValidation;
 		this.messageIntegrity = messageIntegrity;
+		this.questionSalt = questionSalt;
+		this.encryptedQuestion = encryptedQuestion;
+		this.questionSecretValidation = questionSecretValidation;
+		this.questionIntegrity = questionIntegrity;
 	}
 }
 

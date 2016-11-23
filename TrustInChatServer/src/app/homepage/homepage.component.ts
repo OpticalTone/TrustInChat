@@ -45,6 +45,42 @@ export class HomepageComponent implements OnInit {
 
 		this.generateSharedSecret(answer);
 
+
+
+		// The question (encrypted) + question salt + validation: 
+		let randomQuestionString = this.generateRandomString(8);
+		let questionArray = CryptoJS.enc.Utf16.parse(randomQuestionString);
+		let questionSalt = CryptoJS.enc.Base64.stringify(questionArray);
+
+		let plainTextQuestion = this.homepageForm.value.securityQuestion;
+
+		let questionSecretString = "secret:" + questionSalt + ":" + clientSessionSecret;
+		let hashQuestionSecret = CryptoJS.SHA256(questionSecretString);
+		let questionSecret = CryptoJS.enc.Base64.stringify(hashQuestionSecret);
+
+		let encryptedQuestionObject = CryptoJS.AES.encrypt(questionSecret, plainTextQuestion);
+		let encryptedQuestion = encryptedQuestionObject.toString();
+
+		let questionSecretValidationString = "validate:" + questionSalt + ":" + clientSessionSecret;
+		let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
+		let questionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
+
+		let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, plainTextQuestion);
+		let questionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
+
+		console.log('-----------------------------------------------');
+		console.log('question-salt: ', questionSalt);
+		console.log('plain-text-question: ', plainTextQuestion);
+		console.log('questionSecretString: ', questionSecretString);
+		console.log('question-secret: ', questionSecret);
+		console.log('encrypted-question: ', encryptedQuestion);
+		console.log('questionSecretValidationString: ', questionSecretValidationString);
+		console.log('question-secret-validation: ', questionSecretValidation);
+		console.log('question-integrity: ', questionIntegrity);
+		console.log('-----------------------------------------------'); 
+
+
+
 		//The message (encrypted) + message salt + validation:
 		let randomMessageString = this.generateRandomString(8);
 		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
@@ -89,7 +125,11 @@ export class HomepageComponent implements OnInit {
 				serverSessionSecret,
 				messageSalt,
 				messageSecretValidation,
-				messageIntegrity
+				messageIntegrity,
+				questionSalt,
+				encryptedQuestion,
+				questionSecretValidation,
+				questionIntegrity
 			);
 
 		// get data from server(serverSessionId)
