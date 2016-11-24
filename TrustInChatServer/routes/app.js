@@ -143,6 +143,10 @@ router.get('/remoteserver', function(req, res, next) {
 				var serverSessionIdValidation = session.serverSessionIdValidation;
 				var serverSessionSalt = session.serverSessionSalt;
 				var serverSessionSecret = session.serverSessionSecret;
+				var questionSalt = session.questionSalt;
+				var encryptedQuestion = session.encryptedQuestion;
+				var questionSecretValidation = session.questionSecretValidation;
+				var questionIntegrity = session.questionIntegrity;
 
 				res.status(200).json({
 					serverSecretId: serverSecretId,
@@ -153,7 +157,11 @@ router.get('/remoteserver', function(req, res, next) {
 					serverSessionId: serverSessionId,
 					serverSessionIdValidation: serverSessionIdValidation,
 					serverSessionSalt: serverSessionSalt,
-					serverSessionSecret: serverSessionSecret
+					serverSessionSecret: serverSessionSecret,
+					questionSalt: questionSalt,
+					encryptedQuestion: encryptedQuestion,
+					questionSecretValidation: questionSecretValidation,
+					questionIntegrity: questionIntegrity
 				});
 			});
 	}).sort({_id: -1});		

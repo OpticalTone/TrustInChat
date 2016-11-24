@@ -81,16 +81,16 @@ export class RemoteWelcomeComponent implements OnInit {
 		this.remoteWelcomeService.getData()
 			.subscribe(
 				data => {
-					console.log(data);
-					sessionStorage.setItem('serverSecretId', data.serverSecretId);
-					sessionStorage.setItem('toEmail', data.toEmail);
-					sessionStorage.setItem('fromName', data.fromName);
-					sessionStorage.setItem('fromEmail', data.fromEmail);
-					sessionStorage.setItem('securityQuestion', data.securityQuestion);
-					sessionStorage.setItem('serverSessionId', data.serverSessionId);
-					sessionStorage.setItem('serverSessionIdValidation', data.serverSessionIdValidation);
-					sessionStorage.setItem('serverSessionSalt', data.serverSessionSalt);
-					sessionStorage.setItem('serverSessionSecret', data.serverSessionSecret);
+					//console.log(data);
+					//sessionStorage.setItem('serverSecretId', data.serverSecretId);
+					//sessionStorage.setItem('toEmail', data.toEmail);
+					//sessionStorage.setItem('fromName', data.fromName);
+					//sessionStorage.setItem('fromEmail', data.fromEmail);
+					//sessionStorage.setItem('securityQuestion', data.securityQuestion);
+					//sessionStorage.setItem('serverSessionId', data.serverSessionId);
+					//sessionStorage.setItem('serverSessionIdValidation', data.serverSessionIdValidation);
+					//sessionStorage.setItem('serverSessionSalt', data.serverSessionSalt);
+					//sessionStorage.setItem('serverSessionSecret', data.serverSessionSecret);
 				},
 				error => this.errorService.handleError(error)
 			);	
