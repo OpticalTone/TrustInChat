@@ -116,6 +116,59 @@ router.post('/', function(req, res, next) {
 	}).sort({_id: -1});
 });
 
+router.delete('/:serverSessionId', function(req, res, next) {
+	Session.findOne(req.params.serverSessionId, function(err, session) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		if (!session) {
+			return res.status(500).json({
+				title: 'No Session Found',
+				error: {message: 'Session not found!'}
+			});
+		}
+		var sessionId = session[0]._id;
+		console.log(sessionId);
+
+		/*Message.find({session: sessionId}, function(err, messages) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			messages.remove(function(err, removed) {
+				if (err) {
+					return res.status(500).json({
+						title: 'An error occurred',
+						error: err
+					});
+				}
+				res.status(200).json({
+					message: 'Messages deleted',
+					obj: result
+				});
+			});
+		});*/
+
+		session.remove(function(err, result) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			res.status(200).json({
+				message: 'Session deleted',
+				obj: result
+			});
+		});
+	});
+});
+
 router.get('/remoteserver', function(req, res, next) {
 	ServerData.findOne(function(err, serverdata) {
 		if (err) {

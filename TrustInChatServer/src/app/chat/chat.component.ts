@@ -53,7 +53,12 @@ export class ChatComponent {
 	}
 
 	onCloseSession() {
-		this.homepageService.closeSession();
+		let serverSessionId = sessionStorage.getItem('serverSessionId');
+		//TODO: move this into chatService
+		this.homepageService.closeSession(serverSessionId);
+
+		sessionStorage.clear();
+
 		this.router.navigate(['/']);
 	}
 
