@@ -151,4 +151,16 @@ export class ChatService {
 				return Observable.throw(error.json());
 			});
 	}
+
+	closeSession(serverSessionId) {
+
+		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
+
+		return this.http.delete(this.chatUrl + '/' + 'close/' + serverSessionId + '/' + token)
+			.map(response => response.json())
+			.catch((error: Response) => {
+				this.errorService.handleError(error.json());
+				return Observable.throw(error.json());
+			});
+	}
 }

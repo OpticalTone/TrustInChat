@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { MessageListComponent } from './message/message-list.component';
 import { MessageInputComponent } from './message/message-input.component';
 
-import { HomepageService } from '../homepage/homepage.service';
+import { ChatService } from './chat.service';
+import { ErrorService } from '../errors/error.service';
 
 @Component({
 	selector: 'chat-page',
@@ -26,7 +27,7 @@ import { HomepageService } from '../homepage/homepage.service';
 })
 export class ChatComponent {
 
-	constructor(private homepageService: HomepageService, private router: Router) {
+	constructor(private chatService: ChatService, private errorService: ErrorService, private router: Router) {
 
 	}
 
@@ -54,8 +55,12 @@ export class ChatComponent {
 
 	onCloseSession() {
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		//TODO: move this into chatService
-		this.homepageService.closeSession(serverSessionId);
+		
+		this.chatService.closeSession(serverSessionId)
+			.subscribe(
+					result => console.log(result),
+					error => this.errorService.handleError(error)
+				);
 
 		sessionStorage.clear();
 

@@ -42,15 +42,6 @@ export class HomepageService {
 			});
 	}
 
-	closeSession(serverSessionId) {
-		return this.http.delete(this.homepageUrl + '/' + serverSessionId)
-			.map(response => response.json())
-			.catch((error: Response) => {
-				this.errorService.handleError(error.json());
-				return Observable.throw(error.json());
-			});
-	}
-
 	isLoggedIn() {
 		return sessionStorage.getItem('token') !== null;
 	}

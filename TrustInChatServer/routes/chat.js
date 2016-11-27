@@ -167,4 +167,39 @@ router.delete('/:id', function(req, res, next) {
 	});
 });
 
+router.delete('/close/:serverSessionId', function(req, res, next) {
+
+	var decoded = jwt.decode(req.query.token);
+
+	console.log('serverSessionId: ' + req.params.serverSessionId);
+
+	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		var sessionId = session[0]._id;
+		console.log(sessionId);
+
+		
+
+		/*Message.find({session: sessionId})
+			.populate('session', 'fromEmail toEmail')
+			.exec(function(err, messages) {
+				if (err) {
+					return res.status(500).json({
+						title: 'An error occurred',
+						error: err
+					});
+				}
+				res.status(200).json({
+					message: 'Success',
+					obj: messages
+				});
+			});*/
+	});
+});
+
 module.exports = router;

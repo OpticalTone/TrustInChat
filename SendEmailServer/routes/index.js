@@ -74,11 +74,11 @@ router.post('/', function(req, res, next) {
 
 	res.status(200).json({
 		message: 'Success',
-		serverSessionId,
-		clientSessionSecret,
-		toEmail,
-		fromEmail,
-		fromName
+		serverSessionId: serverSessionId,
+		clientSessionSecret: clientSessionSecret,
+		toEmail: toEmail,
+		fromEmail: fromEmail,
+		fromName: fromName
 	});
 });
 
