@@ -133,7 +133,7 @@ router.delete('/:serverSessionId', function(req, res, next) {
 		var sessionId = session[0]._id;
 		console.log(sessionId);
 
-		/*Message.find({session: sessionId}, function(err, messages) {
+		Message.find({session: sessionId}, function(err, messages) {
 			if (err) {
 				return res.status(500).json({
 					title: 'An error occurred',
@@ -152,7 +152,7 @@ router.delete('/:serverSessionId', function(req, res, next) {
 					obj: result
 				});
 			});
-		});*/
+		});
 
 		session.remove(function(err, result) {
 			if (err) {

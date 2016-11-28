@@ -173,7 +173,7 @@ router.delete('/close/:serverSessionId', function(req, res, next) {
 
 	console.log('serverSessionId: ' + req.params.serverSessionId);
 
-	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
+	Session.find({serverSessionId: req.params.serverSessionId}, function(err, session) {
 		if (err) {
 			return res.status(500).json({
 				title: 'An error occurred',
@@ -183,22 +183,26 @@ router.delete('/close/:serverSessionId', function(req, res, next) {
 		var sessionId = session[0]._id;
 		console.log(sessionId);
 
-		
-
-		/*Message.find({session: sessionId})
-			.populate('session', 'fromEmail toEmail')
-			.exec(function(err, messages) {
+		Message.remove({session: sessionId}, function(err, result) {
+			if (err) {
+				return res.status(500).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			Session.remove({_id: sessionId}, function(err) {
 				if (err) {
 					return res.status(500).json({
 						title: 'An error occurred',
 						error: err
 					});
 				}
-				res.status(200).json({
-					message: 'Success',
-					obj: messages
-				});
-			});*/
+			});
+			res.status(200).json({
+				message: 'Messages and session deleted.',
+				obj: result
+			});
+		});
 	});
 });
 
