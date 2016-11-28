@@ -171,6 +171,10 @@ export class HomepageComponent implements OnInit {
 
 	ngOnInit() {
 
+		if (sessionStorage.getItem('serverSecretId') == null) {
+			window.location.reload(true);
+		}
+
 		sessionStorage.setItem('user', 'homepage');
 
 		let emailRegExp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
