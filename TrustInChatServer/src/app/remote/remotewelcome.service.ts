@@ -62,7 +62,7 @@ export class RemoteWelcomeService {
 				let questionSecret = CryptoJS.enc.Base64.stringify(hashQuestionSecret);
 
 				let decryptQuestionObject = CryptoJS.AES.decrypt(s.encryptedQuestion, questionSecret);
-				let decriptedQuestion = decryptQuestionObject.toString(CryptoJS.enc.Utf8);
+				let decryptedQuestion = decryptQuestionObject.toString(CryptoJS.enc.Utf8);
 
 				let questionSecretValidationString = "validate:" + s.questionSalt + ":" + clientSessionSecret;
 				let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
@@ -71,14 +71,14 @@ export class RemoteWelcomeService {
 				let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, s.securityQuestion);
 				let clientQuestionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
 
-				console.log('decriptedQuestion: ' + decriptedQuestion);
+				console.log('decryptedQuestion: ' + decryptedQuestion);
 				console.log('encrypted-question: ' + s.encryptedQuestion);
 				console.log('question-secret-validation: ' + s.questionSecretValidation);
 				console.log('clientQuestionSecretValidation: ' + clientQuestionSecretValidation);
 				console.log('question-integrity: ' + s.questionIntegrity);
 				console.log('clientQuestionIntegrity: ' + clientQuestionIntegrity);
 
-				if (s.securityQuestion == decriptedQuestion && 
+				if (s.securityQuestion == decryptedQuestion && 
 					s.questionSecretValidation == clientQuestionSecretValidation &&
 					s.questionIntegrity == clientQuestionIntegrity) {
 					sessionStorage.setItem('serverSecretId', serverSecretId);

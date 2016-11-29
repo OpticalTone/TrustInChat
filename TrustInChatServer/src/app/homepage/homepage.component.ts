@@ -86,17 +86,20 @@ export class HomepageComponent implements OnInit {
 		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
 		let messageSalt = CryptoJS.enc.Base64.stringify(messageArray);
 
+		let plainTextMessage = this.homepageForm.value.initialMessage;
+
 		let sharedSecret = sessionStorage.getItem('sharedSecret');
 
 		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
+		let encryptedInitialMessageObject = CryptoJS.AES.encrypt(plainTextMessage, messageSecret);
+		let encryptedInitialMessage = encryptedInitialMessageObject.toString();
+
 		let messageSecretValidationString = "validate:" + messageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
 		let messageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
-
-		let plainTextMessage = this.homepageForm.value.initialMessage;
 
 		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
 		let messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
@@ -105,6 +108,8 @@ export class HomepageComponent implements OnInit {
 		console.log('initial-message-salt: ', messageSalt);
 		console.log('initial-message-secret-string: ', messageSecretString);
 		console.log('initial-message-secret: ', messageSecret);
+		console.log('plain-text-message: ', plainTextMessage);
+		console.log('encrypted-message: ', encryptedInitialMessage);
 		console.log('initial-message-secret-validation-string: ', messageSecretValidationString);
 		console.log('initial-message-secret-validation: ', messageSecretValidation);
 		console.log('initial-message-integrity: ', messageIntegrity);
@@ -116,7 +121,8 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.fromEmail,
 				this.homepageForm.value.securityQuestion,
 				answerProof,
-				this.homepageForm.value.initialMessage,
+				//this.homepageForm.value.initialMessage,
+				encryptedInitialMessage,
 				this.homepageForm.value.notifications,
 				sessionStorage.getItem('user'),
 				serverSessionId,
@@ -140,7 +146,7 @@ export class HomepageComponent implements OnInit {
 					sessionStorage.setItem('fromEmail', data.fromEmail);
 					sessionStorage.setItem('fromName', data.fromName);
 					sessionStorage.setItem('toEmail', data.toEmail);
-					sessionStorage.setItem('initialMessage', data.initialMessage);
+					sessionStorage.setItem('encryptedInitialMessage', data.encryptedInitialMessage);
 					this.router.navigate(['chat', serverSessionId, clientSessionSecret]);
 				},
 				error =>this.errorService.handleError(error)

@@ -3,8 +3,7 @@ var Schema = mongoose.Schema;
 var Session= require('./session');
 
 var messageSchema = new Schema({
-	content: { type: String, required: true },
-
+	encryptedMessage: { type: String, required: true },
 	messageSalt: { type: String, default: '' },
 	messageSecretValidation: { type: String, default: '' },
 	messageIntegrity: { type: String, default: '' },

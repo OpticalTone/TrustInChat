@@ -4,7 +4,7 @@ export class Session {
 	public fromEmail: string;  
 	public securityQuestion: string;    
 	public answerProof: string;
-	public initialMessage: string;
+	public encryptedInitialMessage: string;
 	public notifications: string;
 
 	public user: string;
@@ -28,7 +28,7 @@ export class Session {
 				 fromEmail?: string,
 				 securityQuestion?: string,
 				 answerProof?: string,
-				 initialMessage?: string,
+				 encryptedInitialMessage?: string,
 				 notifications?: string,
 				 user?: string,
 				 serverSessionId?: string,
@@ -49,7 +49,7 @@ export class Session {
 		this.fromEmail = fromEmail;
 		this.securityQuestion = securityQuestion;
 		this.answerProof = answerProof;
-		this.initialMessage = initialMessage;  
+		this.encryptedInitialMessage = encryptedInitialMessage;  
 		this.notifications = notifications;
 		this.user = user;
 		this.serverSessionId = serverSessionId;

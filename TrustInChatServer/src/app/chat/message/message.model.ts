@@ -1,5 +1,5 @@
 export class Message {
-	public content: string;
+	public encryptedMessage: string;
 	public chatFromEmail: string;
 	public chatToEmail: string;
 	public messageId: string;
@@ -11,7 +11,7 @@ export class Message {
 
 	public user: string;
 
-	constructor (content: string, 
+	constructor (encryptedMessage: string, 
 				 chatFromEmail?: string,
 				 chatToEmail?: string,
 				 messageId?: string,
@@ -22,7 +22,7 @@ export class Message {
 				 user?: string
 				 ) 
 	{
-		this.content = content;
+		this.encryptedMessage = encryptedMessage;
 		this.chatFromEmail = chatFromEmail;
 		this.chatToEmail = chatToEmail;
 		this.messageId = messageId;

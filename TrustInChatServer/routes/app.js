@@ -50,6 +50,7 @@ router.get('/', function(req, res, next) {
 }); 
 
 router.post('/', function(req, res, next) {
+	console.log('encryptedInitialMessage: ' + req.body.encryptedInitialMessage);
 	ServerData.findOne(function(err, serverdata) {
 		if (err) {
 			return res.status(500).json({
@@ -75,7 +76,7 @@ router.post('/', function(req, res, next) {
 			serverdata: serverdata
 		});
 		var message = new Message({
-			content: req.body.initialMessage,
+			encryptedMessage: req.body.encryptedInitialMessage,
 			messageSalt: req.body.messageSalt,
 			messageSecretValidation: req.body.messageSecretValidation,
 			messageIntegrity: req.body.messageIntegrity,
@@ -109,7 +110,7 @@ router.post('/', function(req, res, next) {
 					fromEmail: req.body.fromEmail,
 					fromName: req.body.fromName,
 					toEmail: req.body.toEmail,
-					initialMessage: req.body.initialMessage
+					encryptedInitialMessage: req.body.encryptedInitialMessage
 				});
 			});
 		});

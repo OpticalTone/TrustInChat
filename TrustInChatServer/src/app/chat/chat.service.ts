@@ -62,11 +62,10 @@ export class ChatService {
 				const messages = response.json().obj;
 				let transformedMessages: Message[] = [];
 
-
 				for (let message of messages) {
 
 					let m = new Message(
-						message.content, 
+						message.encryptedMessage, 
 						message.session.fromEmail, 
 						message.session.toEmail, 
 						message._id, 
@@ -92,6 +91,12 @@ export class ChatService {
 					let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 					let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
+					let decryptMessageObject = CryptoJS.AES.decrypt(t.encryptedMessage, messageSecret);
+					let decryptedMessage = decryptMessageObject.toString(CryptoJS.enc.Utf8);
+					console.log('encryptedMessage: ' + t.encryptedMessage);
+					console.log('messageSecret: ' + messageSecret);
+					console.log('decryptedMessage: ' + decryptedMessage);
+
 					let messageValidation = t.newMessageSecretValidation;
 					console.log('messageValidation: ' + messageValidation);
 
@@ -103,15 +108,19 @@ export class ChatService {
 					let messageIntegrity = t.newMessageIntegrity;
 					console.log('messageIntegrity: ' + messageIntegrity);
 
-					let clientMessageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, t.content);
+					let clientMessageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, decryptedMessage);
 					let clientMessageIntegrity = CryptoJS.enc.Base64.stringify(clientMessageIntegrityArray);
 					console.log('clientMessageIntegrity: ' + clientMessageIntegrity);
 
+					t.encryptedMessage = decryptedMessage;
 
 					if (messageValidation == clientMessageValidation && messageIntegrity == clientMessageIntegrity) {
 						validatedMessages.push(t);
 					} 
 				}
+
+				console.log(validatedMessages[0].encryptedMessage);
+
 				this.messages = validatedMessages;
 				return validatedMessages;
 			})

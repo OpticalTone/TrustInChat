@@ -58,7 +58,8 @@ export class MessageInputComponent implements OnInit {
 
 		if (this.message) {
 			// Edit
-			this.message.content = form.value.content;
+			//TODO: enryptedMessage
+			//this.message.content = form.value.content;
 			this.message.newMessageSalt = newMessageSalt;
 			this.message.newMessageSecretValidation = newMessageSecretValidation;
 			this.message.newMessageIntegrity = newMessageIntegrity;
