@@ -63,7 +63,14 @@ export class MessageInputComponent implements OnInit {
 
 		if (this.message) {
 			// Edit
-			this.message.encryptedMessage = encryptedNewMessage;
+			// TODO: fix edit: take text from form, change it, encrypt it, save it, send it back to client, decrypt it, show message to user
+			let editText = form.value.content;
+			let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+			let encryptedEditMessageObject = CryptoJS.AES.encrypt(editText, newMessageSecret);
+			let encryptedEditMessage = encryptedNewMessageObject.toString();
+
+			this.message.encryptedMessage = encryptedEditMessage;
 			this.message.newMessageSalt = newMessageSalt;
 			this.message.newMessageSecretValidation = newMessageSecretValidation;
 			this.message.newMessageIntegrity = newMessageIntegrity;
