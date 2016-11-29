@@ -57,9 +57,9 @@ router.post('/', function(req, res, next) {
 				error: err
 			});
 		}
-
+		console.log('encryptedMessage: ' + req.body.encryptedMessage);
 		var message = new Message({
-			content: req.body.content,
+			encryptedMessage: req.body.encryptedMessage,
 			messageSalt: req.body.newMessageSalt,
 			messageSecretValidation: req.body.newMessageSecretValidation,
 			messageIntegrity: req.body.newMessageIntegrity,
@@ -109,7 +109,7 @@ router.patch('/:id', function(req, res, next) {
 			});
 		}
 
-		message.content = req.body.content;
+		message.encryptedMessage = req.body.encryptedMessage;
 		message.messageSalt = req.body.newMessageSalt;
 		message.messageSecretValidation = req.body.newMessageSecretValidation;
 		message.messageIntegrity = req.body.newMessageIntegrity;

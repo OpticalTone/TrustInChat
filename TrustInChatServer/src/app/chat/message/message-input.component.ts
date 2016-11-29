@@ -32,17 +32,20 @@ export class MessageInputComponent implements OnInit {
 		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
 		let newMessageSalt = CryptoJS.enc.Base64.stringify(messageArray);
 
+		let plainTextMessage = form.value.content;
+
 		let sharedSecret = sessionStorage.getItem('sharedSecret');
 
 		let messageSecretString = "secret:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 		let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
+		let encryptedNewMessageObject = CryptoJS.AES.encrypt(plainTextMessage, newMessageSecret);
+		let encryptedNewMessage = encryptedNewMessageObject.toString();
+
 		let messageSecretValidationString = "validate:" + newMessageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
 		let newMessageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
-
-		let plainTextMessage = form.value.content;
 
 		let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
 		let newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
@@ -51,6 +54,8 @@ export class MessageInputComponent implements OnInit {
 		console.log('new-message-salt: ', newMessageSalt);
 		console.log('new-message-secret-string: ', messageSecretString);
 		console.log('new-message-secret: ', newMessageSecret);
+		console.log('new-plain-text-message: ', plainTextMessage);
+		console.log('new-encrypted-message: ', encryptedNewMessage);
 		console.log('new-message-secret-validation-string: ', messageSecretValidationString);
 		console.log('new-message-secret-validation: ', newMessageSecretValidation);
 		console.log('new-message-integrity: ', newMessageIntegrity);
@@ -58,8 +63,7 @@ export class MessageInputComponent implements OnInit {
 
 		if (this.message) {
 			// Edit
-			//TODO: enryptedMessage
-			//this.message.content = form.value.content;
+			this.message.encryptedMessage = encryptedNewMessage;
 			this.message.newMessageSalt = newMessageSalt;
 			this.message.newMessageSecretValidation = newMessageSecretValidation;
 			this.message.newMessageIntegrity = newMessageIntegrity;
@@ -71,7 +75,7 @@ export class MessageInputComponent implements OnInit {
 		} else {
 			// Create
 			const message = new Message(
-				form.value.content,
+				encryptedNewMessage,
 				null,
 				null,
 				null,
@@ -84,7 +88,10 @@ export class MessageInputComponent implements OnInit {
 
 			this.chatService.addMessage(message)
 				.subscribe(
-					data => console.log(data),
+					data => {
+						console.log(data);
+					},
+
 					error => this.errorService.handleError(error)
 				);
 		}

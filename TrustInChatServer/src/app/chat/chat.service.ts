@@ -32,16 +32,34 @@ export class ChatService {
 			.map((response: Response) => {
 				const result = response.json();
 				const message = new Message(
-					result.obj.content,
+					result.obj.encryptedMessage,
 					result.obj.session.fromEmail, 
 					result.obj.session.toEmail, 
 					result.obj._id, 
 					result.obj.session._id,
-					result.obj.newMessageSalt,
-					result.obj.newMessageSecretValidation,
-					result.obj.newMessageIntegrity,
+					result.obj.messageSalt,
+					result.obj.messageSecretValidation,
+					result.obj.messageIntegrity,
 					result.obj.user
 				);
+
+
+				let messageSalt = message.newMessageSalt;
+				let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+				let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
+				let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
+				let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+
+				let decryptedMessage = CryptoJS.AES.decrypt(message.encryptedMessage, messageSecret).toString(CryptoJS.enc.Utf8);
+				
+				console.log('messageSecretString: ' + messageSecretString);
+				console.log('encryptedMessage: ' + message.encryptedMessage);
+				console.log('messageSecret: ' + messageSecret);
+				console.log('decryptedMessage: ' + decryptedMessage);
+
+				message.encryptedMessage = decryptedMessage;
+
 				this.messages.push(message);
 				return message;
 			})
@@ -119,7 +137,7 @@ export class ChatService {
 					} 
 				}
 
-				console.log(validatedMessages[0].encryptedMessage);
+				//console.log(validatedMessages[0].encryptedMessage);
 
 				this.messages = validatedMessages;
 				return validatedMessages;
