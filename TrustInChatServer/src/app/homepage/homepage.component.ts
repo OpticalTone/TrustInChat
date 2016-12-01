@@ -137,7 +137,6 @@ export class HomepageComponent implements OnInit {
 				questionIntegrity
 			);
 
-		// get data from server(serverSessionId)
 		this.homepageService.createSession(session)
 			.subscribe(
 				data => {
@@ -146,7 +145,8 @@ export class HomepageComponent implements OnInit {
 					sessionStorage.setItem('fromName', data.fromName);
 					sessionStorage.setItem('toEmail', data.toEmail);
 					sessionStorage.setItem('encryptedInitialMessage', data.encryptedInitialMessage);
-					this.router.navigate(['chat', serverSessionId, clientSessionSecret]);
+					sessionStorage.setItem('serverSessionId', serverSessionId);
+					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
 				},
 				error =>this.errorService.handleError(error)
 			);

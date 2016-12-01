@@ -27,7 +27,6 @@ export class RemoteWelcomeService {
 		params.set('serverSessionId', serverSessionId);
 
 		return this.http.get(this.remoteWelcomeUrl, { search: params })
-			//.map((response: Response) => response.json())
 			.map((response: Response) => {
 				const result = response.json();
 

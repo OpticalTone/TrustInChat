@@ -8,8 +8,8 @@ import { ChatGuard } from './chat/chat.guard';
 
 const CHAT_ROUTES: Routes = [
 	{ path: '', component: HomepageComponent },
-	{ path: 'chat/:serverSessionId/:clientSessionSecret', component: ChatComponent, canActivate: [ChatGuard] },
-	{ path: 'chat/remotewelcome/:serverSessionId/:clientSessionSecret', component: RemoteWelcomeComponent },
+	{ path: 'chat/:serverSessionId', component: ChatComponent, canActivate: [ChatGuard] },
+	{ path: 'chat/remotewelcome/:serverSessionId', component: RemoteWelcomeComponent },
 	{ path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

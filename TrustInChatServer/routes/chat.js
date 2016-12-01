@@ -6,7 +6,7 @@ var Message = require('../models/message');
 var Session = require('../models/session');
 
 router.get('/', function(req, res, next) {
-	console.log(req.query.serverSessionId);
+	console.log('serverSessionId: ', req.query.serverSessionId);
 
 	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
 		if (err) {
@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 		console.log(sessionId);
 
 		Message.find({session: sessionId})
-			.populate('session', 'fromEmail toEmail')
+			.populate('session', 'fromEmail toEmail serverSessionId')
 			.exec(function(err, messages) {
 				if (err) {
 					return res.status(500).json({

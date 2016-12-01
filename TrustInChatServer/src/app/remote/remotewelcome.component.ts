@@ -60,7 +60,7 @@ export class RemoteWelcomeComponent implements OnInit {
 					sessionStorage.setItem('fromEmail', data.session.fromEmail);
 					sessionStorage.setItem('initialMessage', data.session.initialMessage);
 					console.log(data);
-					this.router.navigate(['chat', serverSessionId, clientSessionSecret]);
+					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
 				},
 				error => this.errorService.handleError(error)
 			);
@@ -73,7 +73,7 @@ export class RemoteWelcomeComponent implements OnInit {
 	ngOnInit() {
 
 		let serverSessionId = this.route.snapshot.params['serverSessionId'];
-		let clientSessionSecret = this.route.snapshot.params['clientSessionSecret'];
+		let clientSessionSecret = this.route.snapshot.fragment;
 
 		sessionStorage.setItem('serverSessionId', serverSessionId);
 		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
@@ -81,16 +81,7 @@ export class RemoteWelcomeComponent implements OnInit {
 		this.remoteWelcomeService.getData()
 			.subscribe(
 				data => {
-					//console.log(data);
-					//sessionStorage.setItem('serverSecretId', data.serverSecretId);
-					//sessionStorage.setItem('toEmail', data.toEmail);
-					//sessionStorage.setItem('fromName', data.fromName);
-					//sessionStorage.setItem('fromEmail', data.fromEmail);
-					//sessionStorage.setItem('securityQuestion', data.securityQuestion);
-					//sessionStorage.setItem('serverSessionId', data.serverSessionId);
-					//sessionStorage.setItem('serverSessionIdValidation', data.serverSessionIdValidation);
-					//sessionStorage.setItem('serverSessionSalt', data.serverSessionSalt);
-					//sessionStorage.setItem('serverSessionSecret', data.serverSessionSecret);
+					console.log(data);
 				},
 				error => this.errorService.handleError(error)
 			);	

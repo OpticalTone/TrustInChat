@@ -15,7 +15,7 @@
 			</div>
 	    	<div class="row spacing">
 				<section class="col-md-8 col-md-offset-2">
-					<div style="white-space:nowrap">
+					<div style="white-space:nowrap" *ngIf="homepageUser()">
 						<label>Share URL:</label>
 						<a href="{{getShareUrl()}}">{{getShareUrl()}}</a>
 					</div>	
