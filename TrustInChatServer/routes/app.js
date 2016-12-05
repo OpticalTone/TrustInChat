@@ -222,26 +222,57 @@ router.get('/remoteserver', function(req, res, next) {
 });
 
 router.post('/remoteserver', function(req, res, next) {
-	Session.findOne({answerProof: req.body.answerProof}, function(err, session) {
+	Session.findOne({serverSessionId: req.body.serverSessionId}, function(err, sess) {
 		if (err) {
 			return res.status(401).json({
 				title: 'An error occurred',
 				error: err
 			});
 		}
-		if (!session) {
-			return res.status(401).json({
-				title: 'Wrong answer',
-				error: {message: 'Wrong answer'}
+		console.log('sess: ', sess.remoteAnswerAttempts);
+
+		var attempts = sess.remoteAnswerAttempts;
+
+		Session.findOne({answerProof: req.body.answerProof}, function(err, session) {
+			if (err) {
+				return res.status(401).json({
+					title: 'An error occurred',
+					error: err
+				});
+			}
+			if (!session) {
+
+				attempts +=1;
+
+				Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {remoteAnswerAttempts: 1}})
+					.select('remoteAnswerAttempts').exec(function(err, result) {
+						if (err) {
+							return res.status(401).json({
+								title: 'An error occurred',
+								error: err
+							});
+						}
+						console.log(result);
+					});
+
+				console.log('var attempts: ' + attempts);
+
+				return res.status(401).json({
+					title: 'Wrong answer',
+					error: {message: 'Wrong answer, attempts: ' + attempts}
+				});
+				
+			}
+
+			
+
+			var token = jwt.sign({session: session}, 'secretstring');
+
+			res.status(200).json({
+				message: 'Successfully logged in',
+				token: token,
+				session: session
 			});
-		}
-
-		var token = jwt.sign({session: session}, 'secretstring');
-
-		res.status(200).json({
-			message: 'Successfully logged in',
-			token: token,
-			session: session
 		});
 	});
 });

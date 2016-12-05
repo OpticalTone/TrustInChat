@@ -19,6 +19,8 @@ var sessionSchema = new Schema({
 	questionSecretValidation: { type: String, default: '' },
 	questionIntegrity: { type: String, default: '' },
 
+	remoteAnswerAttempts: { type: Number, default: 0 },
+
 	serverdata: {type: Schema.Types.ObjectId, ref: 'ServerData'},
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
 });

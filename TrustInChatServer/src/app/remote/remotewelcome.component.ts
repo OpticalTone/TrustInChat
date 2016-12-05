@@ -49,7 +49,9 @@ export class RemoteWelcomeComponent implements OnInit {
 			null,
 			answerProof,
 			null,
-			null
+			null,
+			null,
+			serverSessionId
 		);
 
 		this.remoteWelcomeService.signIn(session)
@@ -59,7 +61,6 @@ export class RemoteWelcomeComponent implements OnInit {
 					sessionStorage.setItem('toEmail', data.session.toEmail);
 					sessionStorage.setItem('fromEmail', data.session.fromEmail);
 					sessionStorage.setItem('initialMessage', data.session.initialMessage);
-					console.log(data);
 					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
 				},
 				error => this.errorService.handleError(error)
