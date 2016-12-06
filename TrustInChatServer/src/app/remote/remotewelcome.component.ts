@@ -97,6 +97,11 @@ export class RemoteWelcomeComponent implements OnInit {
 		});
 	}
 
+
+	getDelay() {
+		return sessionStorage.getItem('delay') == '0';
+	}
+
 	getToEmail() {
 		return sessionStorage.getItem('toEmail');
 	}

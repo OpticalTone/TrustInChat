@@ -229,9 +229,10 @@ router.post('/remoteserver', function(req, res, next) {
 				error: err
 			});
 		}
-		console.log('sess: ', sess.remoteAnswerAttempts);
-
+		var sessionId = sess._id;
+		console.log('sessionId: ', sessionId);
 		var attempts = sess.remoteAnswerAttempts;
+		console.log('attempts: ', attempts);
 
 		Session.findOne({answerProof: req.body.answerProof}, function(err, session) {
 			if (err) {
@@ -242,29 +243,82 @@ router.post('/remoteserver', function(req, res, next) {
 			}
 			if (!session) {
 
-				attempts +=1;
+				attempts += 1;
+				var msg = '';
+				var title = '';
 
-				Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {remoteAnswerAttempts: 1}})
-					.select('remoteAnswerAttempts').exec(function(err, result) {
-						if (err) {
-							return res.status(401).json({
-								title: 'An error occurred',
-								error: err
-							});
-						}
-						console.log(result);
+				if (6 - attempts == 0) {
+					msg = 'Message is permanently deleted.';
+
+					title = (6 - attempts) + ' attempts remaining';
+
+					Message.findOneAndRemove({session: sessionId})
+						.exec();
+
+					Session.findOneAndRemove({serverSessionId: req.body.serverSessionId})
+						.exec(function(err, result) {
+							if (err) {
+								return res.status(401).json({
+									title: 'An error occurred',
+									error: err
+								});
+							}
+							console.log(result);
+						});
+						console.log('attempts: ', attempts);
+
+					return res.status(401).json({
+						title: title,
+						error: {message: msg}
 					});
+				}
+				else if (6 - attempts == 3) {
+					msg = 'You have ' + (6 - attempts) + ' attempts remaining to answer the security question correctly before ' + 
+						  'message is permanently deleted. You may retry again in 20 seconds.';
 
-				console.log('var attempts: ' + attempts);
+					title = (6 - attempts) + ' attempts remaining';
 
-				return res.status(401).json({
-					title: 'Wrong answer',
-					error: {message: 'Wrong answer, attempts: ' + attempts}
-				});
-				
+					Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {remoteAnswerAttempts: 1}})
+						.select('remoteAnswerAttempts').exec(function(err, result) {
+							if (err) {
+								return res.status(401).json({
+									title: 'An error occurred',
+									error: err
+								});
+							}
+							console.log(result);
+						});
+						console.log('attempts: ', attempts);
+
+					return res.status(401).json({
+						title: title,
+						error: {message: msg}
+					});
+				}
+				else {
+					msg = 'You have ' + (6 - attempts) + ' attempts remaining to answer the security question correctly before ' + 
+						  'message is permanently deleted.';
+
+					title = (6 - attempts) + ' attempts remaining';
+
+					Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {remoteAnswerAttempts: 1}})
+							.select('remoteAnswerAttempts').exec(function(err, result) {
+								if (err) {
+									return res.status(401).json({
+										title: 'An error occurred',
+										error: err
+									});
+								}
+								console.log(result);
+							});
+							console.log('attempts: ', attempts);
+
+					return res.status(401).json({
+						title: title,
+						error: {message: msg}
+					});
+				}
 			}
-
-			
 
 			var token = jwt.sign({session: session}, 'secretstring');
 

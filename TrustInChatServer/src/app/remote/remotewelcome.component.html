@@ -26,7 +26,7 @@
 							<label>Security answer:</label>
 							<input type="password" id="securityAnswer" class="form-control" formControlName="securityAnswer">
 						</div>
-						<button type="submit" class="btn btn-primary" [disabled]="!remotewelcomeForm.valid">SUBMIT</button>
+						<button type="submit" class="btn btn-primary" [disabled]="!remotewelcomeForm.valid || getDelay()">SUBMIT</button>
 					</form>	
 				</section>
 			</div>
