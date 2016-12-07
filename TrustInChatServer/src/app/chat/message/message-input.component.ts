@@ -67,7 +67,7 @@ export class MessageInputComponent implements OnInit {
 			console.log('new-message-integrity: ', newMessageIntegrity);
 			console.log('-----------------------------------------------');
 
-			if (this.message) {
+			/*if (this.message) {
 				// Edit
 				// TODO: fix edit: take text from form, change it, encrypt it, save it, send it back to client, decrypt it, show message to user
 				let editText = form.value.content;
@@ -85,7 +85,7 @@ export class MessageInputComponent implements OnInit {
 						result => console.log(result)
 					);
 				this.message = null;
-			} else {
+			} else {*/
 				// Create
 				const message = new Message(
 					encryptedNewMessage,
@@ -107,7 +107,7 @@ export class MessageInputComponent implements OnInit {
 
 						error => this.errorService.handleError(error)
 					);
-			}
+			//}
 			form.resetForm();
 		}
 	}
