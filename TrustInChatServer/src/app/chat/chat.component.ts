@@ -58,6 +58,7 @@ export class ChatComponent {
 	}
 
 	onCloseSession() {
+
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		
 		this.chatService.closeSession(serverSessionId)

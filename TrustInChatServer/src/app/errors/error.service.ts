@@ -11,6 +11,10 @@ export class ErrorService {
 
 		console.log(errorData.title);
 
+		if (errorData.title == '0') {
+			sessionStorage.setItem('attempt', '0');
+		}
+
 		if (errorData.title == '3 attempts remaining') {
 			console.log('0 sec');
 			sessionStorage.setItem('delay', '0');

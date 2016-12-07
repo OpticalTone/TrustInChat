@@ -180,6 +180,12 @@ router.delete('/close/:serverSessionId', function(req, res, next) {
 				error: err
 			});
 		}
+		if (!session[0]) {
+			return res.status(401).json({
+				title: '0',
+				error: {message: 'Message is permanently deleted.'}
+			});
+		}
 		var sessionId = session[0]._id;
 		console.log(sessionId);
 

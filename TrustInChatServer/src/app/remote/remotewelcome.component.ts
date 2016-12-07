@@ -25,6 +25,11 @@ export class RemoteWelcomeComponent implements OnInit {
 
 	onSubmit() {
 
+		if (sessionStorage.getItem('attempt') == '0') {
+			sessionStorage.clear();
+			this.router.navigate(['/']);
+		};
+
 		let serverSecretId = sessionStorage.getItem('serverSecretId');
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
@@ -84,7 +89,7 @@ export class RemoteWelcomeComponent implements OnInit {
 				data => {
 					console.log(data);
 				},
-				error => this.errorService.handleError(error)
+				error => this.errorService.handleError(error),
 			);	
 
 		let answerRegExp = "^[a-zA-Z0-9-_@#$%^&*\s]{4,}$";
@@ -96,7 +101,6 @@ export class RemoteWelcomeComponent implements OnInit {
 			])
 		});
 	}
-
 
 	getDelay() {
 		return sessionStorage.getItem('delay') == '0';

@@ -229,6 +229,13 @@ router.post('/remoteserver', function(req, res, next) {
 				error: err
 			});
 		}
+
+		if (!sess) {
+			return res.status(401).json({
+				title: '0',
+				error: {message: 'Message is permanently deleted.'}
+			});
+		}
 		var sessionId = sess._id;
 		console.log('sessionId: ', sessionId);
 		var attempts = sess.remoteAnswerAttempts;
@@ -247,10 +254,16 @@ router.post('/remoteserver', function(req, res, next) {
 				var msg = '';
 				var title = '';
 
+				if (6 - attempts < 0) {
+					return res.status(401).json({
+						title: '0',
+						error: {message: 'Message is permanently deleted.'}
+					});
+				} 
 				if (6 - attempts == 0) {
 					msg = 'Message is permanently deleted.';
 
-					title = (6 - attempts) + ' attempts remaining';
+					title = '0';
 
 					Message.findOneAndRemove({session: sessionId})
 						.exec();
