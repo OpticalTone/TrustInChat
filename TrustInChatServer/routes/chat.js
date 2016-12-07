@@ -57,6 +57,12 @@ router.post('/', function(req, res, next) {
 				error: err
 			});
 		}
+		if (!session) {
+			return res.status(401).json({
+				title: '0',
+				error: {message: 'Initial message is permanently deleted. Remote user entered wrong answer 6 times. You can start new session.'}
+			});
+		}
 		console.log('encryptedMessage: ' + req.body.encryptedMessage);
 		var message = new Message({
 			encryptedMessage: req.body.encryptedMessage,

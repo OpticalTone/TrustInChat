@@ -28,52 +28,54 @@ export class RemoteWelcomeComponent implements OnInit {
 		if (sessionStorage.getItem('attempt') == '0') {
 			sessionStorage.clear();
 			this.router.navigate(['/']);
-		};
+		}
+		else {
 
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+			let serverSecretId = sessionStorage.getItem('serverSecretId');
+			let serverSessionId = sessionStorage.getItem('serverSessionId');
+			let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+			let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+			let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
 
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
+			let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 
-		let securityAnswer = this.remotewelcomeForm.value.securityAnswer;
-		let answer = this.normalizeAnswer(securityAnswer);
+			let securityAnswer = this.remotewelcomeForm.value.securityAnswer;
+			let answer = this.normalizeAnswer(securityAnswer);
 
-		this.generateAnswerProof(answer);
+			this.generateAnswerProof(answer);
 
-		let answerProof = sessionStorage.getItem('answerProof');
+			let answerProof = sessionStorage.getItem('answerProof');
 
-		this.generateSharedSecret(answer);
+			this.generateSharedSecret(answer);
 
-		const session = new Session(
-			null,
-			null,
-			null,
-			null,
-			answerProof,
-			null,
-			null,
-			null,
-			serverSessionId
-		);
-
-		this.remoteWelcomeService.signIn(session)
-			.subscribe(
-				data => {
-					sessionStorage.setItem('token', data.token);
-					sessionStorage.setItem('toEmail', data.session.toEmail);
-					sessionStorage.setItem('fromEmail', data.session.fromEmail);
-					sessionStorage.setItem('initialMessage', data.session.initialMessage);
-					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
-				},
-				error => this.errorService.handleError(error)
+			const session = new Session(
+				null,
+				null,
+				null,
+				null,
+				answerProof,
+				null,
+				null,
+				null,
+				serverSessionId
 			);
 
-		sessionStorage.setItem('user', 'remote');
+			this.remoteWelcomeService.signIn(session)
+				.subscribe(
+					data => {
+						sessionStorage.setItem('token', data.token);
+						sessionStorage.setItem('toEmail', data.session.toEmail);
+						sessionStorage.setItem('fromEmail', data.session.fromEmail);
+						sessionStorage.setItem('initialMessage', data.session.initialMessage);
+						this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
+					},
+					error => this.errorService.handleError(error)
+				);
 
-		this.remotewelcomeForm.reset();
+			sessionStorage.setItem('user', 'remote');
+
+			this.remotewelcomeForm.reset();
+		}
 	}
 
 	ngOnInit() {

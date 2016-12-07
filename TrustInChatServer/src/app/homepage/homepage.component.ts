@@ -179,7 +179,7 @@ export class HomepageComponent implements OnInit {
 		if (sessionStorage.getItem('serverSecretId') == null) {
 			window.location.reload(true);
 		}
-
+		sessionStorage.removeItem('attempt');
 		sessionStorage.setItem('user', 'homepage');
 
 		let emailRegExp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
