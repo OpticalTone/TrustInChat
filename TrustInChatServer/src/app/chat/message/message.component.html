@@ -15,8 +15,8 @@
 			{{message.encryptedMessage}}
 		</div>
 		<div class="config" *ngIf="belongsToUser()">
-			<!--a (click)="onEdit()">Edit</a>
-			<a (click)="onDelete()">Delete</a-->
+			<!--a (click)="onEdit()">Edit</a-->
+			<a (click)="onDelete()">Delete</a>
 		</div>
 		<div class="msgRight" *ngIf="!belongsToUser()">
 			{{message.encryptedMessage}}
