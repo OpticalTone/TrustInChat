@@ -16,7 +16,7 @@ Start MongoDB shell client: `mongo`
 Mongo commands:     
 > Choose database: `use simple`    
 > Collections: `show collections`      
-> Find all documents in the collection: `db.collection.find()`     
+> Find all documents in the collection: `db.collection.find().pretty()`     
 > Delete all documents from the collection: `db.collection.remove({})`         
      
 ----------------     
@@ -26,13 +26,13 @@ Project setup:
 TrustInChatServer:     
 > Navigate to TrustInChat/TrustInChatServer     
 > Install dependencies(package.json): `sudo npm install`     
-> Start server: `sudo npm start`     
+> Start server: `npm start`     
 > Run build: `npm run build`    
      
 SendEmailServer:     
 > Navigate to TrustInChat/SendEmailServer     
 > Install dependencies(package.json): `sudo npm install`     
-> Start server: `sudo npm start`    
+> Start server: `npm start`    
      
 ----------------     
       

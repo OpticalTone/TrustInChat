@@ -22,7 +22,9 @@ var sessionSchema = new Schema({
 	remoteAnswerAttempts: { type: Number, default: 0 },
 
 	serverdata: {type: Schema.Types.ObjectId, ref: 'ServerData'},
-	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}]
+	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}],
+
+	createdAt: {type: Date, default: Date.now}
 });
 
 module.exports = mongoose.model('Session', sessionSchema);

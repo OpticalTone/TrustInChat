@@ -10,7 +10,9 @@ var messageSchema = new Schema({
 
 	user: { type: String, default: '' },
 	
-	session: {type: Schema.Types.ObjectId, ref: 'Session'}
+	session: {type: Schema.Types.ObjectId, ref: 'Session'},
+
+	createdAt: {type: Date, default: Date.now}
 });
 
 messageSchema.post('remove', function(message) {

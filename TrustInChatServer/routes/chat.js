@@ -60,7 +60,7 @@ router.post('/', function(req, res, next) {
 		if (!session) {
 			return res.status(401).json({
 				title: '0',
-				error: {message: 'Initial message is permanently deleted. Remote user entered wrong answer 6 times. You can start new session.'}
+				error: {message: 'Session is permanently deleted! Remote user closed the session or entered wrong answer 6 times. You can start new session.'}
 			});
 		}
 		console.log('encryptedMessage: ' + req.body.encryptedMessage);
