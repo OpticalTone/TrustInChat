@@ -48,6 +48,8 @@ export class RemoteWelcomeComponent implements OnInit {
 
 			this.generateSharedSecret(answer);
 
+			let questionSecretValidation = sessionStorage.getItem('clientQuestionSecretValidation');
+
 			const session = new Session(
 				null,
 				null,
@@ -57,7 +59,17 @@ export class RemoteWelcomeComponent implements OnInit {
 				null,
 				null,
 				null,
-				serverSessionId
+				serverSessionId,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				questionSecretValidation,
+				null
 			);
 
 			this.remoteWelcomeService.signIn(session)

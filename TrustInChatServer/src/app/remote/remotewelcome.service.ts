@@ -66,6 +66,7 @@ export class RemoteWelcomeService {
 				let questionSecretValidationString = "validate:" + s.questionSalt + ":" + clientSessionSecret;
 				let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
 				let clientQuestionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
+				sessionStorage.setItem('clientQuestionSecretValidation', clientQuestionSecretValidation);
 
 				let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, s.securityQuestion);
 				let clientQuestionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
