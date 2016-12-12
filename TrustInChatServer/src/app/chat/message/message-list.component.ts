@@ -27,9 +27,10 @@ export class MessageListComponent implements OnInit {
 
 	ngOnInit() {
 
-		let serverSessionId = this.route.snapshot.params['serverSessionId'];
-		
-		sessionStorage.setItem('serverSessionId', serverSessionId);
+		if (!sessionStorage.getItem('serverSessionId')) {
+			let serverSessionId = this.route.snapshot.params['serverSessionId'];
+			sessionStorage.setItem('serverSessionId', serverSessionId);
+		}
 		
 		this.chatService.getMessages()
 			.subscribe(

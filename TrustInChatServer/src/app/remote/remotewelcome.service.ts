@@ -50,7 +50,7 @@ export class RemoteWelcomeService {
 					null,
 					result.questionSalt,
 					result.encryptedQuestion,
-					result.questionSecretValidation,
+					null,
 					result.questionIntegrity
 				);
 
@@ -66,21 +66,13 @@ export class RemoteWelcomeService {
 				let questionSecretValidationString = "validate:" + s.questionSalt + ":" + clientSessionSecret;
 				let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
 				let clientQuestionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
-				sessionStorage.setItem('clientQuestionSecretValidation', clientQuestionSecretValidation);
 
 				let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, s.securityQuestion);
 				let clientQuestionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
 
-				console.log('decryptedQuestion: ' + decryptedQuestion);
-				console.log('encrypted-question: ' + s.encryptedQuestion);
-				console.log('question-secret-validation: ' + s.questionSecretValidation);
-				console.log('clientQuestionSecretValidation: ' + clientQuestionSecretValidation);
-				console.log('question-integrity: ' + s.questionIntegrity);
-				console.log('clientQuestionIntegrity: ' + clientQuestionIntegrity);
-
 				if (s.securityQuestion == decryptedQuestion && 
-					s.questionSecretValidation == clientQuestionSecretValidation &&
 					s.questionIntegrity == clientQuestionIntegrity) {
+					sessionStorage.setItem('clientQuestionSecretValidation', clientQuestionSecretValidation);
 					sessionStorage.setItem('serverSecretId', serverSecretId);
 					sessionStorage.setItem('toEmail', s.toEmail);
 					sessionStorage.setItem('fromName', s.fromName);
@@ -92,7 +84,11 @@ export class RemoteWelcomeService {
 					sessionStorage.setItem('serverSessionSecret', s.serverSessionSecret);
 				}
 
-
+				console.log('decryptedQuestion: ' + decryptedQuestion);
+				console.log('encrypted-question: ' + s.encryptedQuestion);
+				console.log('clientQuestionSecretValidation: ' + clientQuestionSecretValidation);
+				console.log('question-integrity: ' + s.questionIntegrity);
+				console.log('clientQuestionIntegrity: ' + clientQuestionIntegrity);
 			})
 			.catch((error: Response) => {
 				this.errorService.handleError(error.json());

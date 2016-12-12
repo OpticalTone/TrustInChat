@@ -199,7 +199,6 @@ router.get('/remoteserver', function(req, res, next) {
 				var serverSessionSecret = session.serverSessionSecret;
 				var questionSalt = session.questionSalt;
 				var encryptedQuestion = session.encryptedQuestion;
-				var questionSecretValidation = session.questionSecretValidation;
 				var questionIntegrity = session.questionIntegrity;
 
 				res.status(200).json({
@@ -214,7 +213,6 @@ router.get('/remoteserver', function(req, res, next) {
 					serverSessionSecret: serverSessionSecret,
 					questionSalt: questionSalt,
 					encryptedQuestion: encryptedQuestion,
-					questionSecretValidation: questionSecretValidation,
 					questionIntegrity: questionIntegrity
 				});
 			});
