@@ -58,6 +58,20 @@ router.post('/', function(req, res, next) {
 				error: err
 			});
 		}
+
+		var emailServerNonce = crypto.randomBytes(8).toString('hex');
+		var emailServerSecret = 'hardcoded-email-server-secret';
+		var emailServerSecretExpiry = new Date().toISOString();
+
+		var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + req.body.toEmail;
+		var emailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
+
+		console.log('emailServerNonce: ', emailServerNonce);
+		console.log('emailServerSecret: ', emailServerSecret);
+		console.log('emailServerSecretExpiry: ', emailServerSecretExpiry);
+		console.log('data: ', data);
+		console.log('emailServerSecretProof: ', emailServerSecretProof);
+
 		var session = new Session({
 			toEmail: req.body.toEmail,  
 			fromName: req.body.fromName,
@@ -69,6 +83,10 @@ router.post('/', function(req, res, next) {
 			serverSessionIdValidation: req.body.serverSessionIdValidation,
 			serverSessionSalt: req.body.serverSessionSalt,
 			serverSessionSecret: req.body.serverSessionSecret,
+			emailServerNonce: emailServerNonce,
+			emailServerSecret: emailServerSecret,
+			emailServerSecretExpiry: emailServerSecretExpiry,
+			emailServerSecretProof: emailServerSecretProof,
 			questionSalt: req.body.questionSalt,
 			questionSecretValidation: req.body.questionSecretValidation,
 			questionIntegrity: req.body.questionIntegrity,
@@ -110,7 +128,10 @@ router.post('/', function(req, res, next) {
 					fromEmail: req.body.fromEmail,
 					fromName: req.body.fromName,
 					toEmail: req.body.toEmail,
-					encryptedInitialMessage: req.body.encryptedInitialMessage
+					encryptedInitialMessage: req.body.encryptedInitialMessage,
+					emailServerNonce: emailServerNonce,
+					emailServerSecretProof: emailServerSecretProof,
+					emailServerSecretExpiry: emailServerSecretExpiry
 				});
 			});
 		});

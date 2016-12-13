@@ -41,13 +41,9 @@ console.log('server-secret-id: ' + serverSecretId);
 var serverSecret = crypto.randomBytes(16).toString('hex');
 console.log('server-secret: ' + serverSecret);
 
-var emailServerSecret = 'hardcoded-email-server-secret';
-console.log('email-server-secret: ' + emailServerSecret);
-
 var data = {
   serverSecretId: serverSecretId,
-  serverSecret: serverSecret,
-  emailServerSecret: emailServerSecret
+  serverSecret: serverSecret
 };
 
 var newserverdata = new ServerData(data);

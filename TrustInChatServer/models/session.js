@@ -14,6 +14,11 @@ var sessionSchema = new Schema({
 	serverSessionSalt: { type: String, default: '' },
 	serverSessionSecret: { type: String, default: '' },
 
+	emailServerNonce: { type: String, default: '' },
+	emailServerSecret: { type: String, default: '' },
+	emailServerSecretExpiry: {type: Date, default: ''},
+	emailServerSecretProof: { type: String, default: '' },
+
 	questionSalt: { type: String, default: '' },
 	encryptedQuestion: { type: String, default: '' },
 	questionSecretValidation: { type: String, default: '' },
