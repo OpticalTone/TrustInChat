@@ -76,7 +76,6 @@ router.post('/', function(req, res, next) {
 			toEmail: req.body.toEmail,  
 			fromName: req.body.fromName,
 			fromEmail: req.body.fromEmail,
-			securityQuestion: req.body.securityQuestion,
 			answerProof: req.body.answerProof,  
 			notifications: req.body.notifications,
 			serverSessionId: req.body.serverSessionId,
@@ -213,7 +212,6 @@ router.get('/remoteserver', function(req, res, next) {
 				var toEmail = session.toEmail;
 				var fromName = session.fromName;
 				var fromEmail = session.fromEmail;
-				var securityQuestion = session.securityQuestion;
 				var serverSessionId = session.serverSessionId;
 				var serverSessionIdValidation = session.serverSessionIdValidation;
 				var serverSessionSalt = session.serverSessionSalt;
@@ -227,7 +225,6 @@ router.get('/remoteserver', function(req, res, next) {
 					toEmail: toEmail,
 					fromName: fromName,
 					fromEmail: fromEmail,
-					securityQuestion: securityQuestion,
 					serverSessionId: serverSessionId,
 					serverSessionIdValidation: serverSessionIdValidation,
 					serverSessionSalt: serverSessionSalt,

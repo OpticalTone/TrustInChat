@@ -36,7 +36,7 @@ export class RemoteWelcomeService {
 					result.toEmail,
 					result.fromName,
 					result.fromEmail,
-					result.securityQuestion,
+					null,
 					null,
 					null,
 					null,
@@ -67,17 +67,16 @@ export class RemoteWelcomeService {
 				let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
 				let clientQuestionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
 
-				let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, s.securityQuestion);
+				let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, decryptedQuestion);
 				let clientQuestionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
 
-				if (s.securityQuestion == decryptedQuestion && 
-					s.questionIntegrity == clientQuestionIntegrity) {
+				if (s.questionIntegrity == clientQuestionIntegrity) {
 					sessionStorage.setItem('clientQuestionSecretValidation', clientQuestionSecretValidation);
 					sessionStorage.setItem('serverSecretId', serverSecretId);
 					sessionStorage.setItem('toEmail', s.toEmail);
 					sessionStorage.setItem('fromName', s.fromName);
 					sessionStorage.setItem('fromEmail', s.fromEmail);
-					sessionStorage.setItem('securityQuestion', s.securityQuestion);
+					sessionStorage.setItem('securityQuestion', decryptedQuestion);
 					sessionStorage.setItem('serverSessionId', s.serverSessionId);
 					sessionStorage.setItem('serverSessionIdValidation',s.serverSessionIdValidation);
 					sessionStorage.setItem('serverSessionSalt', s.serverSessionSalt);

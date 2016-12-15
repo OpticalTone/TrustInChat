@@ -5,7 +5,6 @@ var sessionSchema = new Schema({
 	toEmail: { type: String, default: ''},    
 	fromName: { type: String, required: true},    
 	fromEmail: { type: String, default: '' }, 
-	securityQuestion: { type: String, default: '' }, 
 	answerProof: { type: String, default: '' },
 	notifications: { type: String, default: '' },
 

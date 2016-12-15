@@ -119,7 +119,7 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.toEmail,
 				this.homepageForm.value.fromName,
 				this.homepageForm.value.fromEmail,
-				this.homepageForm.value.securityQuestion,
+				null,
 				answerProof,
 				encryptedInitialMessage,
 				this.homepageForm.value.notifications,
