@@ -30,16 +30,34 @@ router.post('/', function(req, res, next) {
 	var fromEmail = req.body.fromEmail;
 	var fromName = req.body.fromName;
 
+	var emailServerNonce = req.body.emailServerNonce;
+	var emailServerSecretProof = req.body.emailServerSecretProof;
+	var emailServerSecretExpiry = req.body.emailServerSecretExpiry;
+
 	console.log(serverSessionId);
 	console.log(clientSessionSecret);
 	console.log(toEmail);
 	console.log(fromEmail);
 	console.log(fromName);
 
+	console.log(emailServerNonce);
+	console.log(emailServerSecretProof);
+	console.log(emailServerSecretExpiry);
+
+	var emailServerSecret = 'hardcoded-email-server-secret';
+
+	var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
+	var checkEmailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
+
 	var chatSessionUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
 	var chatUrl = 'https://session.trustinchat.com/chat/';
-	// TODO: check how long then calculate date
-	var date = new Date();
+
+	if (checkEmailServerSecretProof == emailServerSecretProof) {
+		return res.status(500).json({
+			title: 'Invalid email data',
+			error: err
+		});
+	}
 
 	var sendinblue = require('sendinblue-api');
 
@@ -56,7 +74,7 @@ router.post('/', function(req, res, next) {
 				serverSessionId + '<br><br>' +
 				'Validation code:<br>' + 
 				clientSessionSecret + '<br><br><br>' + 
-				'This encrypted message will automatically self-destruct by ' + date + '<br><br>' + 
+				'This encrypted message will automatically self-destruct by ' + emailServerSecretExpiry + '<br><br>' + 
 				'Thank you!<br>' + 
 				'The TrustInChat.com team<br><br><br>' +
 				'If you feel you are receiving this email abusively, with our apologies please forward this email to:<br>' + 
