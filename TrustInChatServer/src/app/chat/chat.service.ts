@@ -73,8 +73,12 @@ export class ChatService {
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let params = new URLSearchParams();
 		params.set('serverSessionId', serverSessionId);
-		
-		return this.http.get(this.chatUrl, { search: params })
+
+		return Observable
+			.interval(1000)
+			.switchMap(() => {
+				return this.http.get(this.chatUrl, { search: params })
+			})
 			.map((response: Response) => {
 
 				const messages = response.json().obj;
