@@ -15,6 +15,18 @@ router.get('/', function(req, res, next) {
 				error: err
 			});
 		}
+		if (!session) {
+			return res.status(500).json({
+				title: 'No Session Found',
+				error: {message: 'Session not found!'}
+			});
+		}
+		if (!session[0]) {
+			return res.status(500).json({
+				title: 'No Session id Found',
+				error: {message: 'Session id not found!'}
+			});
+		}
 		var sessionId = session[0]._id;
 		console.log(sessionId);
 
