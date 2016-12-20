@@ -23,7 +23,18 @@ export class HomepageService {
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		return this.http.post(this.homepageUrl, body, {headers: headers})
-			.map((response: Response) => response.json())
+			//.map(response => response.json())
+			.map((response: Response) => {
+				const session= response.json();
+				sessionStorage.setItem('token', session.token);
+				sessionStorage.setItem('fromEmail', session.fromEmail);
+				sessionStorage.setItem('fromName', session.fromName);
+				sessionStorage.setItem('toEmail', session.toEmail);
+				sessionStorage.setItem('encryptedInitialMessage', session.encryptedInitialMessage);
+				sessionStorage.setItem('emailServerNonce', session.emailServerNonce);
+				sessionStorage.setItem('emailServerSecretProof', session.emailServerSecretProof);
+				sessionStorage.setItem('emailServerSecretExpiry', session.emailServerSecretExpiry);
+			})
 			.catch((error: Response) => {
 				this.errorService.handleError(error.json());
 				return Observable.throw(error.json());

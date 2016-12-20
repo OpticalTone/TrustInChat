@@ -140,15 +140,7 @@ export class HomepageComponent implements OnInit {
 		this.homepageService.createSession(session)
 			.subscribe(
 				data => {
-					sessionStorage.setItem('token', data.token);
-					sessionStorage.setItem('fromEmail', data.fromEmail);
-					sessionStorage.setItem('fromName', data.fromName);
-					sessionStorage.setItem('toEmail', data.toEmail);
-					sessionStorage.setItem('encryptedInitialMessage', data.encryptedInitialMessage);
-					sessionStorage.setItem('serverSessionId', serverSessionId);
-					sessionStorage.setItem('emailServerNonce', data.emailServerNonce);
-					sessionStorage.setItem('emailServerSecretProof', data.emailServerSecretProof);
-					sessionStorage.setItem('emailServerSecretExpiry', data.emailServerSecretExpiry);
+					
 					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
 				},
 				error =>this.errorService.handleError(error)
@@ -159,21 +151,25 @@ export class HomepageComponent implements OnInit {
 		let fromEmail = this.homepageForm.value.fromEmail;
 		let fromName = 	this.homepageForm.value.fromName;
 
-		let emailServerNonce = sessionStorage.getItem('emailServerNonce');
-		let emailServerSecretProof = sessionStorage.getItem('emailServerSecretProof');
-		let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
+		setTimeout(() => {
+			let emailServerNonce = sessionStorage.getItem('emailServerNonce');
+			let emailServerSecretProof = sessionStorage.getItem('emailServerSecretProof');
+			let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
 
-		const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName, 
-								emailServerNonce, emailServerSecretProof, emailServerSecretExpiry);
+			const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName, 
+									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry);
 
-		this.homepageService.sendEmail(email)
-			.subscribe(
-				data => {
-					console.log(data);
-				},
-				error => this.errorService.handleError(error)
-			);
+			console.log(email);
 
+			this.homepageService.sendEmail(email)
+				.subscribe(
+					data => {
+						console.log(data);
+					},
+					error => this.errorService.handleError(error)
+				);
+		}, 5000);
+		
 		// clear homepage form	
 		this.homepageForm.reset();	
 	}

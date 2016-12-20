@@ -1,4 +1,5 @@
 var express = require('express');
+var crypto = require('crypto');
 var router = express.Router();
 
 // ignored file 
@@ -49,10 +50,12 @@ router.post('/', function(req, res, next) {
 	var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
 	var checkEmailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
 
+	console.log('checkEmailServerSecretProof: ', checkEmailServerSecretProof);
+
 	var chatSessionUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
 	var chatUrl = 'https://session.trustinchat.com/chat/';
 
-	if (checkEmailServerSecretProof == emailServerSecretProof) {
+	if (checkEmailServerSecretProof != emailServerSecretProof) {
 		return res.status(500).json({
 			title: 'Invalid email data',
 			error: err
@@ -96,7 +99,10 @@ router.post('/', function(req, res, next) {
 		clientSessionSecret: clientSessionSecret,
 		toEmail: toEmail,
 		fromEmail: fromEmail,
-		fromName: fromName
+		fromName: fromName,
+		emailServerNonce: emailServerNonce,
+		emailServerSecretProof: emailServerSecretProof,
+		emailServerSecretExpiry: emailServerSecretExpiry
 	});
 });
 
