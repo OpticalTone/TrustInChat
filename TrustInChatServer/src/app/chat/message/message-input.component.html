@@ -1,7 +1,7 @@
 <section class="col-md-8 col-md-offset-2">
 	<form (ngSubmit)="onSubmit(f)" #f="ngForm">
 		<div class="input-group">
-			<input type="text" id="content" class="form-control" [ngModel]="message?.content" name="content" placeholder="Enter text here..." required>
+			<input type="text" id="content" class="form-control" [ngModel]="message?.encryptedMessage" name="content" placeholder="Enter text here..." required>
 			<span class="input-group-btn">
 				<button class="btn btn-primary" type="submit">SEND</button>
 			</span>
