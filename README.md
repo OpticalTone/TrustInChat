@@ -17,8 +17,8 @@ Mongo commands:
 > Choose database: `use simple`    
 > Collections: `show collections`      
 > Find all documents in the collection: `db.collection.find().pretty()`     
-> Delete all documents from the collection: `db.collection.remove({})`         
-     
+> Delete all documents from the collection: `db.collection.remove({})`     
+      
 ----------------     
      
 Project setup:     
@@ -27,14 +27,24 @@ TrustInChatServer:
 > Navigate to TrustInChat/TrustInChatServer     
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`     
-> Run build: `npm run build`    
-     
+> Run development build: `npm run build`    
+> Run pruduction build: `npm run build:prod`       
+      
 SendEmailServer:     
 > Navigate to TrustInChat/SendEmailServer     
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`    
+> Create ignored config file: parameters.js     
+> `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`    
+> `exports.parameters = parameters;`   
+> and set `your_api_key`      
      
-----------------     
+----------------    
+    
+Exit terminal:    
+> Ctrl + c    
+       
+----------------    
       
 Open Chromium Web Browser:     
 > Install Chromium web browser from Ubuntu software     
