@@ -9,15 +9,19 @@
 		{{message.chatFromEmail}}
 	</div>
 </div>
-<article class="panel panel-default">
+<article class="panel panel-default" *ngIf="belongsToUser()">
 	<div class="panel-body">
-		<div class="msg" *ngIf="belongsToUser()">
+		<div class="msg">
 			{{message.encryptedMessage}}
 		</div>
-		<div class="config" *ngIf="belongsToUser()">
+		<div class="config">
 			<!--a (click)="onEdit()">Edit</a-->
 			<a (click)="onDelete()">Delete</a>
 		</div>
+	</div>
+</article>
+<article class="panel panel-default" *ngIf="!belongsToUser()">
+	<div class="panel-body">
 		<div class="msgRight" *ngIf="!belongsToUser()">
 			{{message.encryptedMessage}}
 		</div>

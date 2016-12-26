@@ -23,7 +23,17 @@ a.danger {
 }
 
 .space {
-	margin-bottom: 60px;
+	margin-bottom: 30px;
+}
+
+.chatclose {
+	margin: 30px;
+	text-align: center;
+}
+
+.chatbox {
+	border: solid 2px #d3d3d3;
+	padding: 10px;
 }
 
 input.ng-invalid.ng-touched {

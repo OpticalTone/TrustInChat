@@ -27,7 +27,7 @@ import { Message } from './message.model';
 			display: inline-block;
 			text-align: right;
 			font-size: 12px;
-			width: 19%
+			width: 19%;
 		}
 	`]
 })

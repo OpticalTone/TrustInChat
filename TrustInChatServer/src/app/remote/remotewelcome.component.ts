@@ -11,7 +11,25 @@ import * as CryptoJS from 'crypto-js';
 
 @Component({
 	selector: 'chat-remotewelcome',
-	templateUrl: './remotewelcome.component.html'
+	templateUrl: './remotewelcome.component.html',
+	styles: [`
+		.data {
+			margin-top: 60px;
+			margin-bottom 60px;		
+		}
+
+		span#toEmail {
+			margin-left: 131px;
+		}
+
+		span#fromEmail {
+			margin-left: 112px;
+		}
+
+		span#securityQuestion {
+			margin-left: 30px;
+		}
+	`]
 })
 export class RemoteWelcomeComponent implements OnInit {
 	

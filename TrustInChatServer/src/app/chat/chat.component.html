@@ -22,14 +22,16 @@
 				</section>
 			</div>
 		</div>	
-		<div class="row spacing">
-			<chat-message-list></chat-message-list>		
+		<div class="chatbox">
+			<div class="row spacing">
+				<chat-message-list></chat-message-list>		
+			</div>
+			<div class="row spacing">
+				<chat-message-input></chat-message-input>		
+			</div>
 		</div>
-		<div class="row spacing">
-			<chat-message-input></chat-message-input>		
-		</div>
-		<div class="col-md-8 col-md-offset-2">
-			<button class="btn btn-primary" (click)="onCloseSession()">CLOSE</button>
+		<div class="col-md-8 col-md-offset-2 chatclose">
+			<button class="btn" (click)="onCloseSession()">CLOSE</button>
 		</div>
 	</div>
 </div>	
