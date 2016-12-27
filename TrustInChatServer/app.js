@@ -6,12 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
-var socket_io = require('socket.io');
+// var socket_io = require('socket.io');
 
 var app = express();
 
-var io = socket_io();
-app.io = io;
+// var io = socket_io();
+// app.io = io;
 
 var chatRoutes = require('./routes/chat');
 var appRoutes = require('./routes/app');
@@ -30,6 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next){
+	// enable CORS
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');

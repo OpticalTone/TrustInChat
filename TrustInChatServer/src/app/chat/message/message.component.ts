@@ -29,6 +29,16 @@ import { Message } from './message.model';
 			font-size: 12px;
 			width: 19%;
 		}
+		.chatarticle {
+			background-color: #e0ffff;
+		}
+		.chatarticleRight {
+			background-color: #ccffe6;
+		}
+		.chatlist {
+			margin-left: 50px;
+			margin-right: 50px;
+		}
 	`]
 })
 export class MessageComponent {

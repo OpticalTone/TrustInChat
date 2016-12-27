@@ -6,8 +6,6 @@ var Message = require('../models/message');
 var Session = require('../models/session');
 
 router.get('/', function(req, res, next) {
-	console.log('serverSessionId: ', req.query.serverSessionId);
-
 	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
 		if (err) {
 			return res.status(500).json({
@@ -28,7 +26,6 @@ router.get('/', function(req, res, next) {
 			});
 		}
 		var sessionId = session[0]._id;
-		console.log(sessionId);
 
 		Message.find({session: sessionId})
 			.populate('session', 'fromEmail toEmail serverSessionId')
@@ -72,7 +69,9 @@ router.post('/', function(req, res, next) {
 		if (!session) {
 			return res.status(401).json({
 				title: '0',
-				error: {message: 'Session is permanently deleted! Remote user closed the session or entered wrong answer 6 times. You can start new session.'}
+				error: {message: 'Session is permanently deleted!' + 
+				' Remote user closed the session or entered wrong answer 6 times. ' + 
+				'You can start new session.'}
 			});
 		}
 		console.log('encryptedMessage: ' + req.body.encryptedMessage);
@@ -126,7 +125,6 @@ router.patch('/:id', function(req, res, next) {
 				error: err
 			});
 		}
-
 		message.encryptedMessage = req.body.encryptedMessage;
 		message.messageSalt = req.body.newMessageSalt;
 		message.messageSecretValidation = req.body.newMessageSecretValidation;
@@ -205,7 +203,6 @@ router.delete('/close/:serverSessionId', function(req, res, next) {
 			});
 		}
 		var sessionId = session[0]._id;
-		console.log(sessionId);
 
 		Message.remove({session: sessionId}, function(err, result) {
 			if (err) {

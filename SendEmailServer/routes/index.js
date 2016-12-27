@@ -35,22 +35,10 @@ router.post('/', function(req, res, next) {
 	var emailServerSecretProof = req.body.emailServerSecretProof;
 	var emailServerSecretExpiry = req.body.emailServerSecretExpiry;
 
-	console.log(serverSessionId);
-	console.log(clientSessionSecret);
-	console.log(toEmail);
-	console.log(fromEmail);
-	console.log(fromName);
-
-	console.log(emailServerNonce);
-	console.log(emailServerSecretProof);
-	console.log(emailServerSecretExpiry);
-
 	var emailServerSecret = 'hardcoded-email-server-secret';
 
 	var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
 	var checkEmailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
-
-	console.log('checkEmailServerSecretProof: ', checkEmailServerSecretProof);
 
 	var chatSessionUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
 	var chatUrl = 'https://session.trustinchat.com/chat/';
@@ -61,7 +49,6 @@ router.post('/', function(req, res, next) {
 			error: err
 		});
 	}
-
 	var sendinblue = require('sendinblue-api');
 
 	var sendinObj = new sendinblue(p.parameters);
