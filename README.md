@@ -23,35 +23,27 @@ Mongo commands:
      
 Project setup:     
      
-TrustInChatServer:     
-> Navigate to TrustInChat/TrustInChatServer     
+TrustInChat/TrustInChatServer:         
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`     
 > Run development build: `npm run build`    
-> Run pruduction build: `npm run build:prod`       
-      
-SendEmailServer:     
-> Navigate to TrustInChat/SendEmailServer     
+> Run pruduction build: `npm run build:prod`      
+> localhost:3000        
+       
+TrustInChat/SendEmailServer:     
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`    
-> Create ignored config file: parameters.js     
+> Create ignored file: parameters.js     
 > `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`    
 > `exports.parameters = parameters;`   
 > and set `your_api_key`      
-     
+> localhost:2000       
+      
 ----------------    
     
 Exit terminal:    
 > Ctrl + c    
-       
-----------------    
-      
-Open Chromium Web Browser:     
-> Install Chromium web browser from Ubuntu software     
-> TrustInChatServer: localhost:3000    
-> SendEmailServer: localhost:2000    
-> Open console: F12      
-     
+
      
     
     
