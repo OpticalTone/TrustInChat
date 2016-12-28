@@ -32,8 +32,15 @@ a.danger {
 }
 
 .chatbox {
-	border: solid 2px #d3d3d3;
+	border: solid 1px #bbb;
 	padding: 10px;
+	height: 500px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.chatinput {
+	margin-top: 15px;
 }
 
 input.ng-invalid.ng-touched {
