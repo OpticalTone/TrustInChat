@@ -3,9 +3,11 @@
 		<div class="input-group">
 			<input type="text" id="content" class="form-control" [ngModel]="message?.encryptedMessage" name="content" placeholder="Enter text here..." required>
 			<span class="input-group-btn">
-				<button class="btn btn-primary" type="submit">SEND</button>
+				<button class="btn" type="submit">SEND</button>
 			</span>
 		</div>
-		<button type="button" class="btn" (click)="onClear(f)">CLEAR</button>
+		<div class="config">
+			<a (click)="onClear(f)">Clear</a>
+		</div>
 	</form>
 </section>	 

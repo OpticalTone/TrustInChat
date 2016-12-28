@@ -17,10 +17,7 @@ mongoose.connect('mongodb://127.0.0.1/simple', function(err) {
   if (err) {
     return console.log(err);
   }
-
-  return console.log("Successfully connected to MongoDB!");
 });
-
 
 /**
  * Get port from environment and store in Express.
@@ -35,15 +32,14 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-var io = app.io;
-io.attach(server);
+// TODO: implement socket.io
+// var io = app.io;
+// io.attach(server);
 
-// generate server crypto rnd str
+// when a the nodejs server is loaded
+// cryptographic random strings generated
 var serverSecretId = crypto.randomBytes(16).toString('hex');
-console.log('server-secret-id: ' + serverSecretId);
-
 var serverSecret = crypto.randomBytes(16).toString('hex');
-console.log('server-secret: ' + serverSecret);
 
 var data = {
   serverSecretId: serverSecretId,
@@ -51,7 +47,6 @@ var data = {
 };
 
 var newserverdata = new ServerData(data);
-
 newserverdata.save();
 
 /**
@@ -62,8 +57,8 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-var io = require('socket.io').listen(server);
-require('../sockets/base.js')(io);
+// var io = require('socket.io').listen(server);
+// require('../sockets/base.js')(io);
 
 /**
  * Normalize a port into a number, string, or false.

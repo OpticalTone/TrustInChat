@@ -27,7 +27,17 @@ import { Message } from './message.model';
 			display: inline-block;
 			text-align: right;
 			font-size: 12px;
-			width: 19%
+			width: 19%;
+		}
+		.chatarticle {
+			background-color: #e0ffff;
+		}
+		.chatarticleRight {
+			background-color: #ccffe6;
+		}
+		.chatlist {
+			margin-left: 50px;
+			margin-right: 50px;
 		}
 	`]
 })

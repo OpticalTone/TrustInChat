@@ -22,6 +22,8 @@ router.get('/', function(req, res, next) {
 			var serverSecretId = serverdata.serverSecretId;
 			var serverSecret = serverdata.serverSecret;
 			
+			// when the home page loads
+			// cryptographic random strings generated
 			var serverSessionId = crypto.randomBytes(8).toString('hex');
 
 			var validationString = serverSecretId + ':' + serverSessionId + ':' + serverSecret;
@@ -29,14 +31,6 @@ router.get('/', function(req, res, next) {
 
 			var serverSessionSalt = crypto.randomBytes(8).toString('hex');
 			var serverSessionSecret = crypto.randomBytes(8).toString('hex');
-
-			console.log('server-secret-id: ' + serverSecretId);
-			console.log('server-secret: ' + serverSecret);
-			console.log('server-session-id: ' + serverSessionId);
-			console.log('validationString: ' + validationString);
-			console.log('server-session-id-validation: ' + serverSessionIdValidation);
-			console.log('server-session-salt: ' + serverSessionSalt);
-			console.log('server-session-secret: ' + serverSessionSecret);
 
 			res.render('index', {
 		    	title: 'TrustInChat',
@@ -59,18 +53,13 @@ router.post('/', function(req, res, next) {
 			});
 		}
 
+		// sending email
 		var emailServerNonce = crypto.randomBytes(8).toString('hex');
 		var emailServerSecret = 'hardcoded-email-server-secret';
 		var emailServerSecretExpiry = new Date().toISOString();
 
 		var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + req.body.toEmail;
 		var emailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
-
-		console.log('emailServerNonce: ', emailServerNonce);
-		console.log('emailServerSecret: ', emailServerSecret);
-		console.log('emailServerSecretExpiry: ', emailServerSecretExpiry);
-		console.log('data: ', data);
-		console.log('emailServerSecretProof: ', emailServerSecretProof);
 
 		var session = new Session({
 			toEmail: req.body.toEmail,  
@@ -92,6 +81,7 @@ router.post('/', function(req, res, next) {
 			encryptedQuestion: req.body.encryptedQuestion,
 			serverdata: serverdata
 		});
+
 		var message = new Message({
 			encryptedMessage: req.body.encryptedInitialMessage,
 			messageSalt: req.body.messageSalt,
@@ -100,6 +90,7 @@ router.post('/', function(req, res, next) {
 			user: req.body.user,
 			session: session
 		});
+
 		message.save(function(err, resultMessage) {
 			if (err) {
 				return res.status(500).json({
@@ -152,7 +143,6 @@ router.delete('/:serverSessionId', function(req, res, next) {
 			});
 		}
 		var sessionId = session[0]._id;
-		console.log(sessionId);
 
 		Message.find({session: sessionId}, function(err, messages) {
 			if (err) {
@@ -253,12 +243,9 @@ router.post('/remoteserver', function(req, res, next) {
 			});
 		}
 		var sessionId = sess._id;
-		console.log('sessionId: ', sessionId);
 		var attempts = sess.remoteAnswerAttempts;
-		console.log('attempts: ', attempts);
 
 		Session.findOne({questionSecretValidation: req.body.questionSecretValidation}, function(err, s) {
-			console.log('clientQuestionSecretValidation :', req.body.questionSecretValidation);
 			if (err) {
 				return res.status(401).json({
 					title: 'An error occurred',
@@ -306,9 +293,7 @@ router.post('/remoteserver', function(req, res, next) {
 										error: err
 									});
 								}
-								console.log(result);
 							});
-							console.log('attempts: ', attempts);
 
 						return res.status(401).json({
 							title: title,
@@ -329,10 +314,7 @@ router.post('/remoteserver', function(req, res, next) {
 										error: err
 									});
 								}
-								console.log(result);
 							});
-							console.log('attempts: ', attempts);
-
 						return res.status(401).json({
 							title: title,
 							error: {message: msg}
@@ -352,10 +334,7 @@ router.post('/remoteserver', function(req, res, next) {
 											error: err
 										});
 									}
-									console.log(result);
 								});
-								console.log('attempts: ', attempts);
-
 						return res.status(401).json({
 							title: title,
 							error: {message: msg}
@@ -374,7 +353,6 @@ router.post('/remoteserver', function(req, res, next) {
 		});
 	});
 });
-
 
 module.exports = router;
 

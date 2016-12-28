@@ -1,23 +1,27 @@
 <div class="panel-body">
-	<div class="author" *ngIf="belongsToUser()">
+	<div class="author chatlist" *ngIf="belongsToUser()">
 		Me:
 	</div>
-	<div class="author" *ngIf="!belongsToUser() && !remoteUser()" style="float: right;">
+	<div class="author chatlist" *ngIf="!belongsToUser() && !remoteUser()" style="float: right;">
 		{{message.chatToEmail}}
 	</div>
-	<div class="author" *ngIf="!belongsToUser() && remoteUser()" style="float: right;">
+	<div class="author chatlist" *ngIf="!belongsToUser() && remoteUser()" style="float: right;">
 		{{message.chatFromEmail}}
 	</div>
 </div>
-<article class="panel panel-default">
+<article class="panel panel-default chatarticle chatlist" *ngIf="belongsToUser()">
 	<div class="panel-body">
-		<div class="msg" *ngIf="belongsToUser()">
+		<div class="msg">
 			{{message.encryptedMessage}}
 		</div>
-		<div class="config" *ngIf="belongsToUser()">
+		<div class="config">
 			<!--a (click)="onEdit()">Edit</a-->
 			<a (click)="onDelete()">Delete</a>
 		</div>
+	</div>
+</article>
+<article class="panel panel-default chatarticleRight chatlist" *ngIf="!belongsToUser()">
+	<div class="panel-body">
 		<div class="msgRight" *ngIf="!belongsToUser()">
 			{{message.encryptedMessage}}
 		</div>
