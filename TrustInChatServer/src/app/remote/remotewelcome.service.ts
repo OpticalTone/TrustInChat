@@ -82,12 +82,6 @@ export class RemoteWelcomeService {
 					sessionStorage.setItem('serverSessionSalt', s.serverSessionSalt);
 					sessionStorage.setItem('serverSessionSecret', s.serverSessionSecret);
 				}
-
-				console.log('decryptedQuestion: ' + decryptedQuestion);
-				console.log('encrypted-question: ' + s.encryptedQuestion);
-				console.log('clientQuestionSecretValidation: ' + clientQuestionSecretValidation);
-				console.log('question-integrity: ' + s.questionIntegrity);
-				console.log('clientQuestionIntegrity: ' + clientQuestionIntegrity);
 			})
 			.catch((error: Response) => {
 				this.errorService.handleError(error.json());

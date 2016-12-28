@@ -56,17 +56,6 @@ export class MessageInputComponent implements OnInit {
 			let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
 			let newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
 
-			console.log('-----------------------------------------------');
-			console.log('new-message-salt: ', newMessageSalt);
-			console.log('new-message-secret-string: ', messageSecretString);
-			console.log('new-message-secret: ', newMessageSecret);
-			console.log('new-plain-text-message: ', plainTextMessage);
-			console.log('new-encrypted-message: ', encryptedNewMessage);
-			console.log('new-message-secret-validation-string: ', messageSecretValidationString);
-			console.log('new-message-secret-validation: ', newMessageSecretValidation);
-			console.log('new-message-integrity: ', newMessageIntegrity);
-			console.log('-----------------------------------------------');
-
 			/*if (this.message) {
 				// Edit
 				// TODO: fix edit: take text from form, change it, encrypt it, save it, send it back to client, decrypt it, show message to user
@@ -86,6 +75,7 @@ export class MessageInputComponent implements OnInit {
 					);
 				this.message = null;
 			} else {*/
+
 				// Create
 				const message = new Message(
 					encryptedNewMessage,
@@ -104,7 +94,6 @@ export class MessageInputComponent implements OnInit {
 						data => {
 							console.log(data);
 						},
-
 						error => this.errorService.handleError(error)
 					);
 			//}
@@ -132,5 +121,4 @@ export class MessageInputComponent implements OnInit {
 		}
 		return text;
 	}
-
 }

@@ -27,11 +27,9 @@ export class Message {
 		this.chatToEmail = chatToEmail;
 		this.messageId = messageId;
 		this.sessionId = sessionId;
-
 		this.newMessageSalt = newMessageSalt;
 		this.newMessageSecretValidation = newMessageSecretValidation;
 		this.newMessageIntegrity = newMessageIntegrity;
-
 		this.user = user;
 	}
 }

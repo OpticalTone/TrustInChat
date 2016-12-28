@@ -23,7 +23,6 @@ export class HomepageService {
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		return this.http.post(this.homepageUrl, body, {headers: headers})
-			//.map(response => response.json())
 			.map((response: Response) => {
 				const session= response.json();
 				sessionStorage.setItem('token', session.token);

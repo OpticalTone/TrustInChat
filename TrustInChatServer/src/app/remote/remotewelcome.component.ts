@@ -185,12 +185,6 @@ export class RemoteWelcomeComponent implements OnInit {
 		let answerProof = CryptoJS.enc.Base64.stringify(hash);
 
         sessionStorage.setItem('answerProof', answerProof);
-
-        console.log('-----------------------------------------------');
-        console.log('clientSessionSecret: ' + clientSessionSecret);
-        console.log('answerProofString: ' + answerProofString);
-        console.log('answerProof: ' + answerProof);
-        console.log('-----------------------------------------------');
 	}
 
 	private generateSharedSecret(answer) {
@@ -210,11 +204,6 @@ export class RemoteWelcomeComponent implements OnInit {
 		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
 
 		sessionStorage.setItem('sharedSecret', sharedSecret);
-
-		console.log('-----------------------------------------------');
-		console.log('sharedSecretString: ' + sharedSecretString);
-		console.log('shared-secret: ' + sharedSecret);
-		console.log('-----------------------------------------------');
 	}
 
 	private generateRandomString(len) {

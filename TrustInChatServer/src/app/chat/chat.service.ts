@@ -52,11 +52,6 @@ export class ChatService {
 				let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
 				let decryptedMessage = CryptoJS.AES.decrypt(message.encryptedMessage, messageSecret).toString(CryptoJS.enc.Utf8);
-				
-				console.log('messageSecretString: ' + messageSecretString);
-				console.log('encryptedMessage: ' + message.encryptedMessage);
-				console.log('messageSecret: ' + messageSecret);
-				console.log('decryptedMessage: ' + decryptedMessage);
 
 				message.encryptedMessage = decryptedMessage;
 
@@ -97,9 +92,7 @@ export class ChatService {
 				 		message.messageIntegrity,
 						message.user
 					);
-
 					transformedMessages.push(m);
-
 				}
 
 				let validatedMessages = [];
@@ -115,20 +108,14 @@ export class ChatService {
 
 					let decryptMessageObject = CryptoJS.AES.decrypt(t.encryptedMessage, messageSecret);
 					let decryptedMessage = decryptMessageObject.toString(CryptoJS.enc.Utf8);
-					console.log('encryptedMessage: ' + t.encryptedMessage);
-					console.log('messageSecret: ' + messageSecret);
-					console.log('decryptedMessage: ' + decryptedMessage);
 
 					let messageValidation = t.newMessageSecretValidation;
-					console.log('messageValidation: ' + messageValidation);
 
 					let clientMessageValidationString = "validate:" + messageSalt + ":" + sharedSecret;
 					let clientMessageValidationHash = CryptoJS.SHA256(clientMessageValidationString);
 					let clientMessageValidation = CryptoJS.enc.Base64.stringify(clientMessageValidationHash);
-					console.log('clientMessageValidation: ' + clientMessageValidation);
 
 					let messageIntegrity = t.newMessageIntegrity;
-					console.log('messageIntegrity: ' + messageIntegrity);
 
 					let clientMessageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, decryptedMessage);
 					let clientMessageIntegrity = CryptoJS.enc.Base64.stringify(clientMessageIntegrityArray);
@@ -140,9 +127,6 @@ export class ChatService {
 						validatedMessages.push(t);
 					} 
 				}
-
-				//console.log(validatedMessages[0].encryptedMessage);
-
 				this.messages = validatedMessages;
 				return validatedMessages;
 			})
@@ -184,7 +168,6 @@ export class ChatService {
 	}
 
 	closeSession(serverSessionId) {
-
 		const token = sessionStorage.getItem('token') ? '?token=' + sessionStorage.getItem('token') : '';
 
 		return this.http.delete(this.chatUrl + '/' + 'close/' + serverSessionId + '/' + token)

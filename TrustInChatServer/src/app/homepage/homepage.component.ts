@@ -47,7 +47,6 @@ export class HomepageComponent implements OnInit {
 		this.generateSharedSecret(answer);
 
 
-
 		// The question (encrypted) + question salt + validation: 
 		let randomQuestionString = this.generateRandomString(8);
 		let questionArray = CryptoJS.enc.Utf16.parse(randomQuestionString);
@@ -68,18 +67,6 @@ export class HomepageComponent implements OnInit {
 
 		let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, plainTextQuestion);
 		let questionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
-
-		console.log('-----------------------------------------------');
-		console.log('question-salt: ', questionSalt);
-		console.log('plain-text-question: ', plainTextQuestion);
-		console.log('questionSecretString: ', questionSecretString);
-		console.log('question-secret: ', questionSecret);
-		console.log('encrypted-question: ', encryptedQuestion);
-		console.log('questionSecretValidationString: ', questionSecretValidationString);
-		console.log('question-secret-validation: ', questionSecretValidation);
-		console.log('question-integrity: ', questionIntegrity);
-		console.log('-----------------------------------------------'); 
-
 
 
 		//The message (encrypted) + message salt + validation:
@@ -105,16 +92,6 @@ export class HomepageComponent implements OnInit {
 		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
 		let messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
 
-		console.log('-----------------------------------------------');
-		console.log('initial-message-salt: ', messageSalt);
-		console.log('initial-message-secret-string: ', messageSecretString);
-		console.log('initial-message-secret: ', messageSecret);
-		console.log('plain-text-message: ', plainTextMessage);
-		console.log('encrypted-message: ', encryptedInitialMessage);
-		console.log('initial-message-secret-validation-string: ', messageSecretValidationString);
-		console.log('initial-message-secret-validation: ', messageSecretValidation);
-		console.log('initial-message-integrity: ', messageIntegrity);
-		console.log('-----------------------------------------------');
 
 		const session = new Session(
 				this.homepageForm.value.toEmail,
@@ -159,8 +136,6 @@ export class HomepageComponent implements OnInit {
 
 			const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName, 
 									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry);
-
-			console.log(email);
 
 			this.homepageService.sendEmail(email)
 				.subscribe(
@@ -250,12 +225,6 @@ export class HomepageComponent implements OnInit {
 		let answerProof = CryptoJS.enc.Base64.stringify(hash);
 
         sessionStorage.setItem('answerProof', answerProof);
-
-        console.log('-----------------------------------------------');
-        console.log('clientSessionSecret: ' + clientSessionSecret);
-        console.log('answerProofString: ' + answerProofString);
-        console.log('answerProof: ' + answerProof);
-        console.log('-----------------------------------------------');
 	}
 
 	private generateSharedSecret(answer) {
@@ -275,11 +244,6 @@ export class HomepageComponent implements OnInit {
 		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
 
 		sessionStorage.setItem('sharedSecret', sharedSecret);
-
-		console.log('-----------------------------------------------');
-		console.log('sharedSecretString: ' + sharedSecretString);
-		console.log('shared-secret: ' + sharedSecret);
-		console.log('-----------------------------------------------');
 	}
 
 	private generateRandomString(len) {
