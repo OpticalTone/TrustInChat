@@ -29,10 +29,10 @@ import { Message } from './message.model';
 			font-size: 12px;
 			width: 19%;
 		}
-		.chatarticle {
+		.colorHomepage {
 			background-color: #e0ffff;
 		}
-		.chatarticleRight {
+		.colorRemote {
 			background-color: #ccffe6;
 		}
 		.chatlist {
@@ -67,5 +67,9 @@ export class MessageComponent {
 
 	remoteUser() {
 		return sessionStorage.getItem('user') == 'remote';
+	}
+
+	forColor() {
+		return this.message.user == 'homepage';
 	}
 }

@@ -9,7 +9,7 @@
 		{{message.chatFromEmail}}
 	</div>
 </div>
-<article class="panel panel-default chatarticle chatlist" *ngIf="belongsToUser()">
+<article class="panel panel-default colorHomepage chatlist" *ngIf="belongsToUser() && forColor()">
 	<div class="panel-body">
 		<div class="msg">
 			{{message.encryptedMessage}}
@@ -20,7 +20,25 @@
 		</div>
 	</div>
 </article>
-<article class="panel panel-default chatarticleRight chatlist" *ngIf="!belongsToUser()">
+<article class="panel panel-default colorHomepage chatlist" *ngIf="!belongsToUser() && forColor()">
+	<div class="panel-body">
+		<div class="msgRight" *ngIf="!belongsToUser()">
+			{{message.encryptedMessage}}
+		</div>
+	</div>
+</article>
+<article class="panel panel-default colorRemote chatlist" *ngIf="belongsToUser() && !forColor()">
+	<div class="panel-body">
+		<div class="msg">
+			{{message.encryptedMessage}}
+		</div>
+		<div class="config">
+			<!--a (click)="onEdit()">Edit</a-->
+			<a (click)="onDelete()">Delete</a>
+		</div>
+	</div>
+</article>
+<article class="panel panel-default colorRemote chatlist" *ngIf="!belongsToUser() && !forColor()">
 	<div class="panel-body">
 		<div class="msgRight" *ngIf="!belongsToUser()">
 			{{message.encryptedMessage}}
