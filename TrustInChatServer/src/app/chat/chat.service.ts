@@ -119,7 +119,6 @@ export class ChatService {
 
 					let clientMessageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, decryptedMessage);
 					let clientMessageIntegrity = CryptoJS.enc.Base64.stringify(clientMessageIntegrityArray);
-					console.log('clientMessageIntegrity: ' + clientMessageIntegrity);
 
 					t.encryptedMessage = decryptedMessage;
 

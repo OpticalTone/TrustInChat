@@ -92,7 +92,7 @@ export class MessageInputComponent implements OnInit {
 				this.chatService.addMessage(message)
 					.subscribe(
 						data => {
-							console.log(data);
+							//console.log(data);
 						},
 						error => this.errorService.handleError(error)
 					);

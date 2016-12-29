@@ -140,7 +140,7 @@ export class HomepageComponent implements OnInit {
 			this.homepageService.sendEmail(email)
 				.subscribe(
 					data => {
-						console.log(data);
+						//console.log(data);
 					},
 					error => this.errorService.handleError(error)
 				);

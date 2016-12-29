@@ -56,7 +56,9 @@ export class MessageComponent {
 	onDelete() {
 		this.chatService.deleteMessage(this.message)
 			.subscribe(
-				result => console.log(result),
+				result => {
+					//console.log(result)
+				},
 				error => this.errorService.handleError(error)
 			);
 	}

@@ -119,7 +119,7 @@ export class RemoteWelcomeComponent implements OnInit {
 		this.remoteWelcomeService.getData()
 			.subscribe(
 				data => {
-					console.log(data);
+					//console.log(data);
 				},
 				error => this.errorService.handleError(error),
 			);	
