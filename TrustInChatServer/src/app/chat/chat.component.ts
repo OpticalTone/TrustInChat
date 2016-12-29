@@ -63,7 +63,9 @@ export class ChatComponent {
 		
 		this.chatService.closeSession(serverSessionId)
 			.subscribe(
-					result => console.log(result),
+					result => {
+						//console.log(result)
+					},
 					error => this.errorService.handleError(error)
 				);
 

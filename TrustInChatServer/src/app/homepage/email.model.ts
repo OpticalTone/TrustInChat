@@ -7,6 +7,7 @@ export class Email {
 	public emailServerNonce: string;
 	public emailServerSecretProof: string;
 	public emailServerSecretExpiry: string;
+	public chatUrl: string;
 
 	constructor (serverSessionId?: string, 
 				 clientSessionSecret?: string, 
@@ -15,7 +16,8 @@ export class Email {
 				 fromName?: string,
 				 emailServerNonce?: string,
 				 emailServerSecretProof?: string,
-				 emailServerSecretExpiry?: string
+				 emailServerSecretExpiry?: string,
+				 chatUrl?: string
 				 ) 
 	{
 		this.serverSessionId = serverSessionId;
@@ -26,6 +28,7 @@ export class Email {
 		this.emailServerNonce = emailServerNonce;
 		this.emailServerSecretProof = emailServerSecretProof;
 		this.emailServerSecretExpiry = emailServerSecretExpiry;
+		this.chatUrl = chatUrl;
 	}
 }
 

@@ -35,13 +35,14 @@ router.post('/', function(req, res, next) {
 	var emailServerSecretProof = req.body.emailServerSecretProof;
 	var emailServerSecretExpiry = req.body.emailServerSecretExpiry;
 
+	var chatUrl = req.body.chatUrl;
+
 	var emailServerSecret = 'hardcoded-email-server-secret';
 
 	var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
 	var checkEmailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
 
-	var chatSessionUrl = 'https://session.trustinchat.com/chat/' + serverSessionId + '#' + clientSessionSecret;
-	var chatUrl = 'https://session.trustinchat.com/chat/';
+	var chatSessionUrl = chatUrl + serverSessionId + '#' + clientSessionSecret;
 
 	if (checkEmailServerSecretProof != emailServerSecretProof) {
 		return res.status(500).json({
@@ -70,14 +71,19 @@ router.post('/', function(req, res, next) {
 				'If you feel you are receiving this email abusively, with our apologies please forward this email to:<br>' + 
 				'abuse@trustinchat.com<br><br><br><br>' ;
 
-	var input =	{ 'to': { toEmail: '' },
+	var input =	{
+		'to': {[toEmail]: ''},
 		'from': ['secure-message@trustinchat.com', 'Secure'],
 		'subject': subject,
 		'html': html
 	};
 
 	sendinObj.send_email(input, function(err, response){
-	    console.log(response);
+	    if(err){
+	        console.log(err);
+	    } else {
+	        console.log(response);
+    	}
 	});
 
 	res.status(200).json({

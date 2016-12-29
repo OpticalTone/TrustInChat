@@ -128,6 +128,7 @@ export class HomepageComponent implements OnInit {
 		let toEmail = this.homepageForm.value.toEmail;
 		let fromEmail = this.homepageForm.value.fromEmail;
 		let fromName = 	this.homepageForm.value.fromName;
+		let chatUrl = 'http://localhost:3000/chat/remotewelcome/';
 
 		setTimeout(() => {
 			let emailServerNonce = sessionStorage.getItem('emailServerNonce');
@@ -135,7 +136,7 @@ export class HomepageComponent implements OnInit {
 			let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
 
 			const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName, 
-									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry);
+									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry, chatUrl);
 
 			this.homepageService.sendEmail(email)
 				.subscribe(
