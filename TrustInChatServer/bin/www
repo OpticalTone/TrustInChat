@@ -33,8 +33,8 @@ app.set('port', port);
 var server = http.createServer(app);
 
 // TODO: implement socket.io
-// var io = app.io;
-// io.attach(server);
+ var io = app.io;
+ io.attach(server);
 
 // when a the nodejs server is loaded
 // cryptographic random strings generated
@@ -57,8 +57,8 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-// var io = require('socket.io').listen(server);
-// require('../sockets/base.js')(io);
+ var io = require('socket.io').listen(server);
+ require('../sockets/base.js')(io);
 
 /**
  * Normalize a port into a number, string, or false.
