@@ -9,7 +9,6 @@ import { Session } from './session.model';
 import { Email } from './email.model';
 
 import * as CryptoJS from 'crypto-js';
-import * as io from 'socket.io-client';
 
 @Component({
 	selector: 'chat-homepage',
@@ -156,12 +155,6 @@ export class HomepageComponent implements OnInit {
 	}
 
 	ngOnInit() {
-
-		var socket = io();
-			socket.on('connect', function() {
-		    	console.log('connected!');
-		});
-
 		if (sessionStorage.getItem('serverSecretId') == null) {
 			window.location.reload(true);
 		}

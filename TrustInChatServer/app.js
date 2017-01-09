@@ -6,12 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
- var socket_io = require('socket.io');
 
 var app = express();
-
- var io = socket_io();
- app.io = io;
 
 var chatRoutes = require('./routes/chat');
 var appRoutes = require('./routes/app');

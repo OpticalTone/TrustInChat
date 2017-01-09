@@ -8,6 +8,7 @@ import { ErrorService } from '../errors/error.service'
 import { Message } from './message/message.model';
 
 import * as CryptoJS from 'crypto-js';
+import * as io from 'socket.io-client';
 
 @Injectable()
 export class ChatService {
@@ -17,12 +18,16 @@ export class ChatService {
 	messageEdit = new EventEmitter<Message>();
 
 	private chatUrl = 'http://localhost:3000/chatserver';
+	private socket: any;
 
 	constructor(private http: Http, private errorService: ErrorService) {
 
 	}
 
 	addMessage(message: Message) {
+
+		//this.socket.emit('add-message', message);
+
 		const body = JSON.stringify(message);
 		const headers = new Headers({'Content-Type': 'application/json'});
 
@@ -65,6 +70,18 @@ export class ChatService {
 	}
 
 	getMessages() {
+
+		let observable = new Observable((observer:any) => {
+			this.socket = io(this.chatUrl);
+			this.socket.on('message', (data:any) => {
+				observer.next(data);
+			});
+			return () => {
+				this.socket.disconnect();
+			}
+		});
+		//return observable;
+
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let params = new URLSearchParams();
 		params.set('serverSessionId', serverSessionId);

@@ -8,6 +8,7 @@ import { MessageComponent } from './message.component';
 
 import { Message } from './message.model';
 
+import * as io from 'socket.io-client';
 
 @Component({
 	selector: 'chat-message-list',
@@ -20,6 +21,7 @@ import { Message } from './message.model';
 export class MessageListComponent implements OnInit {
 
 	messages: Message[];
+	connection: any;
 
 	constructor(private chatService: ChatService, private errorService: ErrorService, private route: ActivatedRoute) {
 
@@ -32,6 +34,12 @@ export class MessageListComponent implements OnInit {
 			sessionStorage.setItem('serverSessionId', serverSessionId);
 		}
 		
+		var socket = io();
+			socket.on('connect', function() {
+		    	console.log('connected!');
+		});
+
+		//this.connection = this.chatService.getMessages()
 		this.chatService.getMessages()
 			.subscribe(
 				(messages: Message[]) => {

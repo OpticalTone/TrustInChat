@@ -1,11 +1,15 @@
 
-	module.exports = function (io) {
+module.exports = function (io) {
 	'use strict';
-	io.on('connection', function(socket){
-	  console.log('a user connected');
-	  socket.emit('message', {'message': 'hello!'});
-	  socket.on('disconnect', function(){
-	    console.log('user disconnected');
-	  });
+	io.on('connection', function(socket) {
+		console.log('a user connected');
+
+		socket.on('disconnect', function() {
+			console.log('user disconnected');
+		});
+
+		socket.on('add-message', function(message) {
+			io.emit('message', {type: 'new-message', text: message});
+		});
 	});
 }
