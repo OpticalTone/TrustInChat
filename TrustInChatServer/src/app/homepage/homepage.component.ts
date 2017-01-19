@@ -31,9 +31,7 @@ export class HomepageComponent implements OnInit {
 		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
 
 		// generate cryptographic clientSessionSecret random string
-		let randomString = this.generateRandomString(8);
-		let secretArray = CryptoJS.enc.Utf16.parse(randomString); 
-		let clientSessionSecret = CryptoJS.enc.Base64.stringify(secretArray);
+		let clientSessionSecret = this.cryptoRandomString(16);
 		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
 		let securityAnswer = this.homepageForm.value.securityAnswer;
@@ -251,6 +249,19 @@ export class HomepageComponent implements OnInit {
 
 		for(let i = 0; i < len; i++) {
 			text += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		return text;
+	}
+
+	private cryptoRandomString(len) {
+		let text = '';
+		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		let values = new Uint32Array(len);
+		window.crypto.getRandomValues(values);
+
+		for(let i = 0; i < len; i++) {
+			text += characters[values[i] % characters.length];
 		}
 		return text;
 	}
