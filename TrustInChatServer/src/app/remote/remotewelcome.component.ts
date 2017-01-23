@@ -42,30 +42,19 @@ export class RemoteWelcomeComponent implements OnInit {
 	}
 
 	onSubmit() {
-
 		if (sessionStorage.getItem('attempt') == '0') {
 			sessionStorage.clear();
 			this.router.navigate(['/']);
 		}
 		else {
-
-			let serverSecretId = sessionStorage.getItem('serverSecretId');
 			let serverSessionId = sessionStorage.getItem('serverSessionId');
-			let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-			let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-			let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
-
 			let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 
 			let securityAnswer = this.remotewelcomeForm.value.securityAnswer;
 			let answer = this.normalizeAnswer(securityAnswer);
-
 			this.generateAnswerProof(answer);
-
 			let answerProof = sessionStorage.getItem('answerProof');
-
 			this.generateSharedSecret(answer);
-
 			let questionSecretValidation = sessionStorage.getItem('clientQuestionSecretValidation');
 
 			const session = new Session(
@@ -160,7 +149,6 @@ export class RemoteWelcomeComponent implements OnInit {
 		let answerWhitespaceDash = answerWhitespaceCollapse.replace(/\s-\s/g, '-');
 		let answerUpperCase = answerWhitespaceDash.toUpperCase();
 		//var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
-
 		let normaizedAnswer = answerUpperCase;
 
 		return normaizedAnswer;
@@ -174,7 +162,6 @@ export class RemoteWelcomeComponent implements OnInit {
 		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
 
 		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
-
 		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
 		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
@@ -183,7 +170,6 @@ export class RemoteWelcomeComponent implements OnInit {
 
 		let hash = CryptoJS.SHA256(answerProofString);
 		let answerProof = CryptoJS.enc.Base64.stringify(hash);
-
         sessionStorage.setItem('answerProof', answerProof);
 	}
 
@@ -202,17 +188,6 @@ export class RemoteWelcomeComponent implements OnInit {
 
 		let hash = CryptoJS.SHA256(sharedSecretString);
 		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
-
 		sessionStorage.setItem('sharedSecret', sharedSecret);
-	}
-
-	private generateRandomString(len) {
-		let text = " ";
-		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-		for(let i = 0; i < len; i++) {
-			text += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-		return text;
 	}
 }

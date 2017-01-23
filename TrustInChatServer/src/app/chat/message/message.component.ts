@@ -33,7 +33,7 @@ import { Message } from './message.model';
 			background-color: #e0ffff;
 		}
 		.colorRemote {
-			background-color: #ccffe6;
+			background-color: #b1fcb1;
 		}
 		.chatlist {
 			margin-left: 70px;

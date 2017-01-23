@@ -45,10 +45,7 @@ export class HomepageComponent implements OnInit {
 
 
 		// The question (encrypted) + question salt + validation: 
-		let randomQuestionString = this.generateRandomString(8);
-		let questionArray = CryptoJS.enc.Utf16.parse(randomQuestionString);
-		let questionSalt = CryptoJS.enc.Base64.stringify(questionArray);
-
+		let questionSalt = this.cryptoRandomString(16);
 		let plainTextQuestion = this.homepageForm.value.securityQuestion;
 
 		let questionSecretString = "secret:" + questionSalt + ":" + clientSessionSecret;
@@ -67,12 +64,8 @@ export class HomepageComponent implements OnInit {
 
 
 		//The message (encrypted) + message salt + validation:
-		let randomMessageString = this.generateRandomString(8);
-		let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
-		let messageSalt = CryptoJS.enc.Base64.stringify(messageArray);
-
+		let messageSalt = this.cryptoRandomString(16);
 		let plainTextMessage = this.homepageForm.value.initialMessage;
-
 		let sharedSecret = sessionStorage.getItem('sharedSecret');
 
 		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
@@ -179,7 +172,6 @@ export class HomepageComponent implements OnInit {
 			initialMessage: new FormControl(null, Validators.required),
 			notifications: new FormControl(null)
 		});
-
 	}
 
 	private matchAnswers(control: FormControl): {[s: string]: boolean} {
@@ -243,16 +235,6 @@ export class HomepageComponent implements OnInit {
 		sessionStorage.setItem('sharedSecret', sharedSecret);
 	}
 
-	private generateRandomString(len) {
-		let text = " ";
-		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-		for(let i = 0; i < len; i++) {
-			text += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-		return text;
-	}
-
 	private cryptoRandomString(len) {
 		let text = '';
 		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -265,4 +247,14 @@ export class HomepageComponent implements OnInit {
 		}
 		return text;
 	}
+
+	/*private generateRandomString(len) {
+		let text = " ";
+		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+		for(let i = 0; i < len; i++) {
+			text += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		return text;
+	}*/
 }

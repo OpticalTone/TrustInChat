@@ -21,8 +21,8 @@ router.get('/', function(req, res, next) {
 		}
 		if (!session[0]) {
 			return res.status(500).json({
-				title: 'No Session id Found',
-				error: {message: 'Session id not found!'}
+				title: 'Session Closed',
+				error: {message: 'Remote user closed session!'}
 			});
 		}
 		var sessionId = session[0]._id;

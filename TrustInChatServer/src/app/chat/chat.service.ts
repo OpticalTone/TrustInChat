@@ -71,7 +71,7 @@ export class ChatService {
 
 	getMessages() {
 
-		let observable = new Observable((observer:any) => {
+		/*let observable = new Observable((observer:any) => {
 			this.socket = io(this.chatUrl);
 			this.socket.on('message', (data:any) => {
 				observer.next(data);
@@ -80,7 +80,7 @@ export class ChatService {
 				this.socket.disconnect();
 			}
 		});
-		//return observable;
+		return observable;*/
 
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let params = new URLSearchParams();
