@@ -18,12 +18,24 @@ export class HomepageComponent implements OnInit {
 
 	homepageForm: FormGroup;
 
+	private clientSessionSecret;
+
+	private questionSalt;
+	private encryptedQuestion;
+	private questionSecretValidation;
+	private questionIntegrity;
+
+	private encryptedInitialMessage;
+	private messageSalt;
+	private messageSecretValidation;
+	private messageIntegrity;
+
 	constructor(private homepageService: HomepageService, private errorService: ErrorService, private router: Router) {
 
 	}
 
 	onSubmit() {
-		
+		// server data from browser sessionStorage
 		let serverSecretId = sessionStorage.getItem('serverSecretId');
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
@@ -31,57 +43,19 @@ export class HomepageComponent implements OnInit {
 		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
 
 		// generate cryptographic clientSessionSecret random string
-		let clientSessionSecret = this.cryptoRandomString(16);
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
+		this.clientSessionSecret = this.cryptoRandomString(16);
+		sessionStorage.setItem('clientSessionSecret', this.clientSessionSecret);
 
 		let securityAnswer = this.homepageForm.value.securityAnswer;
 		let answer = this.normalizeAnswer(securityAnswer);
-
 		this.generateAnswerProof(answer);
-
 		let answerProof = sessionStorage.getItem('answerProof');
 
 		this.generateSharedSecret(answer);
 
+		this.encryptQuestion();
 
-		// The question (encrypted) + question salt + validation: 
-		let questionSalt = this.cryptoRandomString(16);
-		let plainTextQuestion = this.homepageForm.value.securityQuestion;
-
-		let questionSecretString = "secret:" + questionSalt + ":" + clientSessionSecret;
-		let hashQuestionSecret = CryptoJS.SHA256(questionSecretString);
-		let questionSecret = CryptoJS.enc.Base64.stringify(hashQuestionSecret);
-
-		let encryptedQuestionObject = CryptoJS.AES.encrypt(plainTextQuestion, questionSecret);
-		let encryptedQuestion = encryptedQuestionObject.toString();
-
-		let questionSecretValidationString = "validate:" + questionSalt + ":" + clientSessionSecret;
-		let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
-		let questionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
-
-		let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, plainTextQuestion);
-		let questionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
-
-
-		//The message (encrypted) + message salt + validation:
-		let messageSalt = this.cryptoRandomString(16);
-		let plainTextMessage = this.homepageForm.value.initialMessage;
-		let sharedSecret = sessionStorage.getItem('sharedSecret');
-
-		let messageSecretString = "secret:" + messageSalt + ":" + sharedSecret;
-		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
-		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
-
-		let encryptedInitialMessageObject = CryptoJS.AES.encrypt(plainTextMessage, messageSecret);
-		let encryptedInitialMessage = encryptedInitialMessageObject.toString();
-
-		let messageSecretValidationString = "validate:" + messageSalt + ":" + sharedSecret;
-		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
-		let messageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
-
-		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
-		let messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
-
+		this.encryptInitialMessage();
 
 		const session = new Session(
 				this.homepageForm.value.toEmail,
@@ -89,27 +63,27 @@ export class HomepageComponent implements OnInit {
 				this.homepageForm.value.fromEmail,
 				null,
 				answerProof,
-				encryptedInitialMessage,
+				this.encryptedInitialMessage,
 				this.homepageForm.value.notifications,
 				sessionStorage.getItem('user'),
 				serverSessionId,
 				serverSessionIdValidation,
 				serverSessionSalt,
 				serverSessionSecret,
-				messageSalt,
-				messageSecretValidation,
-				messageIntegrity,
-				questionSalt,
-				encryptedQuestion,
-				questionSecretValidation,
-				questionIntegrity
+				this.messageSalt,
+				this.messageSecretValidation,
+				this.messageIntegrity,
+				this.questionSalt,
+				this.encryptedQuestion,
+				this.questionSecretValidation,
+				this.questionIntegrity
 			);
 
 		this.homepageService.createSession(session)
 			.subscribe(
 				data => {
 					
-					this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
+					this.router.navigate(['chat', serverSessionId], {fragment: this.clientSessionSecret});
 				},
 				error =>this.errorService.handleError(error)
 			);
@@ -125,7 +99,7 @@ export class HomepageComponent implements OnInit {
 			let emailServerSecretProof = sessionStorage.getItem('emailServerSecretProof');
 			let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
 
-			const email = new Email(serverSessionId, clientSessionSecret, toEmail, fromEmail, fromName, 
+			const email = new Email(serverSessionId, this.clientSessionSecret, toEmail, fromEmail, fromName, 
 									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry, chatUrl);
 
 			this.homepageService.sendEmail(email)
@@ -201,10 +175,7 @@ export class HomepageComponent implements OnInit {
 		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
 		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
 		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
- 
 		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
-
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
 
 		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
 		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
@@ -248,13 +219,44 @@ export class HomepageComponent implements OnInit {
 		return text;
 	}
 
-	/*private generateRandomString(len) {
-		let text = " ";
-		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+	private encryptQuestion() {
+		// The question (encrypted) + question salt + validation: 
+		this.questionSalt = this.cryptoRandomString(16);
+		let plainTextQuestion = this.homepageForm.value.securityQuestion;
 
-		for(let i = 0; i < len; i++) {
-			text += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-		return text;
-	}*/
+		let questionSecretString = "secret:" + this.questionSalt + ":" + this.clientSessionSecret;
+		let hashQuestionSecret = CryptoJS.SHA256(questionSecretString);
+		let questionSecret = CryptoJS.enc.Base64.stringify(hashQuestionSecret);
+
+		let encryptedQuestionObject = CryptoJS.AES.encrypt(plainTextQuestion, questionSecret);
+		this.encryptedQuestion = encryptedQuestionObject.toString();
+
+		let questionSecretValidationString = "validate:" + this.questionSalt + ":" + this.clientSessionSecret;
+		let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
+		this.questionSecretValidation = CryptoJS.enc.Base64.stringify(questionValidationHash);
+
+		let questionIntegrityArr = CryptoJS.HmacSHA256(questionSecret, plainTextQuestion);
+		this.questionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
+	}
+
+	private encryptInitialMessage() {
+		//The message (encrypted) + message salt + validation:
+		this.messageSalt = this.cryptoRandomString(16);
+		let plainTextMessage = this.homepageForm.value.initialMessage;
+		let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+		let messageSecretString = "secret:" + this.messageSalt + ":" + sharedSecret;
+		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
+		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+
+		let encryptedInitialMessageObject = CryptoJS.AES.encrypt(plainTextMessage, messageSecret);
+		this.encryptedInitialMessage = encryptedInitialMessageObject.toString();
+
+		let messageSecretValidationString = "validate:" + this.messageSalt + ":" + sharedSecret;
+		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
+		this.messageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
+
+		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
+		this.messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
+	}
 }

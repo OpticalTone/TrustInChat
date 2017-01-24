@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 		if (!session[0]) {
 			return res.status(500).json({
 				title: 'Session Closed',
-				error: {message: 'Remote user closed session!'}
+				error: {message: 'User closed the session!'}
 			});
 		}
 		var sessionId = session[0]._id;
@@ -186,9 +186,7 @@ router.delete('/:id', function(req, res, next) {
 router.delete('/close/:serverSessionId', function(req, res, next) {
 
 	var decoded = jwt.decode(req.query.token);
-
-	console.log('serverSessionId: ' + req.params.serverSessionId);
-
+	
 	Session.find({serverSessionId: req.params.serverSessionId}, function(err, session) {
 		if (err) {
 			return res.status(500).json({

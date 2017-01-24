@@ -44,7 +44,6 @@ router.get('/', function(req, res, next) {
 }); 
 
 router.post('/', function(req, res, next) {
-	console.log('encryptedInitialMessage: ' + req.body.encryptedInitialMessage);
 	ServerData.findOne(function(err, serverdata) {
 		if (err) {
 			return res.status(500).json({
