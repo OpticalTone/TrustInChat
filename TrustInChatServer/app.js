@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
+var LEX = require('letsencrypt-express');
 
 var app = express();
 
@@ -40,5 +41,24 @@ app.use('/', appRoutes);
 app.use(function(req, res, next) {
   res.render('index');
 });
+
+/*var lex = LEX.create({
+  server: 'staging',	
+  configDir: require('os').homedir() + '/letsencrypt/etc',
+  approveRegistration: function (hostname, cb) {
+    cb(null, {
+      domains: [hostname],
+      email: '',
+      agreeTos: true,
+    });
+  }
+});
+
+lex.onRequest = app;
+
+lex.listen([8080], [443, 5001], function () {
+  var protocol = ('requestCert' in this) ? 'https': 'http';
+  console.log("Listening at " + protocol + '://localhost:' + this.address().port);
+});*/
 
 module.exports = app;
