@@ -32,7 +32,6 @@
     "express-validator": "^2.20.8",
     "hbs": "~4.0.0",
     "jsonwebtoken": "^7.1.9",
-    "letsencrypt-express": "^2.0.6",
     "moment": "^2.15.2",
     "mongoose": "^4.5.10",
     "morgan": "~1.7.0",

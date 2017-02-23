@@ -18,17 +18,25 @@ export class HomepageComponent implements OnInit {
 
 	homepageForm: FormGroup;
 
-	private clientSessionSecret;
+	private serverSecretId: string;
+	private serverSessionId: string;
+	private serverSessionIdValidation: string;
+	private serverSessionSalt: string;
+	private serverSessionSecret: string;
 
-	private questionSalt;
-	private encryptedQuestion;
-	private questionSecretValidation;
-	private questionIntegrity;
+	private clientSessionSecret: string;
 
-	private encryptedInitialMessage;
-	private messageSalt;
-	private messageSecretValidation;
-	private messageIntegrity;
+	private answerProof: string;
+
+	private questionSalt: string;
+	private encryptedQuestion: string;
+	private questionSecretValidation: string;
+	private questionIntegrity: string;
+
+	private encryptedInitialMessage: string;
+	private messageSalt: string;
+	private messageSecretValidation: string;
+	private messageIntegrity: string;
 
 	constructor(private homepageService: HomepageService, private errorService: ErrorService, private router: Router) {
 
@@ -36,11 +44,11 @@ export class HomepageComponent implements OnInit {
 
 	onSubmit() {
 		// server data from browser sessionStorage
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+		this.serverSecretId = sessionStorage.getItem('serverSecretId');
+		this.serverSessionId = sessionStorage.getItem('serverSessionId');
+		this.serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		this.serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		this.serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
 
 		// generate cryptographic clientSessionSecret random string
 		this.clientSessionSecret = this.cryptoRandomString(16);
@@ -49,7 +57,6 @@ export class HomepageComponent implements OnInit {
 		let securityAnswer = this.homepageForm.value.securityAnswer;
 		let answer = this.normalizeAnswer(securityAnswer);
 		this.generateAnswerProof(answer);
-		let answerProof = sessionStorage.getItem('answerProof');
 
 		this.generateSharedSecret(answer);
 
@@ -57,19 +64,20 @@ export class HomepageComponent implements OnInit {
 
 		this.encryptInitialMessage();
 
+		// create session
 		const session = new Session(
 				this.homepageForm.value.toEmail,
 				this.homepageForm.value.fromName,
 				this.homepageForm.value.fromEmail,
 				null,
-				answerProof,
+				this.answerProof,
 				this.encryptedInitialMessage,
 				this.homepageForm.value.notifications,
 				sessionStorage.getItem('user'),
-				serverSessionId,
-				serverSessionIdValidation,
-				serverSessionSalt,
-				serverSessionSecret,
+				this.serverSessionId,
+				this.serverSessionIdValidation,
+				this.serverSessionSalt,
+				this.serverSessionSecret,
 				this.messageSalt,
 				this.messageSecretValidation,
 				this.messageIntegrity,
@@ -83,33 +91,13 @@ export class HomepageComponent implements OnInit {
 			.subscribe(
 				data => {
 					
-					this.router.navigate(['chat', serverSessionId], {fragment: this.clientSessionSecret});
+					this.router.navigate(['chat', this.serverSessionId], {fragment: this.clientSessionSecret});
 				},
 				error =>this.errorService.handleError(error)
 			);
 
 		// send email
-		let toEmail = this.homepageForm.value.toEmail;
-		let fromEmail = this.homepageForm.value.fromEmail;
-		let fromName = 	this.homepageForm.value.fromName;
-		let chatUrl = 'http://localhost:3000/chat/remotewelcome/';
-
-		setTimeout(() => {
-			let emailServerNonce = sessionStorage.getItem('emailServerNonce');
-			let emailServerSecretProof = sessionStorage.getItem('emailServerSecretProof');
-			let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
-
-			const email = new Email(serverSessionId, this.clientSessionSecret, toEmail, fromEmail, fromName, 
-									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry, chatUrl);
-
-			this.homepageService.sendEmail(email)
-				.subscribe(
-					data => {
-						//console.log(data);
-					},
-					error => this.errorService.handleError(error)
-				);
-		}, 5000);
+		this.sendEmail();	
 		
 		// clear homepage form	
 		this.homepageForm.reset();	
@@ -170,35 +158,18 @@ export class HomepageComponent implements OnInit {
 	}
 
 	private generateAnswerProof(answer) {
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
-
-		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
-		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
-		clientSessionSecret + ":" + answer + ":end";
+		let answerProofString = "answer:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
+		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
+		this.clientSessionSecret + ":" + answer + ":end";
 
 		let hash = CryptoJS.SHA256(answerProofString);
-		let answerProof = CryptoJS.enc.Base64.stringify(hash);
-
-        sessionStorage.setItem('answerProof', answerProof);
+		this.answerProof = CryptoJS.enc.Base64.stringify(hash);
 	}
 
 	private generateSharedSecret(answer) {
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
-
-
-		let sharedSecretString = "cipher:" + serverSecretId + ":" + serverSessionId + ":" + 
-		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
-		clientSessionSecret + ":" + answer + ":end";
+		let sharedSecretString = "cipher:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
+		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
+		this.clientSessionSecret + ":" + answer + ":end";
 
 		let hash = CryptoJS.SHA256(sharedSecretString);
 		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
@@ -258,5 +229,29 @@ export class HomepageComponent implements OnInit {
 
 		let messageIntegrityArray = CryptoJS.HmacSHA256(messageSecret, plainTextMessage);
 		this.messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
+	}
+
+	private sendEmail() {
+		let toEmail = this.homepageForm.value.toEmail;
+		let fromEmail = this.homepageForm.value.fromEmail;
+		let fromName = 	this.homepageForm.value.fromName;
+		let chatUrl = 'http://localhost:3000/chat/remotewelcome/';
+
+		setTimeout(() => {
+			let emailServerNonce = sessionStorage.getItem('emailServerNonce');
+			let emailServerSecretProof = sessionStorage.getItem('emailServerSecretProof');
+			let emailServerSecretExpiry = sessionStorage.getItem('emailServerSecretExpiry');
+
+			const email = new Email(this.serverSessionId, this.clientSessionSecret, toEmail, fromEmail, fromName, 
+									emailServerNonce, emailServerSecretProof, emailServerSecretExpiry, chatUrl);
+
+			this.homepageService.sendEmail(email)
+				.subscribe(
+					data => {
+						//console.log(data);
+					},
+					error => this.errorService.handleError(error)
+				);
+		}, 5000);
 	}
 }
