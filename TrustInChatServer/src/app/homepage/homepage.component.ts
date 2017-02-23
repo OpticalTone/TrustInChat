@@ -43,26 +43,8 @@ export class HomepageComponent implements OnInit {
 	}
 
 	onSubmit() {
-		// server data from browser sessionStorage
-		this.serverSecretId = sessionStorage.getItem('serverSecretId');
-		this.serverSessionId = sessionStorage.getItem('serverSessionId');
-		this.serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		this.serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		this.serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
-
-		// generate cryptographic clientSessionSecret random string
-		this.clientSessionSecret = this.cryptoRandomString(16);
-		sessionStorage.setItem('clientSessionSecret', this.clientSessionSecret);
-
-		let securityAnswer = this.homepageForm.value.securityAnswer;
-		let answer = this.normalizeAnswer(securityAnswer);
-		this.generateAnswerProof(answer);
-
-		this.generateSharedSecret(answer);
-
-		this.encryptQuestion();
-
-		this.encryptInitialMessage();
+		// security model
+		this.applySecurity();
 
 		// create session
 		const session = new Session(
@@ -145,7 +127,7 @@ export class HomepageComponent implements OnInit {
 		}
 	}
 
-	private normalizeAnswer(answerInput) {
+	private normalizeAnswer(answerInput): string {
 		let answerTrim = answerInput.trim();
 		let answerWhitespaceCollapse = answerTrim.replace(/\s\s+/g, ' ');
 		let answerWhitespaceDash = answerWhitespaceCollapse.replace(/\s-\s/g, '-');
@@ -157,7 +139,7 @@ export class HomepageComponent implements OnInit {
 		return normaizedAnswer;
 	}
 
-	private generateAnswerProof(answer) {
+	private generateAnswerProof(answer): void {
 		let answerProofString = "answer:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
 		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
 		this.clientSessionSecret + ":" + answer + ":end";
@@ -166,7 +148,7 @@ export class HomepageComponent implements OnInit {
 		this.answerProof = CryptoJS.enc.Base64.stringify(hash);
 	}
 
-	private generateSharedSecret(answer) {
+	private generateSharedSecret(answer): void {
 		let sharedSecretString = "cipher:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
 		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
 		this.clientSessionSecret + ":" + answer + ":end";
@@ -177,7 +159,7 @@ export class HomepageComponent implements OnInit {
 		sessionStorage.setItem('sharedSecret', sharedSecret);
 	}
 
-	private cryptoRandomString(len) {
+	private cryptoRandomString(len): string {
 		let text = '';
 		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -190,7 +172,7 @@ export class HomepageComponent implements OnInit {
 		return text;
 	}
 
-	private encryptQuestion() {
+	private encryptQuestion(): void {
 		// The question (encrypted) + question salt + validation: 
 		this.questionSalt = this.cryptoRandomString(16);
 		let plainTextQuestion = this.homepageForm.value.securityQuestion;
@@ -210,7 +192,7 @@ export class HomepageComponent implements OnInit {
 		this.questionIntegrity = CryptoJS.enc.Base64.stringify(questionIntegrityArr);
 	}
 
-	private encryptInitialMessage() {
+	private encryptInitialMessage(): void {
 		//The message (encrypted) + message salt + validation:
 		this.messageSalt = this.cryptoRandomString(16);
 		let plainTextMessage = this.homepageForm.value.initialMessage;
@@ -231,7 +213,7 @@ export class HomepageComponent implements OnInit {
 		this.messageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
 	}
 
-	private sendEmail() {
+	private sendEmail(): void {
 		let toEmail = this.homepageForm.value.toEmail;
 		let fromEmail = this.homepageForm.value.fromEmail;
 		let fromName = 	this.homepageForm.value.fromName;
@@ -253,5 +235,28 @@ export class HomepageComponent implements OnInit {
 					error => this.errorService.handleError(error)
 				);
 		}, 5000);
+	}
+
+	private applySecurity(): void {
+		// server data from browser sessionStorage
+		this.serverSecretId = sessionStorage.getItem('serverSecretId');
+		this.serverSessionId = sessionStorage.getItem('serverSessionId');
+		this.serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		this.serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		this.serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+
+		// generate cryptographic clientSessionSecret random string
+		this.clientSessionSecret = this.cryptoRandomString(16);
+		sessionStorage.setItem('clientSessionSecret', this.clientSessionSecret);
+
+		let securityAnswer = this.homepageForm.value.securityAnswer;
+		let answer = this.normalizeAnswer(securityAnswer);
+		this.generateAnswerProof(answer);
+
+		this.generateSharedSecret(answer);
+
+		this.encryptQuestion();
+
+		this.encryptInitialMessage();
 	}
 }
