@@ -11,8 +11,8 @@ import { Email } from './email.model';
 @Injectable()
 export class HomepageService {
 
-	private homepageUrl = 'http://localhost:3000';
-	private sendEmailUrl = 'http://localhost:2000';
+	private homepageUrl = 'https://localhost:3000';
+	private sendEmailUrl = 'https://localhost:2000';
 
 	constructor(private http: Http, private errorService: ErrorService) {
 

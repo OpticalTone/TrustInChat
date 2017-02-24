@@ -17,7 +17,7 @@ export class ChatService {
 	
 	messageEdit = new EventEmitter<Message>();
 
-	private chatUrl = 'http://localhost:3000/chatserver';
+	private chatUrl = 'https://localhost:3000/chatserver';
 	private socket: any;
 
 	constructor(private http: Http, private errorService: ErrorService) {

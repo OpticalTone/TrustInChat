@@ -6,17 +6,12 @@
 
 var app = require('../app');
 var debug = require('debug')('TrustInChat:server');
-var http = require('http');
+//var http = require('http');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var https = require('https');
 var fs = require('fs');
-/*
-var options = {
-  key: fs.readFileSync('privkey.pem'),
-  cert: fs.readFileSync('fullchain.pem'),
-  ca: fs.readFileSync('chain.pem')
-} */
+var path = require('path');
 
 var ServerData = require('../models/serverdata');
 
@@ -34,16 +29,24 @@ mongoose.connect('mongodb://127.0.0.1/simple', function(err) {
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+const httpsOptions = {
+  cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+  key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
+};
+
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
 
 /**
  * Create HTTPS server.
  */
- //var server = https.createServer(options, app);
+ var server = https.createServer(httpsOptions, app)
+  .listen(port, function () {
+    console.log(`Serving`);
+  });
 
 // when a the nodejs server is loaded
 // cryptographic random strings generated
@@ -62,7 +65,7 @@ newserverdata.save();
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+//server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

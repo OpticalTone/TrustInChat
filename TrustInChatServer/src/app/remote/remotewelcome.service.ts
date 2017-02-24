@@ -15,7 +15,7 @@ export class RemoteWelcomeService {
 
 	private session: Session;
 
-	private remoteWelcomeUrl = 'http://localhost:3000/remoteserver';
+	private remoteWelcomeUrl = 'https://localhost:3000/remoteserver';
 
 	constructor(private http: Http, private errorService: ErrorService) {
 

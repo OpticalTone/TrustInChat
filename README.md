@@ -28,7 +28,7 @@ TrustInChat/TrustInChatServer:
 > Start server: `npm start`     
 > Run development build: `npm run build`    
 > Run production build: `npm run build:prod`      
-> localhost:3000        
+> https://localhost:3000        
        
 TrustInChat/SendEmailServer:     
 > Install dependencies(package.json): `sudo npm install`     
@@ -37,12 +37,23 @@ TrustInChat/SendEmailServer:
 > `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`    
 > `exports.parameters = parameters;`   
 > and set `your_api_key`      
-> localhost:2000       
+> https://localhost:2000       
       
 ----------------    
     
 Exit terminal:    
 > Ctrl + c    
+    
+----------------    
+    
+Configure a browser to work with self-signed SSL certificate:    
+> chrome://settings/    
+> HTTPS/SSL: Manage certificates...   
+> 000_Test_Certificates: Test CA     
+> Import... : ca.crt    
+     
+
+
 
      
     

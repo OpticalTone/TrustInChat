@@ -48,7 +48,7 @@ export class ChatComponent {
 
 		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 
-		let shareUrl = 'http://localhost:3000/chat/remotewelcome/' + serverSessionId + '#' + clientSessionSecret;
+		let shareUrl = 'https://localhost:3000/chat/remotewelcome/' + serverSessionId + '#' + clientSessionSecret;
 
 		return shareUrl;
 	}

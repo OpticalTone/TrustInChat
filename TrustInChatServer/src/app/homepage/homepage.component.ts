@@ -217,7 +217,7 @@ export class HomepageComponent implements OnInit {
 		let toEmail = this.homepageForm.value.toEmail;
 		let fromEmail = this.homepageForm.value.fromEmail;
 		let fromName = 	this.homepageForm.value.fromName;
-		let chatUrl = 'http://localhost:3000/chat/remotewelcome/';
+		let chatUrl = 'https://localhost:3000/chat/remotewelcome/';
 
 		setTimeout(() => {
 			let emailServerNonce = sessionStorage.getItem('emailServerNonce');
