@@ -181,8 +181,7 @@ export class HomepageComponent implements OnInit {
 		let hashQuestionSecret = CryptoJS.SHA256(questionSecretString);
 		let questionSecret = CryptoJS.enc.Base64.stringify(hashQuestionSecret);
 
-		let encryptedQuestionObject = CryptoJS.AES.encrypt(plainTextQuestion, questionSecret);
-		this.encryptedQuestion = encryptedQuestionObject.toString();
+		this.encryptedQuestion = CryptoJS.AES.encrypt(plainTextQuestion, questionSecret).toString();
 
 		let questionSecretValidationString = "validate:" + this.questionSalt + ":" + this.clientSessionSecret;
 		let questionValidationHash = CryptoJS.SHA256(questionSecretValidationString);
@@ -202,8 +201,7 @@ export class HomepageComponent implements OnInit {
 		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 		let messageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
-		let encryptedInitialMessageObject = CryptoJS.AES.encrypt(plainTextMessage, messageSecret);
-		this.encryptedInitialMessage = encryptedInitialMessageObject.toString();
+		this.encryptedInitialMessage = CryptoJS.AES.encrypt(plainTextMessage, messageSecret).toString();
 
 		let messageSecretValidationString = "validate:" + this.messageSalt + ":" + sharedSecret;
 		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);

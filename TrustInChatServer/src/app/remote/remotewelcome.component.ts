@@ -37,6 +37,17 @@ export class RemoteWelcomeComponent implements OnInit {
 
 	remotewelcomeForm: FormGroup
 
+	private serverSecretId;
+	private serverSessionId;
+	private serverSessionIdValidation;
+	private serverSessionSalt;
+	private serverSessionSecret;
+	private clientSessionSecret;
+
+	private answerProof;
+
+	private questionSecretValidation;
+
 	constructor(private remoteWelcomeService: RemoteWelcomeService, private router: Router, private route: ActivatedRoute, private errorService: ErrorService) {
 
 	}
@@ -47,35 +58,34 @@ export class RemoteWelcomeComponent implements OnInit {
 			this.router.navigate(['/']);
 		}
 		else {
-			let serverSessionId = sessionStorage.getItem('serverSessionId');
-			let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
+			this.getSessionStorageData();
 
 			let securityAnswer = this.remotewelcomeForm.value.securityAnswer;
 			let answer = this.normalizeAnswer(securityAnswer);
+			
 			this.generateAnswerProof(answer);
-			let answerProof = sessionStorage.getItem('answerProof');
 			this.generateSharedSecret(answer);
-			let questionSecretValidation = sessionStorage.getItem('clientQuestionSecretValidation');
+			this.questionSecretValidation = sessionStorage.getItem('clientQuestionSecretValidation');
 
 			const session = new Session(
 				null,
 				null,
 				null,
 				null,
-				answerProof,
+				this.answerProof,
 				null,
 				null,
 				null,
-				serverSessionId,
-				null,
-				null,
-				null,
-				null,
+				this.serverSessionId,
 				null,
 				null,
 				null,
 				null,
-				questionSecretValidation,
+				null,
+				null,
+				null,
+				null,
+				this.questionSecretValidation,
 				null
 			);
 
@@ -86,7 +96,7 @@ export class RemoteWelcomeComponent implements OnInit {
 						sessionStorage.setItem('toEmail', data.session.toEmail);
 						sessionStorage.setItem('fromEmail', data.session.fromEmail);
 						sessionStorage.setItem('initialMessage', data.session.initialMessage);
-						this.router.navigate(['chat', serverSessionId], {fragment: clientSessionSecret});
+						this.router.navigate(['chat', this.serverSessionId], {fragment: this.clientSessionSecret});
 					},
 					error => this.errorService.handleError(error)
 				);
@@ -99,18 +109,18 @@ export class RemoteWelcomeComponent implements OnInit {
 
 	ngOnInit() {
 
-		let serverSessionId = this.route.snapshot.params['serverSessionId'];
-		let clientSessionSecret = this.route.snapshot.fragment;
+		this.serverSessionId = this.route.snapshot.params['serverSessionId'];
+		this.clientSessionSecret = this.route.snapshot.fragment;
 
-		sessionStorage.setItem('serverSessionId', serverSessionId);
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
+		sessionStorage.setItem('serverSessionId', this.serverSessionId);
+		sessionStorage.setItem('clientSessionSecret', this.clientSessionSecret);
 
 		this.remoteWelcomeService.getData()
 			.subscribe(
 				data => {
 					//console.log(data);
 				},
-				error => this.errorService.handleError(error),
+				error => this.errorService.handleError(error)
 			);	
 
 		let answerRegExp = "^[a-zA-Z0-9-_@#$%^&*\s]{4,}$";
@@ -123,71 +133,68 @@ export class RemoteWelcomeComponent implements OnInit {
 		});
 	}
 
-	getDelay() {
+	getDelay(): boolean {
 		return sessionStorage.getItem('delay') == '0';
 	}
 
-	getToEmail() {
+	getToEmail(): string {
 		return sessionStorage.getItem('toEmail');
 	}
 
-	getFromEmail() {
+	getFromEmail(): string {
 		return sessionStorage.getItem('fromEmail');
 	}
 
-	getFromName() {
+	getFromName(): string {
 		return sessionStorage.getItem('fromName');
 	}
 
-	getSecurityQuestion() {
+	getSecurityQuestion(): string {
 		return sessionStorage.getItem('securityQuestion');
 	}
 
-	private normalizeAnswer(answerInput) {
+	private normalizeAnswer(answerInput): string {
 		let answerTrim = answerInput.trim();
 		let answerWhitespaceCollapse = answerTrim.replace(/\s\s+/g, ' ');
 		let answerWhitespaceDash = answerWhitespaceCollapse.replace(/\s-\s/g, '-');
 		let answerUpperCase = answerWhitespaceDash.toUpperCase();
 		//var answerTrailingPunctuation = answerUpperCase.replace(/[?.!,;]?$/, '');
+
 		let normaizedAnswer = answerUpperCase;
 
 		return normaizedAnswer;
 	}
 
-	private generateAnswerProof(answer) {
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+	private generateAnswerProof(answer): void {
+		this.getSessionStorageData();
 
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
-		sessionStorage.setItem('clientSessionSecret', clientSessionSecret);
-
-		let answerProofString = "answer:" + serverSecretId + ":" + serverSessionId + ":" + 
-		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
-		clientSessionSecret + ":" + answer + ":end";
+		let answerProofString = "answer:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
+		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
+		this.clientSessionSecret + ":" + answer + ":end";
 
 		let hash = CryptoJS.SHA256(answerProofString);
-		let answerProof = CryptoJS.enc.Base64.stringify(hash);
-        sessionStorage.setItem('answerProof', answerProof);
+		this.answerProof = CryptoJS.enc.Base64.stringify(hash);
+        sessionStorage.setItem('answerProof', this.answerProof);
 	}
 
-	private generateSharedSecret(answer) {
-		let serverSecretId = sessionStorage.getItem('serverSecretId');
-		let serverSessionId = sessionStorage.getItem('serverSessionId');
-		let serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
-		let serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
-		let serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
-		let clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
+	private generateSharedSecret(answer): void {
+		this.getSessionStorageData();
 
-
-		let sharedSecretString = "cipher:" + serverSecretId + ":" + serverSessionId + ":" + 
-		serverSessionIdValidation + ":" + serverSessionSalt + ":" + serverSessionSecret + ":" + 
-		clientSessionSecret + ":" + answer + ":end";
+		let sharedSecretString = "cipher:" + this.serverSecretId + ":" + this.serverSessionId + ":" + 
+		this.serverSessionIdValidation + ":" + this.serverSessionSalt + ":" + this.serverSessionSecret + ":" + 
+		this.clientSessionSecret + ":" + answer + ":end";
 
 		let hash = CryptoJS.SHA256(sharedSecretString);
 		let sharedSecret = CryptoJS.enc.Base64.stringify(hash);
 		sessionStorage.setItem('sharedSecret', sharedSecret);
+	}
+
+	private getSessionStorageData(): void {
+		this.serverSecretId = sessionStorage.getItem('serverSecretId');
+		this.serverSessionId = sessionStorage.getItem('serverSessionId');
+		this.serverSessionIdValidation = sessionStorage.getItem('serverSessionIdValidation');
+		this.serverSessionSalt = sessionStorage.getItem('serverSessionSalt');
+		this.serverSessionSecret = sessionStorage.getItem('serverSessionSecret');
+		this.clientSessionSecret = sessionStorage.getItem('clientSessionSecret');
 	}
 }

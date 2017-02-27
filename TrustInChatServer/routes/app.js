@@ -189,7 +189,6 @@ router.get('/remoteserver', function(req, res, next) {
 		}
 		var serverSecretId = serverdata.serverSecretId;
 
-		console.log(req.query.serverSessionId);
 		Session.findOne({serverSessionId: req.query.serverSessionId})
 			.exec(function(err, session) {
 				if(err) {
