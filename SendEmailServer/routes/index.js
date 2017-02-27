@@ -9,6 +9,9 @@ var p = require('../parameters');
 // var parameters = { "apiKey": "your_api_key", "timeout": 5000 };
 // exports.parameters = parameters;
 
+// var emailServerSecret = 'hardcoded-email-server-secret';
+// exports.emailServerSecret = emailServerSecret;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
@@ -37,9 +40,7 @@ router.post('/', function(req, res, next) {
 
 	var chatUrl = req.body.chatUrl;
 
-	var emailServerSecret = 'hardcoded-email-server-secret';
-
-	var data = "email-proof:" + emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
+	var data = "email-proof:" + p.emailServerSecret + ":" + emailServerNonce + ":" + emailServerSecretExpiry + ":" + toEmail;
 	var checkEmailServerSecretProof = crypto.createHash('sha256').update(data).digest("hex");
 
 	var chatSessionUrl = chatUrl + serverSessionId + '#' + clientSessionSecret;

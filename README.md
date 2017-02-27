@@ -36,8 +36,10 @@ TrustInChat/SendEmailServer:
 > Create ignored file: parameters.js     
 > `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`    
 > `exports.parameters = parameters;`   
-> and set `your_api_key`      
-> https://localhost:2000       
+> `var emailServerSecret = 'hardcoded-email-server-secret';`    
+> `exports.emailServerSecret = emailServerSecret;`     
+> and set `your_api_key` and `hardcoded-email-server-secret`      
+> https://localhost:2000        
       
 ----------------    
     
@@ -50,8 +52,8 @@ Configure a browser to work with self-signed SSL certificate:
 > chrome://settings/    
 > HTTPS/SSL: Manage certificates...   
 > 000_Test_Certificates: Test CA     
-> Import... : ca.crt    
-     
+> Import... : bin/ssl/ca.crt       
+       
 
 
 
