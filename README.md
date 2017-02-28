@@ -41,10 +41,7 @@ TrustInChat/SendEmailServer:
 > and set `your_api_key` and `hardcoded-email-server-secret`      
 > https://localhost:2000        
       
-----------------    
-    
-Exit terminal:    
-> Ctrl + c    
+Exit terminal: Ctrl + c  
     
 ----------------    
     

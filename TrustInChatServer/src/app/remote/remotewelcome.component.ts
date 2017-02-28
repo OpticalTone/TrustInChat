@@ -111,6 +111,10 @@ export class RemoteWelcomeComponent implements OnInit {
 		});
 	}
 
+	getCountdown() {
+		return sessionStorage.getItem('countdown');
+	}
+
 	getDelay(): boolean {
 		return sessionStorage.getItem('delay') == '0';
 	}
