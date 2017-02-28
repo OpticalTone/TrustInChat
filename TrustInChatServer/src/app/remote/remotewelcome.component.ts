@@ -67,29 +67,7 @@ export class RemoteWelcomeComponent implements OnInit {
 			this.generateSharedSecret(answer);
 			this.questionSecretValidation = sessionStorage.getItem('clientQuestionSecretValidation');
 
-			const session = new Session(
-				null,
-				null,
-				null,
-				null,
-				this.answerProof,
-				null,
-				null,
-				null,
-				this.serverSessionId,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				this.questionSecretValidation,
-				null
-			);
-
-			this.remoteWelcomeService.signIn(session)
+			this.remoteWelcomeService.signIn(this.answerProof, this.serverSessionId, this.questionSecretValidation)
 				.subscribe(
 					data => {
 						sessionStorage.setItem('token', data.token);

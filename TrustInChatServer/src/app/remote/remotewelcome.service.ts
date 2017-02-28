@@ -89,8 +89,12 @@ export class RemoteWelcomeService {
 			});
 	}
 
-	signIn(session: Session) {
-		const body = JSON.stringify(session);
+	signIn(answerProof: string, serverSessionId: string, questionSecretValidation: string) {
+		const body = {
+			answerProof: answerProof,
+			serverSessionId: serverSessionId,
+			questionSecretValidation: questionSecretValidation
+		};
 		const headers = new Headers({'Content-Type': 'application/json'});
 
 		return this.http.post(this.remoteWelcomeUrl, body, {headers: headers})
