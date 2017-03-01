@@ -47,7 +47,8 @@ Exit terminal: Ctrl + c
     
 Configure a browser to work with self-signed SSL certificate:    
 > chrome://settings/    
-> HTTPS/SSL: Manage certificates...   
+> HTTPS/SSL: Manage certificates...     
+> Add test certificate:       
 > 000_Test_Certificates: Test CA     
 > Import... : bin/ssl/ca.crt       
        
