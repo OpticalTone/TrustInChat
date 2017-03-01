@@ -23,7 +23,9 @@
 				<section class="col-md-8 col-md-offset-2">
 					<form [formGroup]="remotewelcomeForm" (ngSubmit)="onSubmit()">
 						<div class="form-group">
-							<label>Security answer:</label><label>{{getCountdown()}}</label>
+							<label>Security answer:</label>
+							<p style="color:red" *ngIf="!finishedCountdown() && getCountdown()">Wait {{getCountdown()}} seconds.</p>
+							<p *ngIf="finishedCountdown()">You can submit answer now.</p>
 							<input type="password" id="securityAnswer" class="form-control" formControlName="securityAnswer">
 						</div>
 						<button type="submit" class="btn btn-primary" [disabled]="!remotewelcomeForm.valid || getDelay()">SUBMIT</button>

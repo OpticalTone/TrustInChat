@@ -9,26 +9,21 @@ export class ErrorService {
 		const errorData = new Error(error.title, error.error.message);
 		this.errorOcurred.emit(errorData);
 
-		//console.log(errorData.title);
-
 		if (errorData.title == '0') {
 			sessionStorage.setItem('attempt', '0');
 		}
 
 		if (errorData.title == '3 attempts remaining') {
-			let cc = 20;
+			let counter = 20;
 			let interval = setInterval(function() {
-				cc--;
-				console.log(cc);
-				sessionStorage.setItem('countdown', String(cc));
-				if (cc == 0) {
+				counter--;
+				sessionStorage.setItem('countdown', String(counter));
+				if (counter == 0) {
 					clearInterval(interval);
 				}
 			}, 1000);
-			//console.log('0 sec');
 			sessionStorage.setItem('delay', '0');
 			setTimeout(()=>{
-				//console.log('20 sec');
 				sessionStorage.setItem('delay', '20');
 			}, 20000);
 		}

@@ -86,7 +86,6 @@ export class RemoteWelcomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
-
 		this.serverSessionId = this.route.snapshot.params['serverSessionId'];
 		this.clientSessionSecret = this.route.snapshot.fragment;
 
@@ -111,8 +110,12 @@ export class RemoteWelcomeComponent implements OnInit {
 		});
 	}
 
-	getCountdown() {
+	getCountdown(): string {
 		return sessionStorage.getItem('countdown');
+	}
+
+	finishedCountdown(): boolean {
+		return sessionStorage.getItem('countdown') == '0';
 	}
 
 	getDelay(): boolean {
