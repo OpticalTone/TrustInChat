@@ -21,90 +21,42 @@ import * as CryptoJS from 'crypto-js';
 export class MessageInputComponent implements OnInit {
 
 	message: Message;
+
+	private encryptedNewMessage: string;
+	private newMessageSalt: string;
+	private newMessageSecretValidation: string;
+	private newMessageIntegrity: string;
+
+	private encryptedEditedMessage: string;
+	private editedMessageSalt: string;
+	private editedMessageSecretValidation: string;
+	private editedMessageIntegrity: string;
 	
 	constructor(private chatService: ChatService, private errorService: ErrorService, private router: Router) {
 
 	}
 
 	onSubmit(form: NgForm) {
-
 		if (sessionStorage.getItem('attempt') == '0') {
 			sessionStorage.clear();
 			this.router.navigate(['/']);
 		}
 		else {
-			//The message (encrypted) + message salt + validation:
-			let newMessageSalt = this.cryptoRandomString(16);
-			let plainTextMessage = form.value.content;
-			let sharedSecret = sessionStorage.getItem('sharedSecret');
-
-			let messageSecretString = "secret:" + newMessageSalt + ":" + sharedSecret;
-			let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
-			let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
-
-			let encryptedNewMessage = CryptoJS.AES.encrypt(plainTextMessage, newMessageSecret).toString();
-
-			let messageSecretValidationString = "validate:" + newMessageSalt + ":" + sharedSecret;
-			let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
-			let newMessageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
-
-			let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
-			let newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
-
 			if (this.message) {
-				// Edit
-				let editedMessageSalt = this.cryptoRandomString(16);
+				// Update
 				let editText = form.value.content;
-				let sharedSecret = sessionStorage.getItem('sharedSecret');
+				this.encryptEditedMessage(editText);
 
-				let editedMessageSecretString = "secret:" + editedMessageSalt + ":" + sharedSecret;
-				let editedMessageHash = CryptoJS.SHA256(editedMessageSecretString);
-				let editedMessageSecret = CryptoJS.enc.Base64.stringify(editedMessageHash);
-
-				let encryptedEditedMessage = CryptoJS.AES.encrypt(editText, editedMessageSecret).toString();
-
-				let editedMessageSecretValidationString = "validate:" + editedMessageSalt + ":" + sharedSecret;
-				let editedMessageValidationHash = CryptoJS.SHA256(editedMessageSecretValidationString);
-				let editedMessageSecretVlidation = CryptoJS.enc.Base64.stringify(editedMessageValidationHash);
-
-				let editedMessageIntegrityArray = CryptoJS.HmacSHA256(editedMessageSecret, editText);
-				let editedMessageIntegrity = CryptoJS.enc.Base64.stringify(editedMessageIntegrityArray);
-
-
-				this.message.encryptedMessage = encryptedEditedMessage;
-				this.message.newMessageSalt = editedMessageSalt;
-				this.message.newMessageSecretValidation = editedMessageSecretVlidation;
-				this.message.newMessageIntegrity = editedMessageIntegrity;
-				this.chatService.updateMessage(this.message)
-					.subscribe(
-						result => {
-							//console.log(result);
-						},
-						error => this.errorService.handleError(error)
-					);
-				this.message = null;
+				this.updateMessage(this.message);
+				
+				
 			} else {
-
 				// Create
-				const message = new Message(
-					encryptedNewMessage,
-					null,
-					null,
-					null,
-					null,
-					newMessageSalt,
-					newMessageSecretValidation,
-					newMessageIntegrity,
-					sessionStorage.getItem('user')
-					);
+				let plainTextMessage = form.value.content;
+				this.encryptNewMessage(plainTextMessage);
 
-				this.chatService.addMessage(message)
-					.subscribe(
-						data => {
-							//console.log(data);
-						},
-						error => this.errorService.handleError(error)
-					);
+				this.createNewMessage();
+				
 			}
 			form.resetForm();
 		}
@@ -132,5 +84,80 @@ export class MessageInputComponent implements OnInit {
 			text += characters[values[i] % characters.length];
 		}
 		return text;
+	}
+
+	private encryptNewMessage(plainTextMessage): void {
+		//The message (encrypted) + message salt + validation:
+		this.newMessageSalt = this.cryptoRandomString(16);
+		let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+		let messageSecretString = "secret:" + this.newMessageSalt + ":" + sharedSecret;
+		let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
+		let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
+
+		this.encryptedNewMessage = CryptoJS.AES.encrypt(plainTextMessage, newMessageSecret).toString();
+
+		let messageSecretValidationString = "validate:" + this.newMessageSalt + ":" + sharedSecret;
+		let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
+		this.newMessageSecretValidation = CryptoJS.enc.Base64.stringify(hashMessageValidation);
+
+		let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
+		this.newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
+	}
+
+	private encryptEditedMessage(editText): void {
+		//The message (encrypted) + message salt + validation:
+		this.editedMessageSalt = this.cryptoRandomString(16);
+		let sharedSecret = sessionStorage.getItem('sharedSecret');
+
+		let editedMessageSecretString = "secret:" + this.editedMessageSalt + ":" + sharedSecret;
+		let editedMessageHash = CryptoJS.SHA256(editedMessageSecretString);
+		let editedMessageSecret = CryptoJS.enc.Base64.stringify(editedMessageHash);
+
+		this.encryptedEditedMessage = CryptoJS.AES.encrypt(editText, editedMessageSecret).toString();
+
+		let editedMessageSecretValidationString = "validate:" + this.editedMessageSalt + ":" + sharedSecret;
+		let editedMessageValidationHash = CryptoJS.SHA256(editedMessageSecretValidationString);
+		this.editedMessageSecretValidation = CryptoJS.enc.Base64.stringify(editedMessageValidationHash);
+
+		let editedMessageIntegrityArray = CryptoJS.HmacSHA256(editedMessageSecret, editText);
+		this.editedMessageIntegrity = CryptoJS.enc.Base64.stringify(editedMessageIntegrityArray);
+	}
+
+	private createNewMessage(): void {
+		const message = new Message(
+			this.encryptedNewMessage,
+			null,
+			null,
+			null,
+			null,
+			this.newMessageSalt,
+			this.newMessageSecretValidation,
+			this.newMessageIntegrity,
+			sessionStorage.getItem('user'));
+
+		this.chatService.addMessage(message)
+			.subscribe(
+				data => {
+					//console.log(data);
+				},
+				error => this.errorService.handleError(error)
+			);
+	}
+
+	private updateMessage(message): void {
+		this.message.encryptedMessage = this.encryptedEditedMessage;
+		this.message.newMessageSalt = this.editedMessageSalt;
+		this.message.newMessageSecretValidation = this.editedMessageSecretValidation;
+		this.message.newMessageIntegrity = this.editedMessageIntegrity;
+
+		this.chatService.updateMessage(this.message)
+			.subscribe(
+				result => {
+					//console.log(result);
+				},
+				error => this.errorService.handleError(error)
+			);
+		this.message = null;
 	}
 }
