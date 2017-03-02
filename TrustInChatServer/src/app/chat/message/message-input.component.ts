@@ -34,20 +34,15 @@ export class MessageInputComponent implements OnInit {
 		}
 		else {
 			//The message (encrypted) + message salt + validation:
-			let randomMessageString = this.generateRandomString(8);
-			let messageArray = CryptoJS.enc.Utf16.parse(randomMessageString);
-			let newMessageSalt = CryptoJS.enc.Base64.stringify(messageArray);
-
+			let newMessageSalt = this.cryptoRandomString(16);
 			let plainTextMessage = form.value.content;
-
 			let sharedSecret = sessionStorage.getItem('sharedSecret');
 
 			let messageSecretString = "secret:" + newMessageSalt + ":" + sharedSecret;
 			let hashMessageSecretString = CryptoJS.SHA256(messageSecretString);
 			let newMessageSecret = CryptoJS.enc.Base64.stringify(hashMessageSecretString);
 
-			let encryptedNewMessageObject = CryptoJS.AES.encrypt(plainTextMessage, newMessageSecret);
-			let encryptedNewMessage = encryptedNewMessageObject.toString();
+			let encryptedNewMessage = CryptoJS.AES.encrypt(plainTextMessage, newMessageSecret).toString();
 
 			let messageSecretValidationString = "validate:" + newMessageSalt + ":" + sharedSecret;
 			let hashMessageValidation = CryptoJS.SHA256(messageSecretValidationString);
@@ -112,12 +107,15 @@ export class MessageInputComponent implements OnInit {
 		);
 	}
 
-	private generateRandomString(len) {
-		let text = " ";
+	private cryptoRandomString(len): string {
+		let text = '';
 		let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
+		let values = new Uint32Array(len);
+		window.crypto.getRandomValues(values);
+
 		for(let i = 0; i < len; i++) {
-			text += characters.charAt(Math.floor(Math.random() * characters.length));
+			text += characters[values[i] % characters.length];
 		}
 		return text;
 	}
