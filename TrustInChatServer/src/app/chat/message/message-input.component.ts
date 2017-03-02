@@ -51,25 +51,39 @@ export class MessageInputComponent implements OnInit {
 			let messageIntegrityArray = CryptoJS.HmacSHA256(newMessageSecret, plainTextMessage);
 			let newMessageIntegrity = CryptoJS.enc.Base64.stringify(messageIntegrityArray);
 
-			/*if (this.message) {
+			if (this.message) {
 				// Edit
-				// TODO: fix edit: take text from form, change it, encrypt it, save it, send it back to client, decrypt it, show message to user
+				let editedMessageSalt = this.cryptoRandomString(16);
 				let editText = form.value.content;
 				let sharedSecret = sessionStorage.getItem('sharedSecret');
 
-				let encryptedEditMessageObject = CryptoJS.AES.encrypt(editText, newMessageSecret);
-				let encryptedEditMessage = encryptedNewMessageObject.toString();
+				let editedMessageSecretString = "secret:" + editedMessageSalt + ":" + sharedSecret;
+				let editedMessageHash = CryptoJS.SHA256(editedMessageSecretString);
+				let editedMessageSecret = CryptoJS.enc.Base64.stringify(editedMessageHash);
 
-				this.message.encryptedMessage = encryptedEditMessage;
-				this.message.newMessageSalt = newMessageSalt;
-				this.message.newMessageSecretValidation = newMessageSecretValidation;
-				this.message.newMessageIntegrity = newMessageIntegrity;
+				let encryptedEditedMessage = CryptoJS.AES.encrypt(editText, editedMessageSecret).toString();
+
+				let editedMessageSecretValidationString = "validate:" + editedMessageSalt + ":" + sharedSecret;
+				let editedMessageValidationHash = CryptoJS.SHA256(editedMessageSecretValidationString);
+				let editedMessageSecretVlidation = CryptoJS.enc.Base64.stringify(editedMessageValidationHash);
+
+				let editedMessageIntegrityArray = CryptoJS.HmacSHA256(editedMessageSecret, editText);
+				let editedMessageIntegrity = CryptoJS.enc.Base64.stringify(editedMessageIntegrityArray);
+
+
+				this.message.encryptedMessage = encryptedEditedMessage;
+				this.message.newMessageSalt = editedMessageSalt;
+				this.message.newMessageSecretValidation = editedMessageSecretVlidation;
+				this.message.newMessageIntegrity = editedMessageIntegrity;
 				this.chatService.updateMessage(this.message)
 					.subscribe(
-						result => console.log(result)
+						result => {
+							//console.log(result);
+						},
+						error => this.errorService.handleError(error)
 					);
 				this.message = null;
-			} else {*/
+			} else {
 
 				// Create
 				const message = new Message(
@@ -91,7 +105,7 @@ export class MessageInputComponent implements OnInit {
 						},
 						error => this.errorService.handleError(error)
 					);
-			//}
+			}
 			form.resetForm();
 		}
 	}
