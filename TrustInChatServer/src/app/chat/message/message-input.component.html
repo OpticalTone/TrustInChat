@@ -1,4 +1,5 @@
 <section class="col-md-8 col-md-offset-2">
+	<p style="color:red" *ngIf="sessionClosed()">Remote user closed session.</p>
 	<form (ngSubmit)="onSubmit(f)" #f="ngForm">
 		<div class="input-group">
 			<input type="text" id="content" class="form-control" [ngModel]="message?.encryptedMessage" name="content" placeholder="Enter text here..." required>

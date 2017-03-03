@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 		}
 		if (!session) {
 			return res.status(500).json({
-				title: 'No Session Found',
+				title: 'Session Closed',
 				error: {message: 'Session not found!'}
 			});
 		}
@@ -68,13 +68,10 @@ router.post('/', function(req, res, next) {
 		}
 		if (!session) {
 			return res.status(401).json({
-				title: '0',
-				error: {message: 'Session is permanently deleted!' + 
-				' Remote user closed the session or entered wrong answer 6 times. ' + 
-				'You can start new session.'}
+				title: 'Session Closed',
+				error: {message: 'Remote user closed session.'}
 			});
 		}
-		console.log('encryptedMessage: ' + req.body.encryptedMessage);
 		var message = new Message({
 			encryptedMessage: req.body.encryptedMessage,
 			messageSalt: req.body.newMessageSalt,
@@ -103,7 +100,6 @@ router.post('/', function(req, res, next) {
 });
 
 router.patch('/:id', function(req, res, next) {
-
 	var decoded = jwt.decode(req.query.token);
 
 	Message.findById(req.params.id, function(err, message) {
@@ -146,7 +142,6 @@ router.patch('/:id', function(req, res, next) {
 });
 
 router.delete('/:id', function(req, res, next) {
-
 	var decoded = jwt.decode(req.query.token);
 
 	Message.findById(req.params.id, function(err, message) {
@@ -184,7 +179,6 @@ router.delete('/:id', function(req, res, next) {
 });
 
 router.delete('/close/:serverSessionId', function(req, res, next) {
-
 	var decoded = jwt.decode(req.query.token);
 	
 	Session.find({serverSessionId: req.params.serverSessionId}, function(err, session) {
@@ -196,7 +190,7 @@ router.delete('/close/:serverSessionId', function(req, res, next) {
 		}
 		if (!session[0]) {
 			return res.status(401).json({
-				title: '0',
+				title: 'Message is permanently deleted.',
 				error: {message: 'Message is permanently deleted.'}
 			});
 		}

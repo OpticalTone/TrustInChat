@@ -6,26 +6,30 @@ export class ErrorService {
 	errorOcurred = new EventEmitter<Error>();
 
 	handleError(error: any) {
-		const errorData = new Error(error.title, error.error.message);
-		this.errorOcurred.emit(errorData);
+		if (error.title == 'Session Closed') {
+			sessionStorage.setItem('session', 'closed');
+		} else {
+			const errorData = new Error(error.title, error.error.message);
+			this.errorOcurred.emit(errorData);
 
-		if (errorData.title == '0') {
-			sessionStorage.setItem('attempt', '0');
-		}
+			if (errorData.title == '0') {
+				sessionStorage.setItem('attempt', '0');
+			}
 
-		if (errorData.title == '3 attempts remaining') {
-			let counter = 20;
-			let interval = setInterval(function() {
-				counter--;
-				sessionStorage.setItem('countdown', String(counter));
-				if (counter == 0) {
-					clearInterval(interval);
-				}
-			}, 1000);
-			sessionStorage.setItem('delay', '0');
-			setTimeout(()=>{
-				sessionStorage.setItem('delay', '20');
-			}, 20000);
+			if (errorData.title == '3 attempts remaining') {
+				let counter = 20;
+				let interval = setInterval(function() {
+					counter--;
+					sessionStorage.setItem('countdown', String(counter));
+					if (counter == 0) {
+						clearInterval(interval);
+					}
+				}, 1000);
+				sessionStorage.setItem('delay', '0');
+				setTimeout(() => {
+					sessionStorage.setItem('delay', '20');
+				}, 20000);
+			}
 		}
 	}
 }

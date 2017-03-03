@@ -52,7 +52,7 @@ router.post('/', function(req, res, next) {
 			});
 		}
 
-		// sending email
+		// send email
 		var emailServerNonce = crypto.randomBytes(8).toString('hex');
 		var emailServerSecret = 'hardcoded-email-server-secret';
 		var emailServerSecretExpiry = new Date().toISOString();
@@ -236,7 +236,7 @@ router.post('/remoteserver', function(req, res, next) {
 
 		if (!sess) {
 			return res.status(401).json({
-				title: '0',
+				title: 'Message is permanently deleted.',
 				error: {message: 'Message is permanently deleted.'}
 			});
 		}

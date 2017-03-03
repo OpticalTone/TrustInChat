@@ -37,7 +37,7 @@ export class MessageInputComponent implements OnInit {
 	}
 
 	onSubmit(form: NgForm) {
-		if (sessionStorage.getItem('attempt') == '0') {
+		if (sessionStorage.getItem('session') == 'closed') {
 			sessionStorage.clear();
 			this.router.navigate(['/']);
 		}
@@ -71,6 +71,10 @@ export class MessageInputComponent implements OnInit {
 		this.chatService.messageEdit.subscribe(
 			(message: Message) => this.message = message
 		);
+	}
+
+	sessionClosed(): boolean {
+		return sessionStorage.getItem('session') == 'closed';
 	}
 
 	private cryptoRandomString(len): string {
