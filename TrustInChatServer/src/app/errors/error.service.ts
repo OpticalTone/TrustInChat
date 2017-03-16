@@ -8,6 +8,8 @@ export class ErrorService {
 	handleError(error: any) {
 		if (error.title == 'Session Closed') {
 			sessionStorage.setItem('session', 'closed');
+		} else if (error.title == 'Message is permanently deleted.') {
+			sessionStorage.setItem('session', 'redirect');
 		} else {
 			const errorData = new Error(error.title, error.error.message);
 			this.errorOcurred.emit(errorData);
