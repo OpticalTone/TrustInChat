@@ -20,7 +20,20 @@ Mongo commands:
 > Delete all documents from the collection: `db.collection.remove({})`     
       
 ----------------     
-     
+    
+Configure browser to work with self-signed SSL certificate:    
+    
+> chrome://settings/    
+> Show advanced settings...   
+> HTTPS/SSL: Manage certificates...   
+> Add test certificate:      
+> Certificate manager/Authorities: Import... :    
+> TrustInChat/TrustInChatServer/bin/ssl/ca.crt       
+> Certificate manager/Authorities:   
+> 000_Test_Certificates: Test CA     
+    
+---------------- 
+
 Project setup:     
      
 TrustInChat/TrustInChatServer:         
@@ -43,15 +56,8 @@ TrustInChat/SendEmailServer:
       
 Exit terminal: Ctrl + c  
     
-----------------    
+   
     
-Configure a browser to work with self-signed SSL certificate:    
-> chrome://settings/    
-> HTTPS/SSL: Manage certificates...     
-> Add test certificate:       
-> 000_Test_Certificates: Test CA     
-> Import... : bin/ssl/ca.crt       
-       
 
 
 
