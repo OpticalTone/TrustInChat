@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var fs = require('fs');
+var path = require('path');
 
 var Message = require('../models/message');
 var Session = require('../models/session');
@@ -45,7 +47,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.use('/', function(req, res, next) {
-	jwt.verify(req.query.token, 'secretstring', function(err, decoded) {
+	var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'public.pem'));
+	jwt.verify(req.query.token, cert, { algorithms: ['RS256'] }, function(err, decoded) {
 		if (err) {
 			return res.status(401).json({
 				title: 'Authentication failed',

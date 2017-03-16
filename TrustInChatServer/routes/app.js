@@ -4,6 +4,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
+var fs = require('fs');
+var path = require('path');
 
 var Session = require('../models/session');
 var Message = require('../models/message');
@@ -98,8 +100,8 @@ router.post('/', function(req, res, next) {
 				});
 			}
 			session.messages.push(resultMessage);
-
-			var token = jwt.sign({session: session}, 'secretstring');
+			var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'private.key'));
+			var token = jwt.sign({session: session}, cert, { algorithm: 'RS256'});
 
 			session.save(function(err, result) {
 				if (err) {
@@ -340,7 +342,9 @@ router.post('/remoteserver', function(req, res, next) {
 					}
 				}
 
-				var token = jwt.sign({session: session}, 'secretstring');
+				var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'private.key'));
+				var token = jwt.sign({session: session}, cert, { algorithm: 'RS256'});
+				//var token = jwt.sign({session: session}, 'secretstring');
 
 				res.status(200).json({
 					message: 'Successfully logged in',
