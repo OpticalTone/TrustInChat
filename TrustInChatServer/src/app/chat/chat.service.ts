@@ -85,6 +85,7 @@ export class ChatService {
 		let serverSessionId = sessionStorage.getItem('serverSessionId');
 		let params = new URLSearchParams();
 		params.set('serverSessionId', serverSessionId);
+		params.set('token', sessionStorage.getItem('token'));
 
 		return Observable
 			.interval(1000)

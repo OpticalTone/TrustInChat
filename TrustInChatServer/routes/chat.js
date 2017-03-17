@@ -7,7 +7,22 @@ var path = require('path');
 var Message = require('../models/message');
 var Session = require('../models/session');
 
+router.use('/', function(req, res, next) {
+	var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'public.pem'));
+	jwt.verify(req.query.token, cert, { algorithms: ['RS256'] }, function(err, decoded) {
+		if (err) {
+			return res.status(401).json({
+				title: 'Authentication failed',
+				error: err
+			});
+		}
+		next();
+	});
+});
+
 router.get('/', function(req, res, next) {
+	var decoded = jwt.decode(req.query.token);
+
 	Session.find({serverSessionId: req.query.serverSessionId}, function(err, session) {
 		if (err) {
 			return res.status(500).json({
@@ -43,19 +58,6 @@ router.get('/', function(req, res, next) {
 					obj: messages
 				});
 			});
-	});
-});
-
-router.use('/', function(req, res, next) {
-	var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'public.pem'));
-	jwt.verify(req.query.token, cert, { algorithms: ['RS256'] }, function(err, decoded) {
-		if (err) {
-			return res.status(401).json({
-				title: 'Authentication failed',
-				error: err
-			});
-		}
-		next();
 	});
 });
 
