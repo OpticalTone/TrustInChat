@@ -24,6 +24,7 @@ var sessionSchema = new Schema({
 	questionIntegrity: { type: String, default: '' },
 
 	remoteAnswerAttempts: { type: Number, default: 0 },
+	numberOfUsers: { type: Number, default: 1 },
 
 	serverdata: {type: Schema.Types.ObjectId, ref: 'ServerData'},
 	messages: [{type: Schema.Types.ObjectId, ref: 'Message'}],
