@@ -240,8 +240,8 @@ router.post('/remoteserver', function(req, res, next) {
 
 		if (numberOfUsers > 2) {
 			return res.status(401).json({
-				title: 'Chat session is not available.',
-				error: {message: 'Two users are already logged in.'}
+				title: 'Two users are already logged in.',
+				error: {message: 'Start new session.'}
 			});
 		}
 
@@ -351,6 +351,16 @@ router.post('/remoteserver', function(req, res, next) {
 					}
 				}
 
+				Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {numberOfUsers: 1}})
+								.select('remoteAnswerAttempts').exec(function(err, result) {
+									if (err) {
+										return res.status(401).json({
+											title: 'An error occurred',
+											error: err
+										});
+									}
+								});
+
 				var cert = fs.readFileSync(path.join(__dirname, 'rsa', 'private.key'));
 				var token = jwt.sign({session: session}, cert, { algorithm: 'RS256'});
 
@@ -361,15 +371,7 @@ router.post('/remoteserver', function(req, res, next) {
 				});
 			});
 		});
-		Session.findOneAndUpdate({serverSessionId: req.body.serverSessionId}, {$inc: {numberOfUsers: 1}})
-								.select('remoteAnswerAttempts').exec(function(err, result) {
-									if (err) {
-										return res.status(401).json({
-											title: 'An error occurred',
-											error: err
-										});
-									}
-								});
+		
 	});
 });
 
