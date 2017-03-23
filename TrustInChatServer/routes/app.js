@@ -241,7 +241,7 @@ router.post('/remoteserver', function(req, res, next) {
 		if (numberOfUsers > 2) {
 			return res.status(401).json({
 				title: 'Two users are already logged in.',
-				error: {message: 'Start new session.'}
+				error: {message: 'Start new chat session.'}
 			});
 		}
 
@@ -371,7 +371,6 @@ router.post('/remoteserver', function(req, res, next) {
 				});
 			});
 		});
-		
 	});
 });
 

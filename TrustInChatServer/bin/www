@@ -5,8 +5,8 @@
  */
 
 var app = require('../app');
+var config = require('../config');
 var debug = require('debug')('TrustInChat:server');
-//var http = require('http');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var https = require('https');
@@ -16,11 +16,7 @@ var path = require('path');
 var ServerData = require('../models/serverdata');
 
 //mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://127.0.0.1/simple', function(err) {
-  if (err) {
-    return console.log(err);
-  }
-});
+mongoose.connect(config.getDbConnectionString());
 
 /**
  * Get port from environment and store in Express.
@@ -33,12 +29,6 @@ const httpsOptions = {
   cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
   key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
 };
-
-/**
- * Create HTTP server.
- */
-
-//var server = http.createServer(app);
 
 /**
  * Create HTTPS server.
