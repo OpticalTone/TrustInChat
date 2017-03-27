@@ -1,4 +1,9 @@
 # TrustInChat    
+   
+Install NPM:
+> `sudo apt-get update && sudo apt-get -y upgrade`   
+> `curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -`     
+> `sudo apt-get install -y nodejs`  
      
 Install MongoDB:      
      
@@ -28,7 +33,8 @@ Configure browser to work with self-signed SSL certificate:
 > HTTPS/SSL: Manage certificates...   
 > Add test certificate:      
 > Certificate manager/Authorities: Import... :    
-> TrustInChat/TrustInChatServer/bin/ssl/ca.crt       
+> TrustInChat/TrustInChatServer/bin/ssl/ca.crt  
+> Select all checkboxes(trust all)     
 > Certificate manager/Authorities:   
 > 000_Test_Certificates: Test CA     
     
