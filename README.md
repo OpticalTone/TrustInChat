@@ -1,9 +1,15 @@
 # TrustInChat    
+    
+Start terminal: ctrl + shift + t    
+Exit terminal: Ctrl + c  
+    
+----------------        
    
 Install NPM:
 > `sudo apt-get update && sudo apt-get -y upgrade`   
 > `curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -`     
 > `sudo apt-get install -y nodejs`  
+> `npm -v`    
      
 Install MongoDB:      
      
@@ -12,6 +18,8 @@ Install MongoDB:
 > `mkdir -p mongodb`     
 > `cp -R -n mongodb-linux-x86_64-3.2.10/. mongodb`      
 > `mkdir -p /data/db`     
+    
+----------------     
     
 Start MongoDB server: `sudo mongod`      
 Stop all processes: `sudo killall mongod`      
@@ -42,25 +50,36 @@ Configure browser to work with self-signed SSL certificate:
 
 Project setup:     
      
-TrustInChat/TrustInChatServer:         
+TrustInChat/TrustInChatServer:     
+
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`     
 > Run development build: `npm run build`    
 > Run production build: `npm run build:prod`      
+
 > https://localhost:3000        
        
-TrustInChat/SendEmailServer:     
+
+
+TrustInChat/SendEmailServer:      
+
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`    
 > Create ignored file: parameters.js     
-> `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`    
-> `exports.parameters = parameters;`   
-> `var emailServerSecret = 'hardcoded-email-server-secret';`    
-> `exports.emailServerSecret = emailServerSecret;`     
-> and set `your_api_key` and `hardcoded-email-server-secret`      
+    
+`var parameters = { "apiKey": "your_api_key", "timeout": 5000 };
+ var emailServerSecret = 'hardcoded-email-server-secret';
+
+ module.exports = {
+ 	parameters: parameters,
+ 	emailServerSecret: emailServerSecret
+ }`    
+     
+> and set `your_api_key` and `hardcoded-email-server-secret`     
+
 > https://localhost:2000        
       
-Exit terminal: Ctrl + c  
+
     
    
     
