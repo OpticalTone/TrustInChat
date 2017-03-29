@@ -1,7 +1,7 @@
 # TrustInChat    
     
-Start terminal: ctrl + shift + t    
-Exit terminal: Ctrl + c  
+Start terminal: `ctrl + shift + t`    
+Exit terminal: `Ctrl + c`  
     
 ----------------        
    
@@ -58,7 +58,7 @@ TrustInChat/TrustInChatServer:
 > Run production build: `npm run build:prod`      
     
 > In Chrome browser navigate to:        
-> https://localhost:3000        
+> `https://localhost:3000`        
        
 
 
@@ -66,20 +66,20 @@ TrustInChat/SendEmailServer:
 
 > Install dependencies(package.json): `sudo npm install`     
 > Start server: `npm start`    
-> Create ignored file: parameters.js     
+> Create ignored file: `parameters.js`     
     
-> `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };
->  var emailServerSecret = 'hardcoded-email-server-secret';
+> `var parameters = { "apiKey": "your_api_key", "timeout": 5000 };`
+> `var emailServerSecret = 'hardcoded-email-server-secret';`
 >       
->  module.exports = {
->  	 parameters: parameters,
->  	 emailServerSecret: emailServerSecret
->  }`    
+> `module.exports = {`
+> `  parameters: parameters,`
+> `  emailServerSecret: emailServerSecret`
+> `}`    
      
 > and set `your_api_key` and `hardcoded-email-server-secret`     
    
 > In Chrome browser navigate to:        
-> https://localhost:2000        
+> `https://localhost:2000`        
       
 
     
