@@ -1,15 +1,20 @@
 # TrustInChat    
     
 Start terminal: `ctrl + shift + t`    
-Exit terminal: `Ctrl + c`  
+Exit terminal: `ctrl + c`  
     
 ----------------        
    
-Install NPM:
-> `sudo apt-get update && sudo apt-get -y upgrade`   
-> `curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -`     
-> `sudo apt-get install -y nodejs`  
-> `npm -v`    
+Install latest Nodejs and NPM:        
+> Install python-software-properties package:         
+> `sudo apt-get install python-software-properties`     
+> Add node.js PPA:    
+> `curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -`     
+> Install Nodejs and NPM:   
+> `sudo apt-get install nodejs`     
+> Check Node.js and NPM version:   
+> Node.js (v7.10.0): `node -v`     
+> NPM (4.2.0): `npm -v`     
      
 Install MongoDB:      
      
